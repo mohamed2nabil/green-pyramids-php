@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ScrollLine } from "../components/motion/ScrollLine";
+import { Reveal } from "../components/motion/Reveal";
 
 const VALUES = [
   { title: "Quality First", body: "Every product we export meets strict international quality standards before it leaves Egyptian soil." },
@@ -11,8 +11,6 @@ const VALUES = [
 export default function AboutPage() {
   return (
     <div className="bg-[#F6F3EC] min-h-screen relative">
-      <ScrollLine />
-
       {/* ── HERO — layered image + geometric accent ────────────── */}
       <div className="relative bg-[#173F35] pt-[72px] overflow-hidden">
         {/* Background agricultural image, clipped to right side */}
@@ -39,16 +37,16 @@ export default function AboutPage() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-24">
-          <div className="flex items-center gap-3 mb-5">
+          <Reveal as="div" type="fade" className="flex items-center gap-3 mb-5">
             <div className="w-5 h-px bg-[#8FAE5D]" />
             <p className="text-[11px] tracking-[0.28em] uppercase text-[#8FAE5D]">Our Story</p>
-          </div>
-          <h1 className="font-serif text-5xl lg:text-[72px] text-[#F6F3EC] leading-[1.03] mb-6 max-w-xl">
+          </Reveal>
+          <Reveal as="h1" type="letter" className="font-serif text-5xl lg:text-[72px] text-[#F6F3EC] leading-[1.03] mb-6 max-w-xl">
             About<br />Green Pyramids
-          </h1>
-          <p className="text-[#F6F3EC]/55 text-[15px] lg:text-lg max-w-md leading-relaxed">
+          </Reveal>
+          <Reveal as="p" type="word" className="text-[#F6F3EC]/55 text-[15px] lg:text-lg max-w-md leading-relaxed">
             An Egyptian agricultural export company connecting the world to the finest fresh produce from Egypt's most fertile lands.
-          </p>
+          </Reveal>
         </div>
       </div>
 
@@ -56,29 +54,31 @@ export default function AboutPage() {
       <section className="py-24 lg:py-36 max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=900&h=1000&fit=crop&auto=format"
-              alt="Egyptian farm operations"
-              className="w-full aspect-[4/5] object-cover rounded-2xl"
-            />
+            <Reveal as="div" type="scale" className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=900&h=1000&fit=crop&auto=format"
+                alt="Egyptian farm operations"
+                className="w-full h-full object-cover"
+              />
+            </Reveal>
           </div>
           <div>
-            <div className="flex items-center gap-3 mb-5">
+            <Reveal as="div" type="fade" className="flex items-center gap-3 mb-5">
               <div className="w-5 h-px bg-[#8FAE5D]" />
               <p className="text-[11px] tracking-[0.28em] uppercase text-[#8FAE5D]">Introduction</p>
-            </div>
-            <h2 className="font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.08] mb-8">
+            </Reveal>
+            <Reveal as="h2" type="line" className="font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.08] mb-8">
               Rooted in Egypt.<br />Reaching the World.
-            </h2>
-            <p className="text-[#173F35]/65 leading-relaxed mb-5 text-[15px]">
+            </Reveal>
+            <Reveal as="p" type="fade" className="text-[#173F35]/65 leading-relaxed mb-5 text-[15px]">
               Green Pyramids was founded with a clear vision: to bring the best of Egyptian agriculture to global markets with the professionalism and reliability that international buyers deserve. We specialize in sourcing, sorting, packing, and exporting premium fresh fruits and vegetables.
-            </p>
-            <p className="text-[#173F35]/65 leading-relaxed mb-5 text-[15px]">
+            </Reveal>
+            <Reveal as="p" type="fade" className="text-[#173F35]/65 leading-relaxed mb-5 text-[15px]">
               We work closely with a network of trusted Egyptian farms — carefully selected based on soil quality, farming practices, and yield consistency.
-            </p>
-            <p className="text-[#173F35]/65 leading-relaxed text-[15px]">
+            </Reveal>
+            <Reveal as="p" type="fade" className="text-[#173F35]/65 leading-relaxed text-[15px]">
               Our clients include importers, distributors, wholesalers, supermarket chains, and food suppliers across Europe, the Gulf, the Middle East, and Asia.
-            </p>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -86,38 +86,40 @@ export default function AboutPage() {
       {/* Mission & Vision */}
       <section className="py-24 bg-[#173F35]">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="p-10 rounded-2xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/4">
+          <Reveal as="div" type="fade" className="p-10 rounded-2xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/4">
             <span className="font-serif text-6xl text-[#D8C7A1]/35 leading-none block mb-6">01</span>
             <h3 className="font-serif text-2xl text-[#F6F3EC] mb-4">Our Mission</h3>
             <p className="text-[#F6F3EC]/55 leading-relaxed text-[14px]">
               To connect Egyptian agricultural excellence to international markets through professional export operations, uncompromising quality standards, and reliable supply chain management.
             </p>
-          </div>
-          <div className="p-10 rounded-2xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/4">
+          </Reveal>
+          <Reveal as="div" type="fade" className="p-10 rounded-2xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/4">
             <span className="font-serif text-6xl text-[#D8C7A1]/35 leading-none block mb-6">02</span>
             <h3 className="font-serif text-2xl text-[#F6F3EC] mb-4">Our Vision</h3>
             <p className="text-[#F6F3EC]/55 leading-relaxed text-[14px]">
               To be recognized globally as Egypt's most trusted agricultural export partner — known for quality, transparency, and the authentic richness of Egyptian produce.
             </p>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Values */}
       <section className="py-24 lg:py-36 max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="flex items-center gap-3 mb-4">
+        <Reveal as="div" type="fade" className="flex items-center gap-3 mb-4">
           <div className="w-5 h-px bg-[#8FAE5D]" />
           <p className="text-[11px] tracking-[0.28em] uppercase text-[#8FAE5D]">What Drives Us</p>
-        </div>
-        <h2 className="font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.08] mb-14">Our Values</h2>
+        </Reveal>
+        <Reveal as="h2" type="letter" className="font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.08] mb-14">
+          Our Values
+        </Reveal>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
           {VALUES.map((v, i) => (
-            <div key={v.title}>
+            <Reveal as="div" type="fade" key={v.title}>
               <div className="font-serif text-[52px] text-[#D8C7A1]/75 mb-5 leading-none">0{i + 1}</div>
               <div className="w-7 h-px bg-[#8FAE5D]/45 mb-4" />
               <h3 className="font-serif text-[19px] text-[#173F35] mb-3">{v.title}</h3>
               <p className="text-[13px] text-[#173F35]/58 leading-relaxed">{v.body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -126,16 +128,16 @@ export default function AboutPage() {
       <section className="py-24 bg-[#D8C7A1]/15 border-y border-[#D8C7A1]/35">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <div className="flex items-center gap-3 mb-5">
+            <Reveal as="div" type="fade" className="flex items-center gap-3 mb-5">
               <div className="w-5 h-px bg-[#8FAE5D]" />
               <p className="text-[11px] tracking-[0.28em] uppercase text-[#8FAE5D]">Agricultural Heritage</p>
-            </div>
-            <h2 className="font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.08] mb-8">
+            </Reveal>
+            <Reveal as="h2" type="line" className="font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.08] mb-8">
               Why Egyptian<br />Agriculture?
-            </h2>
-            <p className="text-[#173F35]/65 leading-relaxed mb-7 text-[15px]">
+            </Reveal>
+            <Reveal as="p" type="fade" className="text-[#173F35]/65 leading-relaxed mb-7 text-[15px]">
               Egypt has one of the world's oldest and most productive agricultural traditions. The Nile Delta and Nile Valley create exceptionally fertile growing conditions that produce fresh fruits and vegetables of outstanding quality.
-            </p>
+            </Reveal>
             <ul className="space-y-3.5">
               {[
                 "Rich Nile alluvial soils with natural nutrients",
@@ -144,38 +146,42 @@ export default function AboutPage() {
                 "Strategic location — close to Europe, Gulf, and Asia",
                 "Competitive pricing with premium quality output",
               ].map((pt) => (
-                <li key={pt} className="flex items-start gap-3">
+                <Reveal as="li" type="fade" key={pt} className="flex items-start gap-3">
                   <div className="w-4 h-4 rounded-full border border-[#8FAE5D]/55 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#8FAE5D]" />
                   </div>
                   <span className="text-[13px] text-[#173F35]/65">{pt}</span>
-                </li>
+                </Reveal>
               ))}
             </ul>
           </div>
           <div>
-            <img
-              src="https://images.unsplash.com/photo-1666987571450-29a997016a96?w=900&h=700&fit=crop&auto=format"
-              alt="Egyptian agricultural landscape"
-              className="w-full aspect-[4/3] object-cover rounded-2xl"
-            />
+            <Reveal as="div" type="scale" className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1666987571450-29a997016a96?w=900&h=700&fit=crop&auto=format"
+                alt="Egyptian agricultural landscape"
+                className="w-full h-full object-cover"
+              />
+            </Reveal>
           </div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-24 bg-[#173F35] text-center">
-        <div className="flex items-center justify-center gap-3 mb-4">
+        <Reveal as="div" type="fade" className="flex items-center justify-center gap-3 mb-4">
           <div className="w-5 h-px bg-[#8FAE5D]" />
           <p className="text-[11px] tracking-[0.28em] uppercase text-[#8FAE5D]">Work With Us</p>
           <div className="w-5 h-px bg-[#8FAE5D]" />
-        </div>
-        <h2 className="font-serif text-3xl lg:text-5xl text-[#F6F3EC] mb-8 max-w-2xl mx-auto leading-[1.08]">
+        </Reveal>
+        <Reveal as="h2" type="line" className="font-serif text-3xl lg:text-5xl text-[#F6F3EC] mb-8 max-w-2xl mx-auto leading-[1.08]">
           Ready to Source Premium Egyptian Produce?
-        </h2>
-        <Link to="/contact" className="inline-block px-9 py-4 bg-[#8FAE5D] text-[#173F35] font-medium tracking-wide rounded-full hover:bg-[#F6F3EC] transition-colors text-[13px]">
-          Get in Touch
-        </Link>
+        </Reveal>
+        <Reveal as="div" type="fade">
+          <Link to="/contact" className="inline-block px-9 py-4 bg-[#8FAE5D] text-[#173F35] font-medium tracking-wide rounded-full hover:bg-[#F6F3EC] transition-colors text-[13px]">
+            Get in Touch
+          </Link>
+        </Reveal>
       </section>
     </div>
   );

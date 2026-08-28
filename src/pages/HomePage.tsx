@@ -1,119 +1,52 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Reveal } from "../components/motion/Reveal";
-import { CanvasPyramid } from "../components/motion/CanvasPyramid";
+import { TubesBackground } from "../components/motion/TubesBackground";
 
-/* ── Static data arrays ─────────────────────────────────────── */
-const HERO_IMAGES = [
-  "https://images.unsplash.com/photo-1666987571351-737b29874697?w=900&h=600&fit=crop&auto=format",
-  "https://images.unsplash.com/photo-1744035355878-222dc04f79f5?w=900&h=600&fit=crop&auto=format",
-  "https://images.unsplash.com/photo-1701294878194-2aa42434e9af?w=900&h=600&fit=crop&auto=format",
-];
-
-/* ── Page component ─────────────────────────────────────────── */
 export default function HomePage() {
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const onMove = (e: MouseEvent) => {
-      const r = el.getBoundingClientRect();
-      setMouse({
-        x: (e.clientX - r.left - r.width / 2) / (r.width / 2),
-        y: (e.clientY - r.top - r.height / 2) / (r.height / 2),
-      });
-    };
-    const onLeave = () => setMouse({ x: 0, y: 0 });
-    el.addEventListener("mousemove", onMove);
-    el.addEventListener("mouseleave", onLeave);
-    return () => {
-      el.removeEventListener("mousemove", onMove);
-      el.removeEventListener("mouseleave", onLeave);
-    };
-  }, []);
-
   return (
     <div className="bg-[#F6F3EC]">
-
-      {/* ── HERO — editorial split with animated card gallery ─── */}
-      <section ref={sectionRef} className="flex flex-col lg:flex-row lg:h-screen">
-
-        {/* Left: typographic editorial column */}
-        <div className="lg:w-1/2 relative flex flex-col justify-center bg-[#F6F3EC] overflow-hidden px-8 sm:px-12 lg:px-16 xl:px-20 pt-28 pb-14 lg:py-0">
-
-          <CanvasPyramid mouseX={mouse.x} mouseY={mouse.y} />
-
-          {/* Content — subtle multi-layer parallax */}
-          <div
-            className="relative z-10 flex flex-col"
-            style={{
-              transform: `translate3d(${mouse.x * 4}px, ${mouse.y * 2.5}px, 0)`,
-              transition: "transform 0.35s ease-out",
-            }}
-          >
-            {/* Brand accent line */}
-            <div className="flex items-center gap-3 mb-8">
+      {/* ── HERO — Tubes Interactive Background ─── */}
+      <section className="relative h-screen w-full overflow-hidden bg-[#050c0a]">
+        <TubesBackground className="absolute inset-0">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none mt-16">
+            <Reveal as="div" type="letter" className="flex items-center gap-3 mb-6">
               <div className="w-6 h-px bg-[#8FAE5D]" />
-              <p className="text-[11px] tracking-[0.3em] uppercase text-[#8FAE5D]">Egyptian Agricultural Exports</p>
-            </div>
-
-            <Reveal as="h1" type="letter" className="font-serif text-[52px] sm:text-[60px] lg:text-[66px] xl:text-[76px] text-[#173F35] leading-[1.02] mb-8 max-w-[480px]">
-              From Egyptian Soil To Global Markets.
+              <p className="text-[12px] tracking-[0.3em] uppercase text-[#8FAE5D]">Egyptian Agricultural Exports</p>
+              <div className="w-6 h-px bg-[#8FAE5D]" />
             </Reveal>
 
-            <p className="text-[#173F35]/58 text-base lg:text-[17px] max-w-[340px] leading-relaxed mb-11">
-              Premium agricultural crops sourced, packed, and delivered with uncompromising quality.
-            </p>
+            <Reveal as="h1" type="letter" className="font-serif text-5xl sm:text-7xl lg:text-8xl text-[#F6F3EC] leading-[1.05] max-w-5xl mx-auto drop-shadow-2xl mb-8">
+              From Egyptian Soil<br />To Global Markets.
+            </Reveal>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <Reveal as="p" type="word" className="text-[#F6F3EC]/70 text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-12 drop-shadow-md">
+              Premium agricultural crops sourced, packed, and delivered with uncompromising quality.
+            </Reveal>
+
+            <Reveal as="div" type="fade" className="flex flex-col sm:flex-row gap-4 pointer-events-auto">
               <Link
                 to="/products"
-                className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#173F35] text-[#F6F3EC] text-[13px] font-medium tracking-wide rounded-full hover:bg-[#1a473b] hover:shadow-lg transition-all duration-300"
+                className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#8FAE5D] text-[#173F35] text-[14px] font-medium tracking-wide rounded-full hover:bg-[#F6F3EC] hover:shadow-lg transition-all duration-300"
               >
                 Explore Products
-                <span className="text-[#8FAE5D] group-hover:translate-x-1 transition-transform">→</span>
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
               </Link>
               <Link
                 to="/contact"
-                className="inline-flex items-center justify-center px-7 py-3.5 border border-[#173F35]/25 text-[#173F35] text-[13px] font-medium tracking-wide rounded-full hover:border-[#173F35]/80 hover:bg-[#173F35]/5 transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-4 border border-[#F6F3EC]/30 text-[#F6F3EC] text-[14px] font-medium tracking-wide rounded-full hover:border-[#F6F3EC] hover:bg-[#F6F3EC]/10 transition-all duration-300 backdrop-blur-sm"
               >
                 Request a Quote
               </Link>
-            </div>
-
-            {/* Stat strip */}
-            <div className="flex items-center gap-6 mt-14 pt-8 border-t border-[#D8C7A1]/50">
-              {[["15+", "Years exporting"], ["40+", "Global markets"], ["200+", "Farm partners"]].map(([num, label]) => (
-                <div key={num} className="flex flex-col">
-                  <span className="font-serif text-xl text-[#173F35]">{num}</span>
-                  <span className="text-[10px] tracking-[0.12em] uppercase text-[#173F35]/45 mt-0.5">{label}</span>
-                </div>
-              ))}
-            </div>
+            </Reveal>
+            
+            <Reveal as="div" type="fade" className="absolute bottom-12 flex flex-col items-center gap-2 text-[#F6F3EC]/40 animate-pulse">
+              <span className="text-[10px] tracking-[0.2em] uppercase">Click anywhere to change colors</span>
+            </Reveal>
           </div>
-        </div>
-
-        {/* Right: Horizontal Immersive Panels */}
-        <div className="lg:w-1/2 relative h-[82vw] sm:h-[55vw] lg:h-full bg-[#050c0a] overflow-hidden flex items-center">
-          <div 
-            className="flex gap-4 px-10 absolute left-0 transition-transform duration-[1.5s] ease-out will-change-transform"
-            style={{ transform: `translateX(${-mouse.x * 10}%)` }}
-          >
-            {HERO_IMAGES.map((img, i) => (
-              <div 
-                key={i} 
-                className="relative w-[60vw] lg:w-[40vw] h-[60vh] lg:h-[70vh] flex-shrink-0 overflow-hidden rounded-xl shadow-2xl"
-                style={{ transform: `translateY(${i % 2 === 0 ? mouse.y * 10 : mouse.y * -10}px)`, transition: "transform 0.6s ease-out" }}
-              >
-                <img src={img} alt="Farm" className="absolute inset-0 w-full h-full object-cover opacity-80" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050c0a]/80 to-transparent" />
-              </div>
-            ))}
-          </div>
-        </div>
+        </TubesBackground>
       </section>
+
 
       {/* ── TRUST STRIP ───────────────────────────────────────── */}
       <div className="bg-[#173F35]">

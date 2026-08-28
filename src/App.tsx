@@ -36,9 +36,9 @@ function Layout() {
   }, [location, displayLocation.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#F6F3EC] flex flex-col font-sans overflow-hidden">
       <Nav />
-      <main className={`flex-1 min-w-0 transition-all duration-300 ease-in-out ${isTransitioning ? "opacity-0 blur-sm translate-y-2 scale-[0.99]" : "opacity-100 blur-none translate-y-0 scale-100"}`}>
+      <main className={`flex-1 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
         <Routes location={displayLocation}>
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />

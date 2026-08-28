@@ -24,131 +24,100 @@ function PyramidMark({ size = 32 }: { size?: number }) {
 }
 
 export default function Nav() {
+  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrollPercent, setScrollPercent] = useState(0);
   const location = useLocation();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     setMenuOpen(false);
   }, [location]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollPercent(h > 0 ? window.scrollY / h : 0);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Determine text color based on route if not scrolled
+  const isDarkHero = location.pathname === "/products" || location.pathname === "/about" || location.pathname === "/process";
+  const navTextColor = scrolled ? "text-[#173F35]" : isDarkHero ? "text-[#F6F3EC]" : "text-[#173F35]";
+  const navBg = scrolled ? "bg-[#F6F3EC]/95 backdrop-blur-md shadow-sm border-b border-[#D8C7A1]/30" : "bg-transparent";
 
   return (
     <>
-      {/* ── Desktop Editorial Rail (Left Side) ── */}
-      <aside
-        className={`hidden lg:flex fixed top-0 left-0 bottom-0 z-50 bg-[#F6F3EC] border-r border-[#D8C7A1]/40 flex-col transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${
-          menuOpen ? "w-[320px]" : "w-[80px]"
-        }`}
-        onMouseLeave={() => setMenuOpen(false)}
-      >
-        {/* Top: Logo & Trigger */}
-        <div className="h-[120px] flex flex-col items-center justify-center border-b border-[#D8C7A1]/20 w-full relative">
-          <Link to="/" className="mb-4">
-            <PyramidMark size={28} />
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${navBg}`}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between h-[80px]">
+          {/* Logo */}
+          <Link to="/" className={`flex items-center gap-3 group flex-shrink-0 transition-colors duration-300 ${navTextColor}`}>
+            <PyramidMark size={32} />
+            <div>
+              <div className="font-serif text-[17px] leading-none tracking-wide">Green Pyramids</div>
+              <div className={`text-[9px] tracking-[0.2em] uppercase mt-1 opacity-70`}>Agricultural Exports</div>
+            </div>
           </Link>
-          <button
-            onMouseEnter={() => setMenuOpen(true)}
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="text-[#173F35] flex flex-col gap-1 w-5"
-          >
-            <span className={`block h-[1px] bg-current transition-all ${menuOpen ? "w-full" : "w-full"}`} />
-            <span className={`block h-[1px] bg-current transition-all ${menuOpen ? "w-full" : "w-3/4"}`} />
-          </button>
-        </div>
 
-        {/* Middle: Expanded Navigation Links */}
-        <div className="flex-1 overflow-hidden relative w-full">
-          <nav
-            className={`absolute inset-0 flex flex-col justify-center px-12 transition-all duration-500 ${
-              menuOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4 pointer-events-none"
-            }`}
-          >
+          {/* Desktop Links */}
+          <nav className="hidden lg:flex items-center gap-8">
             {links.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
-                className={`font-serif text-[28px] leading-[1.4] transition-all group ${
-                  location.pathname === l.to ? "text-[#8FAE5D]" : "text-[#173F35]/70 hover:text-[#173F35]"
+                className={`text-[13px] font-medium tracking-wide transition-all duration-300 hover:opacity-100 ${
+                  location.pathname === l.to
+                    ? `${navTextColor} opacity-100 border-b border-[#8FAE5D] pb-1`
+                    : `${navTextColor} opacity-60 hover:-translate-y-0.5`
                 }`}
               >
-                <span className="relative inline-block">
-                  {l.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#8FAE5D] transition-all duration-300 group-hover:w-full" />
-                </span>
+                {l.label}
               </Link>
             ))}
-            <Link
-              to="/contact"
-              className="mt-10 px-6 py-3 bg-[#173F35] text-[#F6F3EC] text-[12px] tracking-wide text-center hover:bg-[#8FAE5D] hover:text-[#173F35] transition-colors"
-            >
-              Request a Quote
-            </Link>
           </nav>
 
-          {/* Middle: Collapsed Indicators */}
-          <div
-            className={`absolute inset-0 flex flex-col items-center justify-center gap-6 transition-all duration-500 ${
-              menuOpen ? "opacity-0 translate-x-4 pointer-events-none" : "opacity-100 translate-x-0"
-            }`}
-          >
-            <span className="text-[10px] tracking-[0.2em] text-[#173F35] writing-vertical-rl rotate-180">
-              EXPLORE
-            </span>
-            <div className="w-px h-16 bg-[#D8C7A1]/40" />
-            <span className="text-[10px] tracking-widest text-[#173F35]/40 font-serif">
-              0{Math.floor(scrollPercent * 4) + 1}
-            </span>
+          {/* Desktop CTA & Hamburger */}
+          <div className="flex items-center gap-5">
+            <Link
+              to="/contact"
+              className={`hidden lg:flex px-6 py-2.5 rounded-full text-[13px] font-medium tracking-wide transition-all duration-300 ${
+                scrolled || !isDarkHero
+                  ? "bg-[#173F35] text-[#F6F3EC] hover:bg-[#8FAE5D] hover:text-[#173F35]"
+                  : "bg-[#F6F3EC] text-[#173F35] hover:bg-[#8FAE5D]"
+              }`}
+            >
+              Request Quote
+            </Link>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className={`lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-[5px] rounded-full transition-colors ${navTextColor}`}
+              aria-label="Toggle menu"
+            >
+              <span className={`block h-[1.5px] w-5 bg-current transition-transform duration-300 ${menuOpen ? "rotate-45 translate-y-[6.5px]" : ""}`} />
+              <span className={`block h-[1.5px] w-5 bg-current transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+              <span className={`block h-[1.5px] w-5 bg-current transition-transform duration-300 ${menuOpen ? "-rotate-45 -translate-y-[6.5px]" : ""}`} />
+            </button>
           </div>
         </div>
-
-        {/* Bottom: Scroll Progress */}
-        <div className="h-[120px] flex flex-col items-center justify-end pb-8 border-t border-[#D8C7A1]/20 w-full relative">
-          <div className="w-[2px] h-12 bg-[#D8C7A1]/30 relative rounded-full overflow-hidden">
-            <div
-              className="absolute top-0 left-0 right-0 bg-[#8FAE5D] rounded-full origin-top"
-              style={{ height: `${scrollPercent * 100}%` }}
-            />
-          </div>
-        </div>
-      </aside>
-
-      {/* Spacer for desktop layout since aside is fixed left */}
-      <div className="hidden lg:block w-[80px] shrink-0" />
-
-      {/* ── Mobile Header (Top) ── */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[#F6F3EC]/96 backdrop-blur-sm border-b border-[#D8C7A1]/50 h-[72px] flex items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <PyramidMark size={24} />
-          <span className="font-serif text-[#173F35] text-[15px]">Green Pyramids</span>
-        </Link>
-        <button onClick={() => setMenuOpen(!menuOpen)} className="text-[#173F35] w-5 h-5 flex flex-col justify-center gap-1">
-          <span className={`block h-[1px] bg-current transition-all ${menuOpen ? "rotate-45 translate-y-[5px]" : ""}`} />
-          <span className={`block h-[1px] bg-current transition-all ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`block h-[1px] bg-current transition-all ${menuOpen ? "-rotate-45 -translate-y-[5px]" : ""}`} />
-        </button>
       </header>
 
-      {/* ── Mobile Full-screen Menu ── */}
+      {/* Full-screen Mobile Menu */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 bg-[#173F35] flex flex-col pt-[72px] transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${
-          menuOpen ? "translate-y-0" : "-translate-y-full"
+        className={`fixed inset-0 z-40 bg-[#173F35] flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${
+          menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <nav className="flex flex-col px-8 pt-12 gap-6">
+        <div className="flex items-center justify-between px-6 h-[80px] border-b border-[#F6F3EC]/10">
+          <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3">
+            <PyramidMark size={32} />
+            <span className="font-serif text-[#F6F3EC] text-[17px]">Green Pyramids</span>
+          </Link>
+        </div>
+        <nav className="flex flex-col px-8 pt-12 gap-6 overflow-y-auto">
           {links.map((l, i) => (
             <Link
               key={l.to}
               to={l.to}
-              style={{ transitionDelay: menuOpen ? `${i * 0.05 + 0.2}s` : "0s" }}
+              style={{ transitionDelay: menuOpen ? `${i * 0.05 + 0.1}s` : "0s" }}
               className={`font-serif text-[2.5rem] leading-none transition-all duration-500 ${
                 menuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               } ${location.pathname === l.to ? "text-[#8FAE5D]" : "text-[#F6F3EC]/80"}`}
@@ -156,6 +125,16 @@ export default function Nav() {
               {l.label}
             </Link>
           ))}
+          <div 
+            className={`mt-10 transition-all duration-500 delay-300 ${menuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+          >
+            <Link
+              to="/contact"
+              className="inline-block w-full text-center py-4 bg-[#8FAE5D] text-[#173F35] font-medium tracking-wide rounded-full"
+            >
+              Request a Quote
+            </Link>
+          </div>
         </nav>
       </div>
     </>
