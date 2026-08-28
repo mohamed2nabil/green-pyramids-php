@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
+@import 'tailwindcss';
+
+@utility clip-path-unveiled {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+@utility clip-path-veiled {
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+@theme inline {
+  --color-forest: #173F35;
+  --color-offwhite: #F6F3EC;
+  --color-sand: #D8C7A1;
+  --color-naturgreen: #8FAE5D;
+  --color-forest-light: #1f5245;
+  --color-sand-dark: #c4ae84;
+  --font-serif: "DM Serif Display", serif;
+  --font-sans: "DM Sans", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #F6F3EC;
+  color: #173F35;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D8C7A1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8FAE5D;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+@keyframes pyramidBreathe {
+  0%, 100% { transform: scale(1) translateY(0px); }
+  50% { transform: scale(1.012) translateY(-6px); }
+}
+
+@keyframes pyramidGlow {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.65; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pyramid-breathe {
+  animation: pyramidBreathe 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-text-enter {
+  animation: fadeUp 0.9s ease forwards;
+}

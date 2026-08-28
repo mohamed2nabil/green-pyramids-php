@@ -1,0 +1,10 @@
+{
+  "description": "Connects international B2B buyers with premium Egyptian agricultural exports, showcasing fresh produce through a modern, elegant, and user-friendly interface.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
