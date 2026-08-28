@@ -39,7 +39,7 @@ export default function Nav() {
   }, [location]);
 
   // Determine text color based on route if not scrolled
-  const isDarkHero = location.pathname === "/products" || location.pathname === "/about" || location.pathname === "/process";
+  const isDarkHero = location.pathname === "/" || location.pathname === "/products" || location.pathname === "/about" || location.pathname === "/process";
   const navTextColor = scrolled ? "text-[#173F35]" : isDarkHero ? "text-[#F6F3EC]" : "text-[#173F35]";
   const navBg = scrolled ? "bg-[#F6F3EC]/95 backdrop-blur-md shadow-sm border-b border-[#D8C7A1]/30" : "bg-transparent";
 

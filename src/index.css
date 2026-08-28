@@ -1,5 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
 @import 'tailwindcss';
+
+@font-face {
+  font-family: 'Cinzel';
+  src: url('/fonts/Cinzel/Cinzel-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: url('/fonts/Barlow/Barlow-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: url('/fonts/Barlow/Barlow-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: url('/fonts/Barlow/Barlow-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @utility clip-path-unveiled {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
@@ -22,8 +52,8 @@ body,
   --color-naturgreen: #8FAE5D;
   --color-forest-light: #1f5245;
   --color-sand-dark: #c4ae84;
-  --font-serif: "DM Serif Display", serif;
-  --font-sans: "DM Sans", sans-serif;
+  --font-serif: "Cinzel", serif;
+  --font-sans: "Barlow", sans-serif;
 }
 
 * {
