@@ -3,6 +3,62 @@ import { Link } from "react-router-dom";
 import { Reveal } from "../components/motion/Reveal";
 import { TubesBackground } from "../components/motion/TubesBackground";
 
+const CATEGORIES = [
+  {
+    name: "Citrus Fruits",
+    count: "8 Varieties",
+    desc: "Navel oranges, Valencias, lemons, and mandarins grown in the Nile Delta.",
+    img: "https://images.unsplash.com/photo-1594143887697-fb87011a8b2a?w=800&h=1000&fit=crop&auto=format"
+  },
+  {
+    name: "Fresh Vegetables",
+    count: "15 Varieties",
+    img: "https://images.unsplash.com/photo-1572439409920-0b7111340de3?w=800&h=600&fit=crop&auto=format"
+  },
+  {
+    name: "Seasonal Crops",
+    count: "12 Varieties",
+    img: "https://images.unsplash.com/photo-1666987571351-737b29874697?w=800&h=600&fit=crop&auto=format"
+  },
+  {
+    name: "Grapes & Berries",
+    count: "6 Varieties",
+    img: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=800&h=600&fit=crop&auto=format"
+  }
+];
+
+const FEATURED_PRODUCTS = [
+  { name: "Egyptian Mango", cat: "Fruits", season: "May – Sep", img: "https://images.unsplash.com/photo-1744035355878-222dc04f79f5?w=500&h=600&fit=crop&auto=format" },
+  { name: "Pomegranate", cat: "Fruits", season: "Sep – Jan", img: "https://images.unsplash.com/photo-1701294878194-2aa42434e9af?w=500&h=600&fit=crop&auto=format" },
+  { name: "Navel Orange", cat: "Citrus", season: "Nov – Apr", img: "https://images.unsplash.com/photo-1594143887697-fb87011a8b2a?w=500&h=600&fit=crop&auto=format" },
+  { name: "Strawberry", cat: "Fruits", season: "Dec – Apr", img: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=500&h=600&fit=crop&auto=format" },
+  { name: "Potato", cat: "Vegetables", season: "Year-round", img: "https://images.unsplash.com/photo-1572439409920-0b7111340de3?w=500&h=600&fit=crop&auto=format" },
+  { name: "White Onion", cat: "Vegetables", season: "Mar – Jul", img: "https://images.unsplash.com/photo-1720807740685-d9cdcb0836a7?w=500&h=600&fit=crop&auto=format" },
+];
+
+const TRUST_FEATURES = [
+  { n: "01", title: "Traceable Origins", body: "Every shipment is tracked back to the exact farm, ensuring accountability and consistent quality." },
+  { n: "02", title: "Export Grade", body: "We strictly adhere to EU and international MRLs (Maximum Residue Limits) and quality standards." },
+  { n: "03", title: "Cold Chain", body: "Advanced cooling and packing facilities preserve freshness from harvest to destination." },
+  { n: "04", title: "Reliability", body: "Accurate sizing, proper packing, and on-time shipping for long-term partnerships." },
+];
+
+const PROCESS_STEPS = [
+  { n: "01", label: "Harvest" },
+  { n: "02", label: "Selection" },
+  { n: "03", label: "Cooling" },
+  { n: "04", label: "Packing" },
+  { n: "05", label: "Inspection" },
+  { n: "06", label: "Export" },
+];
+
+const MARKETS = [
+  { region: "Europe", desc: "Serving major distributors in the UK, Netherlands, Germany, and Italy with strict compliance to EU standards." },
+  { region: "Gulf Countries", desc: "Rapid logistics via sea and air to Saudi Arabia, UAE, and neighboring nations." },
+  { region: "Asia", desc: "Expanding reach into Eastern markets with long-shelf-life packing solutions." },
+  { region: "Africa", desc: "Supporting neighboring regional markets with essential agricultural commodities." },
+];
+
 export default function HomePage() {
   return (
     <div className="bg-[#F6F3EC]">
