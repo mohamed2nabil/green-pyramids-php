@@ -1,0 +1,24 @@
+/* Fade In */
+.reveal-fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal-fade.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered text splitting */
+.word, .letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(15px);
+  filter: blur(4px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out, filter 0.6s ease-out;
+}
+.is-visible .word, .is-visible .letter {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
