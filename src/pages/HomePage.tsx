@@ -1,316 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Reveal } from "../components/motion/Reveal";
-
-/* ── Hero card data — 6 editorial panels ───────────────────── */
-const HERO_CARDS = [
-  {
-    img: "https://images.unsplash.com/photo-1666987571351-737b29874697?w=900&h=1200&fit=crop&auto=format",
-    location: "Nile Delta", type: "Seasonal Crops", tag: "Export Ready",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1744035355878-222dc04f79f5?w=900&h=1200&fit=crop&auto=format",
-    location: "Upper Egypt", type: "Tropical Fruit", tag: "Premium Grade",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1701294878194-2aa42434e9af?w=900&h=1200&fit=crop&auto=format",
-    location: "Nile Delta", type: "Fresh Fruits", tag: "Winter Harvest",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1649192537902-7b06265dd08f?w=900&h=1200&fit=crop&auto=format",
-    location: "Fayoum", type: "Field Crops", tag: "Direct Farm",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=900&h=1200&fit=crop&auto=format",
-    location: "Delta Region", type: "Fresh Vegetables", tag: "Year-round",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1594143887697-fb87011a8b2a?w=900&h=1200&fit=crop&auto=format",
-    location: "Upper Egypt", type: "Citrus", tag: "Nov – Apr",
-  },
-];
-
-/* depth positions: index 0 = front, index 5 = hidden/exit ──── */
-const CARD_POSITIONS = [
-  { scale: 1.00, rotZ:  0.0, tx:  0, ty:  0, opacity: 1.00, zBase: 50 },
-  { scale: 0.90, rotZ: -4.0, tx: -9, ty:  3, opacity: 0.88, zBase: 40 },
-  { scale: 0.81, rotZ:  5.5, tx: 12, ty:  6, opacity: 0.68, zBase: 30 },
-  { scale: 0.72, rotZ: -2.5, tx: -5, ty: 11, opacity: 0.48, zBase: 20 },
-  { scale: 0.63, rotZ:  4.0, tx:  9, ty: 17, opacity: 0.28, zBase: 10 },
-  { scale: 0.50, rotZ: -7.0, tx: 20, ty: 24, opacity: 0.00, zBase:  5 },
-];
+import { CanvasPyramid } from "../components/motion/CanvasPyramid";
 
 /* ── Static data arrays ─────────────────────────────────────── */
-const CATEGORIES = [
-  {
-    name: "Fresh Fruits",
-    desc: "Mangoes, pomegranates, strawberries from Egyptian orchards.",
-    count: "12+ varieties",
-    img: "https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=700&h=900&fit=crop&auto=format",
-  },
-  {
-    name: "Fresh Vegetables",
-    desc: "Premium vegetables grown in Egypt's fertile Nile Delta.",
-    count: "18+ varieties",
-    img: "https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=700&h=600&fit=crop&auto=format",
-  },
-  {
-    name: "Citrus",
-    desc: "Sun-ripened oranges, lemons, and mandarins.",
-    count: "8+ varieties",
-    img: "https://images.unsplash.com/photo-1663681240509-d9a1b7871898?w=700&h=600&fit=crop&auto=format",
-  },
-  {
-    name: "Seasonal Crops",
-    desc: "Egypt's finest seasonal agricultural produce.",
-    count: "Varies by season",
-    img: "https://images.unsplash.com/photo-1666987571351-737b29874697?w=700&h=600&fit=crop&auto=format",
-  },
+const HERO_IMAGES = [
+  "https://images.unsplash.com/photo-1666987571351-737b29874697?w=900&h=600&fit=crop&auto=format",
+  "https://images.unsplash.com/photo-1744035355878-222dc04f79f5?w=900&h=600&fit=crop&auto=format",
+  "https://images.unsplash.com/photo-1701294878194-2aa42434e9af?w=900&h=600&fit=crop&auto=format",
 ];
-
-const FEATURED_PRODUCTS = [
-  { name: "Egyptian Mango", cat: "Fruits", season: "May – Sep", img: "https://images.unsplash.com/photo-1744035355878-222dc04f79f5?w=500&h=620&fit=crop&auto=format" },
-  { name: "Pomegranate", cat: "Fruits", season: "Sep – Jan", img: "https://images.unsplash.com/photo-1701294878194-2aa42434e9af?w=500&h=620&fit=crop&auto=format" },
-  { name: "Navel Orange", cat: "Citrus", season: "Nov – Apr", img: "https://images.unsplash.com/photo-1594143887697-fb87011a8b2a?w=500&h=620&fit=crop&auto=format" },
-  { name: "Strawberry", cat: "Fruits", season: "Dec – Apr", img: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=500&h=620&fit=crop&auto=format" },
-  { name: "Potato", cat: "Vegetables", season: "Year-round", img: "https://images.unsplash.com/photo-1572439409920-0b7111340de3?w=500&h=620&fit=crop&auto=format" },
-  { name: "White Onion", cat: "Vegetables", season: "Mar – Jul", img: "https://images.unsplash.com/photo-1720807740685-d9cdcb0836a7?w=500&h=620&fit=crop&auto=format" },
-];
-
-const TRUST_FEATURES = [
-  { n: "01", title: "Carefully Selected", body: "Premium crops sourced from audited farms across Egypt’s most fertile growing regions." },
-  { n: "02", title: "Quality Controlled", body: "Strict protocols at every stage — from field inspection to export-grade packing." },
-  { n: "03", title: "Export Ready", body: "Professional sorting, grading, and packing meeting international market specifications." },
-  { n: "04", title: "Reliable Delivery", body: "Cold-chain logistics connecting Egyptian farms to global distribution networks." },
-];
-
-const PROCESS_STEPS = [
-  { n: "01", label: "Farm Selection" },
-  { n: "02", label: "Harvesting" },
-  { n: "03", label: "Sorting & QC" },
-  { n: "04", label: "Packing" },
-  { n: "05", label: "Cold Chain" },
-  { n: "06", label: "Global Shipment" },
-];
-
-const MARKETS = [
-  { region: "Europe", desc: "Germany, Netherlands, UK, France, Italy" },
-  { region: "Gulf Region", desc: "UAE, Saudi Arabia, Qatar, Kuwait" },
-  { region: "Middle East", desc: "Jordan, Lebanon, Iraq" },
-  { region: "Asia", desc: "Emerging export opportunities" },
-];
-
-/* ── Animated perspective card gallery ──────────────────────── */
-function HeroCardStack({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
-  const [active, setActive] = useState(0);
-  const [cyclingOut, setCyclingOut] = useState<number | null>(null);
-  const [paused, setPaused] = useState(false);
-  const cyclingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const N = HERO_CARDS.length;
-
-  const advance = useCallback(() => {
-    setActive((prev) => {
-      setCyclingOut(prev);
-      if (cyclingTimerRef.current) clearTimeout(cyclingTimerRef.current);
-      cyclingTimerRef.current = setTimeout(() => setCyclingOut(null), 1450);
-      return (prev + 1) % N;
-    });
-  }, [N]);
-
-  const goTo = useCallback((idx: number) => {
-    setActive((prev) => {
-      if (prev === idx) return prev;
-      setCyclingOut(prev);
-      if (cyclingTimerRef.current) clearTimeout(cyclingTimerRef.current);
-      cyclingTimerRef.current = setTimeout(() => setCyclingOut(null), 1450);
-      return idx;
-    });
-  }, []);
-
-  useEffect(() => {
-    const id = setInterval(advance, paused ? 9000 : 4200);
-    return () => clearInterval(id);
-  }, [paused, advance]);
-
-  useEffect(() => () => {
-    if (cyclingTimerRef.current) clearTimeout(cyclingTimerRef.current);
-  }, []);
-
-  return (
-    <div
-      className="absolute inset-0 overflow-hidden cursor-default"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      {/* Deep atmospheric base */}
-      <div className="absolute inset-0 bg-[#050c0a]" />
-
-      {/* Radial depth gradient — moves opposite to mouse */}
-      <div
-        className="absolute inset-[-10%] opacity-75"
-        style={{
-          background: "radial-gradient(ellipse 70% 65% at 55% 48%, #162e23 0%, #050c0a 70%)",
-          transform: `translate3d(${mouseX * -12}px, ${mouseY * -8}px, 0)`,
-          transition: "transform 0.65s ease-out",
-        }}
-      />
-
-      {/* Faint pyramid geometry — moves with mouse (forward layer) */}
-      <svg
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        style={{
-          opacity: 0.055,
-          transform: `translate3d(${mouseX * 7}px, ${mouseY * 5}px, 0)`,
-          transition: "transform 0.3s ease-out",
-        }}
-        viewBox="0 0 500 500"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <polygon points="250,55 52,445 448,445" stroke="#8FAE5D" strokeWidth="1.0" fill="none" />
-        <line x1="152" y1="190" x2="348" y2="190" stroke="#D8C7A1" strokeWidth="0.6" />
-        <line x1="105" y1="290" x2="395" y2="290" stroke="#D8C7A1" strokeWidth="0.6" />
-        <line x1="58" y1="390" x2="442" y2="390" stroke="#D8C7A1" strokeWidth="0.5" />
-        <line x1="250" y1="55" x2="52" y2="445" stroke="#8FAE5D" strokeWidth="0.5" opacity="0.5" />
-        <line x1="250" y1="55" x2="448" y2="445" stroke="#050c0a" strokeWidth="0.5" opacity="0.8" />
-      </svg>
-
-      {/* Card stack — centered pivot area */}
-      <div className="absolute" style={{ top: "9%", bottom: "9%", left: "10%", right: "10%" }}>
-        {HERO_CARDS.map((card, i) => {
-          const posIdx = (i - active + N) % N;
-          const cfg = CARD_POSITIONS[posIdx];
-          const parallaxFactor = Math.max(0, 1 - posIdx * 0.16);
-          const px = mouseX * 16 * parallaxFactor;
-          const py = mouseY * 10 * parallaxFactor;
-          const zIdx = cyclingOut === i ? 60 : cfg.zBase;
-
-          return (
-            /* Outer wrapper: fast parallax only */
-            <div
-              key={i}
-              className="absolute inset-0"
-              style={{
-                zIndex: zIdx,
-                transform: `translate3d(${px}px, ${py}px, 0)`,
-                transition: "transform 0.12s linear",
-              }}
-            >
-              {/* Inner wrapper: slow cinematic cycling */}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  transform: `scale(${cfg.scale}) rotateZ(${cfg.rotZ}deg) translate(${cfg.tx}%, ${cfg.ty}%)`,
-                  opacity: cfg.opacity,
-                  transition: "transform 1.15s cubic-bezier(0.76,0,0.24,1), opacity 1.15s cubic-bezier(0.76,0,0.24,1)",
-                  willChange: "transform, opacity",
-                  borderRadius: "11px",
-                  overflow: "hidden",
-                  boxShadow:
-                    posIdx === 0
-                      ? "0 50px 130px -22px rgba(0,0,0,0.80), 0 0 0 1px rgba(255,255,255,0.055)"
-                      : `0 ${26 - posIdx * 4}px ${72 - posIdx * 11}px -14px rgba(0,0,0,${0.52 - posIdx * 0.08})`,
-                }}
-              >
-                {/* Photograph */}
-                <img
-                  src={card.img}
-                  alt={card.type}
-                  draggable={false}
-                  className="absolute inset-[-6%] w-[112%] h-[112%] object-cover select-none"
-                  style={{ objectPosition: "center 38%" }}
-                />
-
-                {/* Bottom atmosphere gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#040a08]/90 via-[#0a1a12]/30 to-transparent" />
-
-                {/* 3D edge lighting: left highlight, right shadow */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(to right, rgba(143,174,93,0.11) 0%, transparent 32%, rgba(4,10,7,0.28) 100%)",
-                  }}
-                />
-
-                {/* Top edge vignette */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#040a08]/30 to-transparent" style={{ height: "30%" }} />
-
-                {/* Front card info — only visible on active card */}
-                {posIdx === 0 && (
-                  <div
-                    className="absolute bottom-0 left-0 right-0 p-6"
-                    style={{ animation: "fadeUp 0.6s ease-out both" }}
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#8FAE5D]" />
-                      <p className="text-[10px] tracking-[0.24em] uppercase text-[#D8C7A1]/72">{card.location}</p>
-                    </div>
-                    <p className="font-serif text-[21px] text-[#F6F3EC] leading-tight mb-3">{card.type}</p>
-                    <span
-                      className="text-[9px] tracking-[0.18em] uppercase px-2.5 py-1 rounded-full"
-                      style={{
-                        background: "rgba(246,243,236,0.09)",
-                        color: "rgba(216,199,161,0.78)",
-                        backdropFilter: "blur(8px)",
-                        WebkitBackdropFilter: "blur(8px)",
-                        border: "1px solid rgba(216,199,161,0.12)",
-                      }}
-                    >
-                      {card.tag}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* ── UI overlays: always above card stack ─────────────── */}
-
-      {/* Card counter — top right */}
-      <div className="absolute top-7 right-7 z-[70]">
-        <p className="font-serif text-[12px] text-[#D8C7A1]/38 tabular-nums tracking-widest">
-          {String(active + 1).padStart(2, "0")}&nbsp;/&nbsp;{String(N).padStart(2, "0")}
-        </p>
-      </div>
-
-      {/* Origin label — bottom left */}
-      <div className="absolute bottom-[52px] left-7 z-[70]">
-        <p className="text-[9px] tracking-[0.28em] uppercase text-[#D8C7A1]/38">Nile Delta · Egypt</p>
-      </div>
-
-      {/* Progress dots — bottom center */}
-      <div className="absolute bottom-5 left-0 right-0 z-[70] flex justify-center items-center gap-[7px]">
-        {HERO_CARDS.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            style={{
-              width: i === active ? 20 : 5,
-              height: 2,
-              borderRadius: 1,
-              background: i === active ? "#8FAE5D" : "rgba(216,199,161,0.25)",
-              transition: "width 0.45s cubic-bezier(0.76,0,0.24,1), background 0.35s ease",
-              cursor: "pointer",
-              border: "none",
-              padding: 0,
-              flexShrink: 0,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Premium origin badge — top left */}
-      <div className="absolute top-7 left-7 z-[70] flex items-center gap-2">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#8FAE5D]" />
-        <p className="text-[9px] tracking-[0.22em] uppercase text-[#D8C7A1]/48">Premium Origin</p>
-      </div>
-    </div>
-  );
-}
 
 /* ── Page component ─────────────────────────────────────────── */
 export default function HomePage() {
@@ -345,15 +43,7 @@ export default function HomePage() {
         {/* Left: typographic editorial column */}
         <div className="lg:w-1/2 relative flex flex-col justify-center bg-[#F6F3EC] overflow-hidden px-8 sm:px-12 lg:px-16 xl:px-20 pt-28 pb-14 lg:py-0">
 
-          {/* Subtle pyramid watermark ghost */}
-          <div className="absolute -bottom-10 -left-10 pointer-events-none opacity-[0.035] hidden lg:block" aria-hidden>
-            <svg width="380" height="380" viewBox="0 0 380 380" fill="none">
-              <polygon points="190,24 18,356 362,356" stroke="#173F35" strokeWidth="2" />
-              <line x1="129" y1="134" x2="251" y2="134" stroke="#173F35" strokeWidth="1" />
-              <line x1="96" y1="200" x2="284" y2="200" stroke="#173F35" strokeWidth="1" />
-              <line x1="56" y1="270" x2="324" y2="270" stroke="#173F35" strokeWidth="1" />
-            </svg>
-          </div>
+          <CanvasPyramid mouseX={mouse.x} mouseY={mouse.y} />
 
           {/* Content — subtle multi-layer parallax */}
           <div
@@ -405,9 +95,23 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Right: animated perspective card gallery */}
-        <div className="lg:w-1/2 relative h-[82vw] sm:h-[55vw] lg:h-full bg-[#050c0a] overflow-hidden">
-          <HeroCardStack mouseX={mouse.x} mouseY={mouse.y} />
+        {/* Right: Horizontal Immersive Panels */}
+        <div className="lg:w-1/2 relative h-[82vw] sm:h-[55vw] lg:h-full bg-[#050c0a] overflow-hidden flex items-center">
+          <div 
+            className="flex gap-4 px-10 absolute left-0 transition-transform duration-[1.5s] ease-out will-change-transform"
+            style={{ transform: `translateX(${-mouse.x * 10}%)` }}
+          >
+            {HERO_IMAGES.map((img, i) => (
+              <div 
+                key={i} 
+                className="relative w-[60vw] lg:w-[40vw] h-[60vh] lg:h-[70vh] flex-shrink-0 overflow-hidden rounded-xl shadow-2xl"
+                style={{ transform: `translateY(${i % 2 === 0 ? mouse.y * 10 : mouse.y * -10}px)`, transition: "transform 0.6s ease-out" }}
+              >
+                <img src={img} alt="Farm" className="absolute inset-0 w-full h-full object-cover opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050c0a]/80 to-transparent" />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
