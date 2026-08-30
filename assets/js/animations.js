@@ -208,6 +208,7 @@ function initProductShowcaseGallery() {
 
 
 function initAnimatedHeadings() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   const headings = document.querySelectorAll('.anim-heading');
   if (!headings.length) return;
   
@@ -215,47 +216,30 @@ function initAnimatedHeadings() {
   if (mediaQueryReducedMotion.matches) return;
 
   headings.forEach(heading => {
-    // Avoid double-splitting
     if (heading.dataset.splitted) return;
-    
     const text = heading.textContent;
     heading.innerHTML = '';
     
-    // Split into characters, keeping spaces intact
-    let charIndex = 0;
     for (let i = 0; i < text.length; i++) {
-      const char = text[i];
-      if (char === ' ') {
+      if (text[i] === ' ') {
         heading.appendChild(document.createTextNode(' '));
       } else {
         const span = document.createElement('span');
-        span.textContent = char;
-        span.className = 'letter-anim inline-block transition-all duration-700 ease-out';
-        span.style.opacity = '0';
-        span.style.transform = 'translateY(30px)';
-        span.style.filter = 'blur(12px)';
-        span.style.transitionDelay = `${charIndex * 0.03}s`;
+        span.textContent = text[i];
+        span.className = 'inline-block';
         heading.appendChild(span);
-        charIndex++;
       }
     }
     heading.dataset.splitted = 'true';
     
-    // Use Intersection Observer to trigger the animation
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const spans = entry.target.querySelectorAll('span');
-          spans.forEach(span => {
-            span.style.opacity = '1';
-          span.style.transform = 'translateY(0)';
-          span.style.filter = 'blur(0)';
-          });
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.2 });
-    
-    observer.observe(heading);
+    gsap.from(heading.querySelectorAll('span'), {
+      scrollTrigger: { trigger: heading, start: 'top 85%' },
+      opacity: 0,
+      y: 30,
+      filter: 'blur(12px)',
+      duration: 0.7,
+      stagger: 0.03,
+      ease: 'power2.out'
+    });
   });
 }
