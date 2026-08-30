@@ -55,17 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePathDraw();
   }
 
-  // 4. Header Shadow & Background on Scroll
-  const header = document.getElementById('site-header');
-  if (header) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 30) {
-        header.classList.add('shadow-lg', 'bg-[#173F35]/95', 'backdrop-blur-md');
-      } else {
-        header.classList.remove('shadow-lg');
-      }
-    }, { passive: true });
-  }
+  // 4. Header Shadow & Background on Scroll (Moved to main.js to avoid conflicts)
+
 
   // 5. Product Showcase Pinned Horizontal Scroll Gallery (GSAP + ScrollTrigger)
   initProductShowcaseGallery();

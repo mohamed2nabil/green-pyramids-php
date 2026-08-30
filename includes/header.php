@@ -116,6 +116,6 @@ $currentUrl = $protocol . '://' . $domain . $_SERVER['REQUEST_URI'];
     }
     </script>
   </head>
-  <body class="font-sans bg-[#F6F3EC] text-[#173F35] pt-[80px] overflow-x-hidden">
+  <body class="font-sans bg-[#F6F3EC] text-[#173F35] pt-[80px] overflow-x-hidden block">
     <?php include 'includes/navigation.php'; ?>
-    <main class="flex-1">
+    <main class="flex-1 min-w-0">
