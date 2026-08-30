@@ -1,58 +1,50 @@
 <?php include 'includes/header.php'; ?>
-<?php
-$PRODUCTS = [
-  "egyptian-mango" => [
-    "name" => "Egyptian Mango",
-    "cat" => "Fruits",
-    "origin" => "Egypt — Upper Egypt & Nile Valley",
-    "season" => "May – September",
-    "packaging" => ["4 kg Carton", "5 kg Carton", "10 kg Carton", "Custom Packaging"],
-    "sizes" => ["Extra Large", "Large", "Medium", "Small"],
-    "desc" => "Renowned for its exceptional sweetness and rich aroma, the Egyptian mango is among the world's most sought-after tropical fruits. Grown in the warm climate of Upper Egypt and the Nile Valley, our mangoes are harvested at peak ripeness and carefully sorted to international quality standards.",
-    "img" => "https://images.unsplash.com/photo-1744035355878-222dc04f79f5?w=900&h=1100&fit=crop&auto=format",
-    "galleryImgs" => [
-      "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=500&h=400&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=500&h=400&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1652211955967-99c892925469?w=500&h=400&fit=crop&auto=format",
-    ],
-  ],
-  "pomegranate" => [
-    "name" => "Pomegranate",
-    "cat" => "Fruits",
-    "origin" => "Egypt — Nile Delta",
-    "season" => "September – January",
-    "packaging" => ["4 kg Carton", "5 kg Carton", "Custom Packaging"],
-    "sizes" => ["Extra Large", "Large", "Medium"],
-    "desc" => "Egyptian pomegranates are celebrated for their vibrant ruby-red arils, exceptional juice content, and balanced sweet-tart flavor. Grown in ideal Mediterranean-adjacent conditions, they are exported to premium markets across Europe and the Middle East.",
-    "img" => "https://images.unsplash.com/photo-1701294878194-2aa42434e9af?w=900&h=1100&fit=crop&auto=format",
-    "galleryImgs" => [
-      "https://images.unsplash.com/photo-1645190392820-fcc39e2f3585?w=500&h=400&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=500&h=400&fit=crop&auto=format",
-      "https://images.unsplash.com/photo-1652211955967-99c892925469?w=500&h=400&fit=crop&auto=format",
-    ],
-  ]
-];
+$id = isset($_GET['id']) ? strtolower($_GET['id']) : '';
 
-$FALLBACK = [
-  "name" => "Fresh Product",
-  "cat" => "Egyptian Produce",
-  "origin" => "Egypt",
-  "season" => "Seasonal",
-  "packaging" => ["4 kg Carton", "5 kg Carton"],
-  "sizes" => ["Large", "Medium"],
-  "desc" => "Premium quality Egyptian agricultural produce, carefully selected and packed for international export markets.",
-  "img" => "https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=900&h=1100&fit=crop&auto=format",
-  "galleryImgs" => [
-    "https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=500&h=400&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1652211955967-99c892925469?w=500&h=400&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1759272840538-ae4b07214c71?w=500&h=400&fit=crop&auto=format",
-  ],
-];
+require_once 'includes/db.php';
 
-$id = isset($_GET['id']) ? $_GET['id'] : '';
-$product = isset($PRODUCTS[$id]) ? $PRODUCTS[$id] : $FALLBACK;
-if (!isset($PRODUCTS[$id]) && $id !== '') {
-    $product['name'] = ucwords(str_replace('-', ' ', $id));
+$query = "SELECT p.*, c.category_name 
+          FROM products p 
+          LEFT JOIN categories c ON p.category_id = c.category_id 
+          WHERE p.slug = ? LIMIT 1";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $id);
+$stmt->execute();
+$db_result = $stmt->get_result();
+$db_product = $db_result->fetch_assoc();
+
+if ($db_product) {
+    $product = [
+        "name" => $db_product['name'],
+        "cat" => $db_product['category_name'] ?? 'Fresh Produce',
+        "origin" => "Egypt",
+        "season" => "Check Availability", // Could map avail_jan, avail_feb etc to a string if needed
+        "packaging" => explode("\n", $db_product['packaging_types']),
+        "sizes" => explode(",", $db_product['sizes']),
+        "desc" => $db_product['description'],
+        "img" => asset_url($db_product['image_path']),
+        "galleryImgs" => [
+            "https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=500&h=400&fit=crop&auto=format",
+            "https://images.unsplash.com/photo-1652211955967-99c892925469?w=500&h=400&fit=crop&auto=format",
+            "https://images.unsplash.com/photo-1759272840538-ae4b07214c71?w=500&h=400&fit=crop&auto=format",
+        ],
+    ];
+} else {
+    $product = [
+        "name" => ucwords(str_replace('-', ' ', $id)),
+        "cat" => "Egyptian Produce",
+        "origin" => "Egypt",
+        "season" => "Seasonal",
+        "packaging" => ["4 kg Carton", "5 kg Carton"],
+        "sizes" => ["Large", "Medium"],
+        "desc" => "Premium quality Egyptian agricultural produce, carefully selected and packed for international export markets.",
+        "img" => "https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=900&h=1100&fit=crop&auto=format",
+        "galleryImgs" => [
+            "https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=500&h=400&fit=crop&auto=format",
+            "https://images.unsplash.com/photo-1652211955967-99c892925469?w=500&h=400&fit=crop&auto=format",
+            "https://images.unsplash.com/photo-1759272840538-ae4b07214c71?w=500&h=400&fit=crop&auto=format",
+        ],
+    ];
 }
 ?>
 

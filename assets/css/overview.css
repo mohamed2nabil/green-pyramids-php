@@ -1,0 +1,349 @@
+/* overview.css - Dedicated stylesheet for Admin Overview */
+
+:root {
+    --ov-bg: #F8F9FA;
+    --ov-card-bg: #FFFFFF;
+    --ov-border: #E2E8F0;
+    --ov-text-main: #1A3022;
+    --ov-text-muted: #64748B;
+    --ov-emerald: #1A3022;
+    --ov-dark-green: #173F35;
+    --ov-gold: #E6C78C;
+    --ov-gold-hover: #D6AC61;
+}
+
+/* Base Main Content positioning relative to 260px sidebar */
+.main-content.admin-overview {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+    max-width: none !important;
+    min-height: 100vh !important;
+    padding: 32px !important;
+    background-color: var(--ov-bg) !important;
+    box-sizing: border-box !important;
+}
+
+/* Header styling */
+.admin-overview .overview-hero {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 20px !important;
+    margin-bottom: 28px !important;
+    padding-bottom: 20px !important;
+    border-bottom: 1px solid var(--ov-border) !important;
+}
+
+.admin-overview .overview-hero .eyebrow {
+    color: #6B7A6F !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    display: block !important;
+    margin-bottom: 4px !important;
+}
+
+.admin-overview .overview-hero h1 {
+    margin: 0 0 4px 0 !important;
+    font-family: 'Playfair Display', serif !important;
+    font-size: 2.2rem !important;
+    font-weight: 600 !important;
+    color: var(--ov-text-main) !important;
+    line-height: 1.15 !important;
+}
+
+.admin-overview .overview-hero p {
+    color: var(--ov-text-muted) !important;
+    font-size: 0.9rem !important;
+    margin: 0 !important;
+}
+
+.admin-overview .overview-controls {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-wrap: nowrap !important;
+}
+
+.admin-overview .overview-controls label {
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: var(--ov-text-muted) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+}
+
+.admin-overview .overview-controls select {
+    height: 38px !important;
+    padding: 0 12px !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 6px !important;
+    background: #FFFFFF !important;
+    color: var(--ov-text-main) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    outline: none !important;
+}
+
+.admin-overview .icon-button {
+    width: 38px !important;
+    height: 38px !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 6px !important;
+    background: #FFFFFF !important;
+    color: var(--ov-text-main) !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+}
+
+.admin-overview .icon-button:hover {
+    border-color: var(--ov-gold) !important;
+    color: #946C27 !important;
+}
+
+/* Grids */
+.admin-overview .business-grid,
+.admin-overview .ga-kpi-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    margin-bottom: 28px !important;
+}
+
+.admin-overview .analytics-two-column,
+.admin-overview .operations-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+    margin-bottom: 28px !important;
+}
+
+/* Cards */
+.admin-overview .metric-card,
+.admin-overview .dashboard-card {
+    background: var(--ov-card-bg) !important;
+    border: 1px solid var(--ov-border) !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
+    box-sizing: border-box !important;
+}
+
+.admin-overview .metric-card {
+    min-height: 140px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+
+.admin-overview .metric-topline {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.admin-overview .metric-icon {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+}
+
+.admin-overview .metric-icon-green { background: #E8F0EB !important; color: var(--ov-emerald) !important; }
+.admin-overview .metric-icon-gold { background: #FBF1DA !important; color: #B0761F !important; }
+.admin-overview .metric-icon-blue { background: #E6F2F6 !important; color: #276E88 !important; }
+
+.admin-overview .metric-pill {
+    border: 1px solid #DFE6E1 !important;
+    border-radius: 999px !important;
+    color: #50725B !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    padding: 3px 8px !important;
+}
+
+.admin-overview .metric-pill-warm {
+    border-color: #F3DFC0 !important;
+    color: #A06B18 !important;
+}
+
+.admin-overview .metric-label {
+    color: #6B7A6F !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    display: block !important;
+}
+
+.admin-overview .metric-value {
+    color: var(--ov-text-main) !important;
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    margin: 6px 0 !important;
+    display: block !important;
+}
+
+.admin-overview .metric-note {
+    font-size: 0.8rem !important;
+    color: var(--ov-text-muted) !important;
+}
+
+/* Quick Actions Card */
+.admin-overview .actions-card {
+    background: var(--ov-dark-green) !important;
+    border-color: var(--ov-dark-green) !important;
+    color: #FFFFFF !important;
+}
+
+.admin-overview .actions-card h2 {
+    color: #FFFFFF !important;
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.25rem !important;
+    font-weight: 500 !important;
+    margin: 4px 0 4px 0 !important;
+}
+
+.admin-overview .actions-card p {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 0.8rem !important;
+    margin-bottom: 12px !important;
+}
+
+.admin-overview .action-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+}
+
+.admin-overview .action-stack .btn {
+    width: 100% !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    box-sizing: border-box !important;
+}
+
+.admin-overview .action-stack .btn-gold {
+    background: var(--ov-gold) !important;
+    color: var(--ov-emerald) !important;
+    border: none !important;
+}
+
+.admin-overview .action-stack .btn-outline {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Section Headings */
+.admin-overview .section-heading {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: space-between !important;
+    margin-bottom: 16px !important;
+}
+
+.admin-overview .section-heading h2,
+.admin-overview .card-heading h3 {
+    font-family: 'Playfair Display', serif !important;
+    font-weight: 600 !important;
+    margin: 2px 0 0 0 !important;
+    color: var(--ov-text-main) !important;
+}
+
+.admin-overview .card-heading h3 {
+    font-size: 1.25rem !important;
+}
+
+.admin-overview .card-heading p {
+    font-size: 0.8rem !important;
+    color: var(--ov-text-muted) !important;
+    margin: 2px 0 0 0 !important;
+}
+
+.admin-overview .card-heading {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    margin-bottom: 16px !important;
+}
+
+.admin-overview .chart-shell {
+    position: relative !important;
+    height: 320px !important;
+    width: 100% !important;
+}
+
+/* Devices Layout */
+.admin-overview .device-layout {
+    display: grid !important;
+    grid-template-columns: 170px 1fr !important;
+    gap: 16px !important;
+    align-items: center !important;
+}
+
+.admin-overview .device-chart-shell {
+    position: relative !important;
+    height: 180px !important;
+}
+
+/* MOBILE MODE RESPONSIVENESS */
+@media (max-width: 1024px) {
+    .main-content.admin-overview {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 16px !important;
+        padding-top: 70px !important;
+    }
+
+    .admin-overview .overview-hero {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+
+    .admin-overview .overview-controls {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+
+    .admin-overview .business-grid,
+    .admin-overview .ga-kpi-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+
+    .admin-overview .analytics-two-column,
+    .admin-overview .operations-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .admin-overview .device-layout {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-overview .business-grid,
+    .admin-overview .ga-kpi-grid {
+        grid-template-columns: 1fr !important;
+    }
+}

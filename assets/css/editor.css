@@ -1,0 +1,318 @@
+/* CMS Editor Layout */
+.editor-container {
+    display: grid;
+    grid-template-columns: 1fr 450px;
+    gap: 30px;
+    margin-top: 20px;
+    height: calc(100vh - 250px);
+}
+
+/* Tabs Navigation */
+.editor-tabs {
+    display: flex;
+    gap: 30px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    padding: 12px 0;
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.tab-btn.active {
+    color: var(--emerald);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--emerald);
+}
+
+/* Action Header */
+.editor-header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-publish {
+    background-color: var(--emerald);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-discard {
+    background: white;
+    color: var(--text-secondary);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+/* Editor Panels */
+.editor-panel {
+    background: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    overflow-y: auto;
+    height: 100%;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Form Elements */
+.section-group {
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.section-group:last-child {
+    border-bottom: none;
+}
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: var(--emerald);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.image-uploader {
+    border: 2px dashed var(--border-color);
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    background: #F8FAFC;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.image-uploader:hover {
+    border-color: var(--emerald);
+    background: #F1F5F9;
+}
+
+.image-uploader i {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+/* Process Step Editor */
+.step-item {
+    background: #F8FAFC;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+}
+
+.step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.step-badge {
+    background: var(--emerald);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Live Preview Frame */
+.preview-frame-container {
+    background: #E2E8F0;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.preview-toolbar {
+    background: #F1F5F9;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.device-toggles {
+    display: flex;
+    gap: 15px;
+}
+
+.device-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.device-btn.active {
+    color: var(--emerald);
+}
+
+.preview-viewport {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    overflow-y: auto;
+    transition: all 0.5s ease;
+}
+
+.preview-content {
+    background: white;
+    width: 100%;
+    min-height: 100%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transform-origin: top center;
+    transition: width 0.5s ease;
+}
+
+/* Preview Device Widths */
+.preview-viewport.desktop .preview-content { width: 100%; }
+.preview-viewport.tablet .preview-content { width: 768px; }
+.preview-viewport.mobile .preview-content { width: 375px; }
+
+/* Mini Preview Styles */
+.mini-hero {
+    height: 150px;
+    background: #1A3022;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+.mini-hero h1 { font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 5px; }
+.mini-hero p { font-size: 0.7rem; opacity: 0.8; }
+
+.mini-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--gold);
+    padding: 10px;
+    text-align: center;
+}
+
+.mini-stat-item h4 { font-size: 0.8rem; margin: 0; }
+.mini-stat-item p { font-size: 0.5rem; margin: 0; text-transform: uppercase; }
+
+.mini-section {
+    padding: 20px;
+}
+
+.mini-section h2 { font-family: var(--font-serif); font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+.mini-section p { font-size: 0.7rem; line-height: 1.4; color: #444; }
+
+.mini-process-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.mini-step {
+    border: 1px solid #eee;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.mini-step i { color: var(--emerald); font-size: 0.8rem; margin-bottom: 5px; }
+.mini-step h5 { font-size: 0.7rem; margin: 0; }
+
+@media (max-width: 1100px) {
+    .editor-container {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 50vh;
+    }
+
+    .editor-panel {
+        height: auto;
+        max-height: none;
+        min-height: 280px;
+    }
+
+    .preview-frame-container {
+        min-height: 420px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .editor-tabs {
+        flex-wrap: wrap;
+        gap: 0.5rem 1.25rem;
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+
+    .tab-btn.active::after {
+        bottom: 0;
+    }
+
+    .editor-header-actions {
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .field-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .mini-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
