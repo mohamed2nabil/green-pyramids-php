@@ -69,7 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 5. Product Showcase Pinned Horizontal Scroll Gallery (GSAP + ScrollTrigger)
   initProductShowcaseGallery();
+  initAnimatedHeadings();
 });
+
 
 function initProductShowcaseGallery() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
@@ -77,6 +79,7 @@ function initProductShowcaseGallery() {
   const stage = document.getElementById('product-showcase-stage');
   const viewport = document.getElementById('product-showcase-viewport');
   const track = document.getElementById('product-showcase-track');
+  const navItems = document.querySelectorAll('.product-nav-item');
 
   if (!stage || !viewport || !track) return;
 
@@ -111,7 +114,8 @@ function initProductShowcaseGallery() {
     if (distance <= 0) return;
 
     ctx = gsap.context(() => {
-      gsap.to(track, {
+      // Create the main horizontal scroll animation
+      const scrollTween = gsap.to(track, {
         x: () => -getDistance(),
         ease: 'none',
         scrollTrigger: {
@@ -121,13 +125,51 @@ function initProductShowcaseGallery() {
           pin: true,
           scrub: 1,
           invalidateOnRefresh: true,
-          anticipatePin: 1
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            // Update active state in bottom nav
+            if (navItems.length > 0) {
+              const progress = self.progress;
+              const slidesCount = navItems.length;
+              // determine active slide index based on progress
+              let activeIndex = Math.floor(progress * slidesCount);
+              if (activeIndex >= slidesCount) activeIndex = slidesCount - 1;
+              
+              navItems.forEach((item, idx) => {
+                const bar = item.querySelector('.nav-progress');
+                if (idx === activeIndex) {
+                  item.classList.remove('opacity-40');
+                  item.classList.add('opacity-100');
+                  if (bar) bar.style.width = '100%';
+                } else {
+                  item.classList.add('opacity-40');
+                  item.classList.remove('opacity-100');
+                  if (bar) bar.style.width = '0%';
+                }
+              });
+            }
+          }
         }
       });
+      
+      // Add click listeners to nav items to jump to position
+      navItems.forEach((item, idx) => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          const slidesCount = navItems.length;
+          const targetProgress = idx / (slidesCount - 0.9); // approximate
+          // Calculate scroll position based on ScrollTrigger
+          const st = scrollTween.scrollTrigger;
+          if (st) {
+            const scrollPos = st.start + (st.end - st.start) * targetProgress;
+            window.scrollTo({ top: scrollPos, behavior: 'smooth' });
+          }
+        });
+      });
+
     }, stage);
   };
 
-  // Ensure dimensions are valid after images load
   const images = track.querySelectorAll('img');
   const imagePromises = Array.from(images).map(img => {
     if (img.complete) return Promise.resolve();
@@ -146,7 +188,6 @@ function initProductShowcaseGallery() {
     });
   });
 
-  // Handle window resize and orientation changes cleanly
   if (window._productShowcaseResizeHandler) {
     window.removeEventListener('resize', window._productShowcaseResizeHandler);
     window.removeEventListener('orientationchange', window._productShowcaseResizeHandler);
@@ -163,4 +204,58 @@ function initProductShowcaseGallery() {
 
   window.addEventListener('resize', window._productShowcaseResizeHandler, { passive: true });
   window.addEventListener('orientationchange', window._productShowcaseResizeHandler, { passive: true });
+}
+
+
+function initAnimatedHeadings() {
+  const headings = document.querySelectorAll('.anim-heading');
+  if (!headings.length) return;
+  
+  const mediaQueryReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (mediaQueryReducedMotion.matches) return;
+
+  headings.forEach(heading => {
+    // Avoid double-splitting
+    if (heading.dataset.splitted) return;
+    
+    const text = heading.textContent;
+    heading.innerHTML = '';
+    
+    // Split into characters, keeping spaces intact
+    let charIndex = 0;
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      if (char === ' ') {
+        heading.appendChild(document.createTextNode(' '));
+      } else {
+        const span = document.createElement('span');
+        span.textContent = char;
+        span.className = 'letter-anim inline-block transition-all duration-700 ease-out';
+        span.style.opacity = '0';
+        span.style.transform = 'translateY(30px)';
+        span.style.filter = 'blur(12px)';
+        span.style.transitionDelay = `${charIndex * 0.03}s`;
+        heading.appendChild(span);
+        charIndex++;
+      }
+    }
+    heading.dataset.splitted = 'true';
+    
+    // Use Intersection Observer to trigger the animation
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const spans = entry.target.querySelectorAll('span');
+          spans.forEach(span => {
+            span.style.opacity = '1';
+          span.style.transform = 'translateY(0)';
+          span.style.filter = 'blur(0)';
+          });
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    
+    observer.observe(heading);
+  });
 }
