@@ -26,17 +26,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Mobile Menu Drawer Toggle
   const menuBtn = document.getElementById('mobile-menu-btn');
   const menuDrawer = document.getElementById('mobile-menu-drawer');
-  if (menuBtn && menuDrawer) {
-    menuBtn.addEventListener('click', () => {
-      const isOpen = !menuDrawer.classList.contains('translate-x-full');
-      if (isOpen) {
-        menuDrawer.classList.add('translate-x-full');
-        document.body.style.overflow = '';
-      } else {
-        menuDrawer.classList.remove('translate-x-full');
-        document.body.style.overflow = 'hidden';
+  const overlay = document.getElementById('mobile-menu-overlay');
+  
+  if (menuBtn && menuDrawer && overlay) {
+    const toggleMenu = (forceClose = false) => {
+      const isClosed = menuDrawer.classList.contains('translate-x-full');
+      const willClose = forceClose || !isClosed;
+      
+      menuDrawer.classList.toggle('translate-x-full', willClose);
+      overlay.classList.toggle('opacity-0', willClose);
+      overlay.classList.toggle('pointer-events-none', willClose);
+      document.body.style.overflow = willClose ? '' : 'hidden';
+      
+      // Animate hamburger to X
+      const spans = menuBtn.querySelectorAll('span');
+      if (spans.length === 3) {
+        spans[0].style.transform = willClose ? '' : 'translateY(7px) rotate(45deg)';
+        spans[1].style.opacity = willClose ? '1' : '0';
+        spans[2].style.transform = willClose ? '' : 'translateY(-7px) rotate(-45deg)';
       }
-    });
+    };
+
+    menuBtn.addEventListener('click', () => toggleMenu());
+    overlay.addEventListener('click', () => toggleMenu(true));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleMenu(true); });
+    menuDrawer.querySelectorAll('a').forEach(link => link.addEventListener('click', () => toggleMenu(true)));
   }
 
   // 3. Process Page SVG S-Curve Line Scroll Drawing
