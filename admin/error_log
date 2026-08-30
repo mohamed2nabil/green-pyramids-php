@@ -1,0 +1,68 @@
+[01-May-2026 20:55:14 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/greenlig/public_html/green light/php/db_connection.php:7
+Stack trace:
+#0 /home/greenlig/public_html/green light/php/db_connection.php(7): mysqli->__construct('localhost', 'root', '', 'green_light')
+#1 /home/greenlig/public_html/green light/index.php(2): require_once('/home/greenlig/...')
+#2 {main}
+  thrown in /home/greenlig/public_html/green light/php/db_connection.php on line 7
+[01-May-2026 20:56:08 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/greenlig/public_html/php/db_connection.php:7
+Stack trace:
+#0 /home/greenlig/public_html/php/db_connection.php(7): mysqli->__construct('localhost', 'root', '', 'green_light')
+#1 /home/greenlig/public_html/index.php(2): require_once('/home/greenlig/...')
+#2 {main}
+  thrown in /home/greenlig/public_html/php/db_connection.php on line 7
+[01-May-2026 20:56:16 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/greenlig/public_html/php/db_connection.php:7
+Stack trace:
+#0 /home/greenlig/public_html/php/db_connection.php(7): mysqli->__construct('localhost', 'root', '', 'green_light')
+#1 /home/greenlig/public_html/index.php(2): require_once('/home/greenlig/...')
+#2 {main}
+  thrown in /home/greenlig/public_html/php/db_connection.php on line 7
+[01-May-2026 20:56:19 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/greenlig/public_html/php/db_connection.php:7
+Stack trace:
+#0 /home/greenlig/public_html/php/db_connection.php(7): mysqli->__construct('localhost', 'root', '', 'green_light')
+#1 /home/greenlig/public_html/index.php(2): require_once('/home/greenlig/...')
+#2 {main}
+  thrown in /home/greenlig/public_html/php/db_connection.php on line 7
+[01-May-2026 20:58:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/greenlig/public_html/php/db_connection.php:7
+Stack trace:
+#0 /home/greenlig/public_html/php/db_connection.php(7): mysqli->__construct('localhost', 'root', '', 'green_light')
+#1 /home/greenlig/public_html/index.php(2): require_once('/home/greenlig/...')
+#2 {main}
+  thrown in /home/greenlig/public_html/php/db_connection.php on line 7
+[01-May-2026 20:58:17 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/greenlig/public_html/php/db_connection.php:7
+Stack trace:
+#0 /home/greenlig/public_html/php/db_connection.php(7): mysqli->__construct('localhost', 'root', '', 'green_light')
+#1 /home/greenlig/public_html/index.php(2): require_once('/home/greenlig/...')
+#2 {main}
+  thrown in /home/greenlig/public_html/php/db_connection.php on line 7
+[01-May-2026 20:58:50 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/greenlig/public_html/php/db_connection.php:7
+Stack trace:
+#0 /home/greenlig/public_html/php/db_connection.php(7): mysqli->__construct('localhost', 'root', '', 'green_light')
+#1 /home/greenlig/public_html/index.php(2): require_once('/home/greenlig/...')
+#2 {main}
+  thrown in /home/greenlig/public_html/php/db_connection.php on line 7
+[01-May-2026 20:59:46 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/greenlig/public_html/php/db_connection.php:7
+Stack trace:
+#0 /home/greenlig/public_html/php/db_connection.php(7): mysqli->__construct('localhost', 'root', '', 'green_light')
+#1 /home/greenlig/public_html/index.php(2): require_once('/home/greenlig/...')
+#2 {main}
+  thrown in /home/greenlig/public_html/php/db_connection.php on line 7
+[01-May-2026 21:00:22 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/greenlig/public_html/php/db_connection.php:7
+Stack trace:
+#0 /home/greenlig/public_html/php/db_connection.php(7): mysqli->__construct('localhost', 'root', '', 'green_light')
+#1 /home/greenlig/public_html/index.php(2): require_once('/home/greenlig/...')
+#2 {main}
+  thrown in /home/greenlig/public_html/php/db_connection.php on line 7
+[2026-08-29 21:31:50] Diagnostic script failure: Google\Analytics\Data\V1beta\Client\BetaAnalyticsDataClient::runReport(): Argument #1 ($request) must be of type Google\Analytics\Data\V1beta\RunReportRequest, array given, called in D:\programs\xxamp\htdocs\Green Pyramids\includes\services\GoogleAnalyticsService.php on line 399
+[2026-08-29 21:32:19] Diagnostic script failure: Invalid message property: dateRanges
+[2026-08-29 21:32:36] Diagnostic script failure: {
+    "message": "User does not have sufficient permissions for this property. To learn more about Property ID, see https:\/\/developers.google.com\/analytics\/devguides\/reporting\/data\/v1\/property-id.",
+    "code": 7,
+    "status": "PERMISSION_DENIED",
+    "details": []
+}
+[2026-08-29 21:33:48] Diagnostic script failure: {
+    "message": "User does not have sufficient permissions for this property. To learn more about Property ID, see https:\/\/developers.google.com\/analytics\/devguides\/reporting\/data\/v1\/property-id.",
+    "code": 7,
+    "status": "PERMISSION_DENIED",
+    "details": []
+}
