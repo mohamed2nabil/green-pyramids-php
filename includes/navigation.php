@@ -11,7 +11,7 @@ $navItems = [
     'contact.php' => 'Contact'
 ];
 ?>
-<header id="site-header" class="group fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ease-in-out bg-[#173F35] shadow-md border-b border-[#D8C7A1]/20">
+<header id="site-header" class="group fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ease-in-out <?= ($currentPage === 'index.php' || $currentPage === 'about.php') ? 'bg-transparent' : 'bg-[#173F35]' ?> shadow-md border-b border-[#D8C7A1]/20">
   <div class="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between h-[80px]">
     <!-- Brand Logo -->
     <a class="flex items-center gap-3 group flex-shrink-0 transition-colors duration-300 text-[#F6F3EC] [.is-scrolled_&]:text-[#173F35]" href="index.php">
