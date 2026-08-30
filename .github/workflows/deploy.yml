@@ -17,7 +17,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install lftp -y
           lftp -c "
+          debug 3;
           set ftp:ssl-allow no;
+          set ftp:passive-mode false;
           set net:timeout 10;
           set net:max-retries 2;
           open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
