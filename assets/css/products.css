@@ -492,6 +492,82 @@
     width: auto;
 }
 
+/* ==========================================================================
+   MasonryGallery Inspired B2B Export Cards & Cinematic Animations
+   ========================================================================== */
+
+.product-card,
+.masonry-card {
+    will-change: transform, opacity, filter;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
+}
+
+.product-card:hover,
+.masonry-card:hover {
+    transform: translateY(-6px) scale(0.98);
+    border-color: #8FAE5D;
+    box-shadow: 0 20px 40px -12px rgba(13, 42, 36, 0.35), 0 8px 16px -6px rgba(13, 42, 36, 0.2);
+}
+
+.product-card .color-overlay,
+.masonry-card .color-overlay {
+    transition: opacity 0.5s ease-in-out;
+}
+
+.product-card:hover .color-overlay,
+.masonry-card:hover .color-overlay {
+    opacity: 0.6;
+}
+
+.product-card:focus-visible,
+.masonry-card:focus-visible {
+    outline: 2px solid #8FAE5D;
+    outline-offset: 4px;
+}
+
+/* Stagger & Blur-to-Sharp Focus Entrance Animation */
+.product-card.stagger-entrance,
+.masonry-card.stagger-entrance {
+    animation: blurToFocusEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+@keyframes blurToFocusEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(32px) scale(0.95);
+        filter: blur(16px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* Accessibility: Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+    .product-card,
+    .masonry-card,
+    .product-card.stagger-entrance,
+    .masonry-card.stagger-entrance {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+    }
+}
+
+/* Scrollbar Hide for Category Filter Bar */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 @media (max-width: 1200px) {
     .products-container {
         grid-template-columns: 1fr;

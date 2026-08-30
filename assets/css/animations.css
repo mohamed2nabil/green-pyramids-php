@@ -22,3 +22,12 @@
   transform: translateY(0);
   filter: blur(0);
 }
+
+/* Product Showcase Horizontal Scroll Utilities */
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
