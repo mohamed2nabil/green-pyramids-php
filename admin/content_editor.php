@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require "includes/session.php";
 
 if (!isset($_SESSION["admin_id"])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION["admin_id"])) {
 
 require '../includes/db.php';
 
-// ===== Ø¬Ù„Ø¨ ÙƒÙ„ Ø£Ù‚Ø³Ø§Ù… Ø§Ù„ØµÙØ­Ø§Øª Ù…Ù† Ø§Ù„Ø¯Ø§ØªØ§ Ø¨ÙŠØ² =====
+// ===== جلب كل أقسام الصفحات من الداتا بيز =====
 $sections = [];
 if (isset($conn) && $conn) {
     $r = $conn->query("SELECT * FROM page_sections");
@@ -19,7 +19,7 @@ if (isset($conn) && $conn) {
     }
 }
 
-// ===== Ø¬Ù„Ø¨ Ø§Ù„Ø³Ù„Ø§ÙŠØ¯Ø± Ø§Ù„Ø®Ø§Øµ Ø¨Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ© =====
+// ===== جلب السلايدر الخاص بالصفحة الرئيسية =====
 $slides = [];
 if (isset($conn) && $conn) {
     $r = $conn->query("SELECT * FROM hero_slides ORDER BY sort_order");
@@ -30,10 +30,10 @@ if (isset($conn) && $conn) {
     }
 }
 
-// ===== ØªØ¬Ù‡ÙŠØ² Ø§Ù„Ù…ØªØºÙŠØ±Ø§Øª ÙˆØªØµØ­ÙŠØ­ ØºÙ„Ø·Ø© Ù…Ø³Ù…ÙŠØ§Øª Ø§Ù„Ø¯Ø§ØªØ§ Ø¨ÙŠØ² =====
-// Ø¨Ù†Ø¬ÙŠØ¨ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ù…Ù† hero Ø£Ùˆ process Ù„Ùˆ Ù…ØªØ³Ø¬Ù„Ø© ØºÙ„Ø· ÙÙŠ Ø§Ù„Ø¯Ø§ØªØ§ Ø¨ÙŠØ²
+// ===== تجهيز المتغيرات وتصحيح غلطة مسميات الداتا بيز =====
+// بنجيب البيانات من hero أو process لو متسجلة غلط في الداتا بيز
 $aboutHero     = $sections['about']['hero'] ?? $sections['about']['process'] ?? ['heading' => 'OUR LEGACY', 'subtext' => '', 'image_path' => ''];
-// Ø¹Ø´Ø§Ù† Ù†Ø­ÙØ¸ Ø§Ù„ØªØ¹Ø¯ÙŠÙ„Ø§Øª ÙÙŠ Ù†ÙØ³ Ø§Ù„Ù…ÙƒØ§Ù† Ø§Ù„Ù‚Ø¯ÙŠÙ… Ù„Ùˆ Ù…ÙˆØ¬ÙˆØ¯
+// عشان نحفظ التعديلات في نفس المكان القديم لو موجود
 $aboutSectionKey = isset($sections['about']['process']) ? 'process' : 'hero'; 
 
 $processHero   = $sections['process']['hero']  ?? ['heading' => '', 'subtext' => '', 'image_path' => ''];
@@ -41,7 +41,7 @@ $processIntro  = $sections['process']['intro'] ?? ['heading' => '', 'subtext' =>
 $productHero   = $sections['production']['hero'] ?? ['heading' => '', 'subtext' => '', 'image_path' => ''];
 $contactHero   = $sections['contact']['hero'] ?? ['heading' => 'Contact Us', 'subtext' => 'Get in touch with our team', 'image_path' => ''];
 
-// ===== Ø¥Ø¯Ø®Ø§Ù„ Ø§Ù„Ø£Ù‚Ø³Ø§Ù… ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹ Ù„Ùˆ Ù…Ø´ Ù…ÙˆØ¬ÙˆØ¯Ø© ÙÙŠ Ø§Ù„Ø¯Ø§ØªØ§ Ø¨ÙŠØ² =====
+// ===== إدخال الأقسام تلقائياً لو مش موجودة في الداتا بيز =====
 $needsReload = false;
 if (isset($conn) && $conn) {
     if (empty($sections['about']['hero']) && empty($sections['about']['process'])) {
@@ -65,7 +65,7 @@ if (isset($conn) && $conn) {
     }
 }
 
-// ===== Ø§Ù„Ø¯Ø§Ù„Ø© Ø§Ù„Ø³Ø­Ø±ÙŠØ© Ù„Ø¶Ø¨Ø· Ù…Ø³Ø§Ø±Ø§Øª Ø§Ù„ØµÙˆØ± (Ø¨Ø¯ÙˆÙ† ÙƒØ³ÙˆØ±) =====
+// ===== الدالة السحرية لضبط مسارات الصور (بدون كسور) =====
 function resolveAdminImage($path) {
     return asset_url($path);
 }
@@ -140,7 +140,7 @@ function resolveAdminImage($path) {
                 <button class="tab-btn" data-tab="about">About Page</button>
                 <button class="tab-btn" data-tab="process">Process Page</button>
                 <button class="tab-btn" data-tab="product">Product Page</button>
-                <!-- Ø§Ù„ØªØ¨ÙˆÙŠØ¨Ø© Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø© Ù„ØµÙØ­Ø© Ø§Ù„ØªÙˆØ§ØµÙ„ -->
+                <!-- التبويبة الجديدة لصفحة التواصل -->
                 <button class="tab-btn" data-tab="contact">Contact Page</button>
             </div>
         </div>
@@ -148,7 +148,7 @@ function resolveAdminImage($path) {
         <div class="editor-container">
             <!-- ================= HOME TAB ================= -->
             <div id="home-tab" class="tab-content active">
-                <h2 class="section-title" style="margin-top: 0;">  Hero Slides</h2>
+                <h2 class="section-title" style="margin-top: 0;">�� Hero Slides</h2>
                 <?php foreach ($slides as $slide): ?>
                     <div class="slide-card" data-slide-id="<?= $slide['slide_id'] ?>">
                         <div class="form-group">
@@ -177,7 +177,7 @@ function resolveAdminImage($path) {
 
             <!-- ================= ABOUT TAB ================= -->
             <div id="about-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">“ About Page Content</h2>
+                <h2 class="section-title" style="margin-top: 0;">�� About Page Content</h2>
                 
                 <div class="section-card" data-page="about" data-section="<?= $aboutSectionKey ?>">
                     <h3 class="section-title">About Hero (Our Legacy)</h3>
@@ -206,7 +206,7 @@ function resolveAdminImage($path) {
 
             <!-- ================= PROCESS TAB ================= -->
             <div id="process-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">âš™ï¸Process Page Sections</h2>
+                <h2 class="section-title" style="margin-top: 0;">⚙�Process Page Sections</h2>
                 
                 <div class="section-card" data-page="process" data-section="hero">
                     <h3 class="section-title">Hero Section</h3>
@@ -243,7 +243,7 @@ function resolveAdminImage($path) {
 
             <!-- ================= PRODUCT TAB ================= -->
             <div id="product-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">“¦ Product Page Hero</h2>
+                <h2 class="section-title" style="margin-top: 0;">�� Product Page Hero</h2>
                 <div class="section-card" data-page="production" data-section="hero">
                     <h3 class="section-title">Main Hero Content</h3>
                     <div class="form-group">
@@ -271,7 +271,7 @@ function resolveAdminImage($path) {
 
             <!-- ================= CONTACT TAB ================= -->
             <div id="contact-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">“ž Contact Page Hero</h2>
+                <h2 class="section-title" style="margin-top: 0;">�� Contact Page Hero</h2>
                 
                 <div class="section-card" data-page="contact" data-section="hero">
                     <h3 class="section-title">Contact Hero Image</h3>
@@ -306,7 +306,7 @@ function resolveAdminImage($path) {
     <script src="../assets/js/profile.js"></script>
     <script src="../assets/js/editor.js?v=1.1"></script>
 
-    <!-- ÙƒÙˆØ¯ Ø¥Ø¶Ø§ÙÙŠ Ù„ØªØ´ØºÙŠÙ„ Ø§Ù„ØªØ¨ÙˆÙŠØ¨Ø§Øª Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø© Ø¨Ø³Ù„Ø§Ø³Ø© -->
+    <!-- كود إضافي لتشغيل التبويبات الجديدة بسلاسة -->
     <script>
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {

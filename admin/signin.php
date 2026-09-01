@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 require '../includes/db.php';
 
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <p>Access the admin dashboard to manage your platform.</p>
     </div>
 
-    <!-- ”¥ Ù‡Ù†Ø§ Ø§Ù„ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ù…Ù‡Ù… -->
+    <!-- �� هنا التعديل المهم -->
     <?php if(!empty($error)): ?>
         <div style="color: red; text-align: center; margin-bottom: 15px;"><?php echo htmlspecialchars($error); ?></div>
     <?php endif; ?>
@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input 
                     type="password" 
                     name="password" 
-                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" 
+                    placeholder="••••••••" 
                     value="<?php echo htmlspecialchars($_POST['password'] ?? ''); ?>"
                     required>
                 <i class="fas fa-eye password-toggle" id="togglePassword"></i>
@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 </div>
 
-<!-- Ø§Ø®ØªÙŠØ§Ø±ÙŠ: Ø¨Ø³ Ù„Ù„Ù€ eye toggle -->
+<!-- اختياري: بس للـ eye toggle -->
 <script>
 const toggle = document.getElementById("togglePassword");
 const password = document.querySelector("input[name='password']");

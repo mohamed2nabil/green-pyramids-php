@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require "includes/session.php";
 
 if (!isset($_SESSION["admin_id"])) {
@@ -6,7 +6,7 @@ if (!isset($_SESSION["admin_id"])) {
     exit();
 }
 
-// Ø§Ø³ØªØ®Ø¯Ø§Ù… Ù…Ù„Ù Ø§Ù„Ø§ØªØµØ§Ù„ Ø§Ù„Ù…ÙˆØ­Ø¯ ÙˆØ§Ù„ØµØ­ÙŠØ­ Ø§Ù„Ø®Ø§Øµ Ø¨Ùƒ Ø¨Ø¯Ù„Ø§Ù‹ Ù…Ù† includes/db.php
+// استخدام ملف الاتصال الموحد والصحيح الخاص بك بدلاً من includes/db.php
 require '../includes/db.php';
 
 if (!isset($_SESSION["category_flash"])) {
@@ -16,7 +16,7 @@ if (!isset($_SESSION["category_flash"])) {
 $flash = $_SESSION["category_flash"];
 $_SESSION["category_flash"] = ["type" => "", "message" => ""];
 
-// Ø¯Ø§Ù„Ø© Ù„Ø±ÙØ¹ Ø§Ù„ØµÙˆØ±
+// دالة لرفع الصور
 function uploadCategoryImage(array $file): array
 {
     if (($file["error"] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
@@ -70,7 +70,7 @@ function uploadCategoryImage(array $file): array
     return ["ok" => true, "path" => $imagePath, "error" => ""];
 }
 
-// Ø§Ù„ØªØ£ÙƒØ¯ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ø¹Ù…ÙˆØ¯ image_path Ø¨Ø§Ø³ØªØ®Ø¯Ø§Ù… mysqli
+// التأكد من وجود عمود image_path باستخدام mysqli
 try {
     $check = $conn->query("SHOW COLUMNS FROM categories LIKE 'image_path'");
     if ($check && $check->num_rows == 0) {
@@ -80,7 +80,7 @@ try {
     $flash = ["type" => "error", "message" => "Unable to verify categories schema."];
 }
 
-// Ù…Ø¹Ø§Ù„Ø¬Ø© Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù€ POST (Ø¥Ø¶Ø§ÙØ©ØŒ ØªØ¹Ø¯ÙŠÙ„ØŒ Ø­Ø°Ù)
+// معالجة طلبات الـ POST (إضافة، تعديل، حذف)
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = trim($_POST["action"] ?? "");
     $name = trim($_POST["category_name"] ?? "");
@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 if (!$upload["ok"]) {
                     $_SESSION["category_flash"] = ["type" => "error", "message" => $upload["error"]];
                 } else {
-                    // Ø§Ø³ØªØ®Ø¯Ø§Ù… Prepared Statement Ù…Ø¹ mysqli Ù„Ù„Ø¥Ø¶Ø§ÙØ©
+                    // استخدام Prepared Statement مع mysqli للإضافة
                     $stmt = $conn->prepare("INSERT INTO categories (category_name, image_path) VALUES (?, ?)");
                     $path = $upload["path"];
                     $stmt->bind_param("ss", $name, $path);
@@ -108,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($categoryId <= 0 || $name === "") {
                 $_SESSION["category_flash"] = ["type" => "error", "message" => "Invalid category update request."];
             } else {
-                // Ø¬Ù„Ø¨ Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©
+                // جلب الصورة الحالية
                 $stmt = $conn->prepare("SELECT image_path FROM categories WHERE category_id = ?");
                 $stmt->bind_param("i", $categoryId);
                 $stmt->execute();
@@ -127,13 +127,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     } else {
                         $newImagePath = $upload["path"] ?? $currentImagePath;
                         
-                        // ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª
+                        // تحديث البيانات
                         $updateStmt = $conn->prepare("UPDATE categories SET category_name = ?, image_path = ? WHERE category_id = ?");
                         $updateStmt->bind_param("ssi", $name, $newImagePath, $categoryId);
                         $updateStmt->execute();
                         $updateStmt->close();
 
-                        // Ø­Ø°Ù Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ù‚Ø¯ÙŠÙ…Ø© Ø¥Ø°Ø§ ØªÙ… Ø±ÙØ¹ ØµÙˆØ±Ø© Ø¬Ø¯ÙŠØ¯Ø©
+                        // حذف الصورة القديمة إذا تم رفع صورة جديدة
                         if (($upload["path"] ?? null) && $currentImagePath !== "" && $currentImagePath !== $newImagePath && file_exists($currentImagePath)) {
                             unlink($currentImagePath);
                         }
@@ -174,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit();
 }
 
-// Ø¬Ù„Ø¨ Ø§Ù„Ø£Ù‚Ø³Ø§Ù… Ù„Ø¹Ø±Ø¶Ù‡Ø§ ÙÙŠ Ø§Ù„Ø¬Ø¯ÙˆÙ„
+// جلب الأقسام لعرضها في الجدول
 $categories = [];
 try {
     $result = $conn->query("SELECT * FROM categories ORDER BY category_id DESC");
@@ -187,7 +187,7 @@ try {
     $flash = ["type" => "error", "message" => "Unable to load categories."];
 }
 
-// Ø¯Ø§Ù„Ø© Ù„Ø¶Ø¨Ø· Ù…Ø³Ø§Ø± Ø¹Ø±Ø¶ Ø§Ù„ØµÙˆØ±Ø© ÙÙŠ Ø§Ù„Ø£Ø¯Ù…Ù†
+// دالة لضبط مسار عرض الصورة في الأدمن
 function resolveCategoryAdminImage($path) {
     return asset_url($path);
 }

@@ -1,8 +1,8 @@
-﻿<?php
+<?php
 if (!isset($settings) || !isset($contact)) {
     require_once __DIR__ . '/../../includes/db.php';
     if (isset($conn) && $conn) {
-        // Ø¬Ù„Ø¨ Ø§Ù„Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø¹Ø§Ù…Ø© ÙˆØ¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„ØªÙˆØ§ØµÙ„ Ù…Ù† Ø§Ù„Ø¯Ø§ØªØ§Ø¨ÙŠØ²
+        // جلب الإعدادات العامة وإعدادات التواصل من الداتابيز
         $settings = $conn->query("SELECT * FROM site_settings LIMIT 1")->fetch_assoc() ?: [];
         $contact = $conn->query("SELECT * FROM contact_settings LIMIT 1")->fetch_assoc() ?: [];
     } else {
@@ -11,20 +11,20 @@ if (!isset($settings) || !isset($contact)) {
     }
 }
 
-// --- Ù…Ø¹Ø§Ù„Ø¬Ø© Ø±Ù‚Ù… Ø§Ù„ÙˆØ§ØªØ³Ø§Ø¨ Ø¨Ø±Ù…Ø¬ÙŠØ§Ù‹ ---
-// 1. ØªÙ†Ø¸ÙŠÙ Ø§Ù„Ø±Ù‚Ù… Ù…Ù† Ø£ÙŠ Ø±Ù…ÙˆØ² Ø£Ùˆ Ù…Ø³Ø§ÙØ§Øª
+// --- معالجة رقم الواتساب برمجياً ---
+// 1. تنظيف الرقم من أي رموز أو مسافات
 $wa_raw = $contact['whatsapp_number'] ?? '01555518060';
 $wa_clean = preg_replace('/[^0-9]/', '', $wa_raw);
 
-// 2. Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙƒÙˆØ¯ Ø§Ù„Ø¯ÙˆÙ„Ø© (20 Ù„Ù…ØµØ±)
-// Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„Ø±Ù‚Ù… ÙŠØ¨Ø¯Ø£ Ø¨Ù€ 01 (Ø±Ù‚Ù… Ù…ØµØ±ÙŠ Ø¹Ø§Ø¯ÙŠ)ØŒ Ù†Ø¶ÙŠÙ Ù„Ù‡ 2 ÙÙŠ Ø§Ù„Ø¨Ø¯Ø§ÙŠØ© Ù„ÙŠØµØ¨Ø­ 201...
+// 2. التحقق من كود الدولة (20 لمصر)
+// إذا كان الرقم يبدأ بـ 01 (رقم مصري عادي)، نضيف له 2 في البداية ليصبح 201...
 if (str_starts_with($wa_clean, '01')) {
     $wa_link = '2' . $wa_clean;
 } elseif (str_starts_with($wa_clean, '1')) { 
-    // Ù„Ùˆ Ø§Ù„Ø±Ù‚Ù… Ù…ÙƒØªÙˆØ¨ 1... Ø¨Ø¯ÙˆÙ† Ø§Ù„ØµÙØ± ÙˆØ¨Ø¯ÙˆÙ† Ø§Ù„Ù€ 20
+    // لو الرقم مكتوب 1... بدون الصفر وبدون الـ 20
     $wa_link = '20' . $wa_clean;
 } else {
-    // Ù„Ùˆ Ø§Ù„Ø±Ù‚Ù… Ù…ÙƒØªÙˆØ¨ Ø¨Ø§Ù„ØµÙŠØºØ© Ø§Ù„Ø¯ÙˆÙ„ÙŠØ© ÙØ¹Ù„Ø§Ù‹ (ÙŠØ¨Ø¯Ø£ Ø¨Ù€ 20) Ø£Ùˆ Ø£ÙŠ Ø±Ù‚Ù… Ø¢Ø®Ø±
+    // لو الرقم مكتوب بالصيغة الدولية فعلاً (يبدأ بـ 20) أو أي رقم آخر
     $wa_link = $wa_clean;
 }
 ?>
@@ -49,7 +49,7 @@ if (str_starts_with($wa_clean, '01')) {
         <!-- DESKTOP ACTIONS -->
         <div class="nav-actions">
 
-            <!-- WhatsApp (Ø§Ù„Ø¯ÙŠÙ†Ø§Ù…ÙŠÙƒÙŠ Ø§Ù„Ù…ØµÙ„Ø­) -->
+            <!-- WhatsApp (الديناميكي المصلح) -->
             <a href="https://wa.me/<?= htmlspecialchars($wa_link) ?>" 
                class="nav-icon-btn" 
                target="_blank">
@@ -57,7 +57,7 @@ if (str_starts_with($wa_clean, '01')) {
                 <span class="nav-icon-tooltip">Chat on WhatsApp</span>
             </a>
 
-            <!-- Email (ÙŠØ³Ø­Ø¨ Ù…Ù† Ø¹Ù…ÙˆØ¯ primary_email) -->
+            <!-- Email (يسحب من عمود primary_email) -->
             <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?= urlencode($contact['primary_email'] ?? 'export@greenlight-eg.com') ?>&su=Inquiry&body=Hello, I want to contact you"
                class="nav-icon-btn" 
                target="_blank">
@@ -282,7 +282,7 @@ if (str_starts_with($wa_clean, '01')) {
 document.addEventListener("DOMContentLoaded", function() {
     const navbar = document.getElementById("navbar");
     
-    // Ø³ØªØ§ÙŠÙ„ Ø¹Ù†Ø¯ Ø§Ù„Ø³ÙƒØ±ÙˆÙ„
+    // ستايل عند السكرول
     window.addEventListener("scroll", function() {
         if (window.scrollY > 50) {
             navbar.classList.add("scrolled");
@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Ø§Ù„Ù…Ù†ÙŠÙˆ ÙÙŠ Ø§Ù„Ù…ÙˆØ¨Ø§ÙŠÙ„
+    // المنيو في الموبايل
     const menuToggle = document.getElementById("menu-toggle");
     const mobileMenu = document.getElementById("mobile-menu");
 

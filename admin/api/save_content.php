@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Content Editor API Endpoint
  * Handles CRUD operations for hero slides and page sections

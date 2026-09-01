@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if (!isset($settings) || !isset($contact)) {
     require_once __DIR__ . '/../../includes/db.php';
     if (isset($conn) && $conn) {
@@ -66,7 +66,7 @@ if (!isset($settings) || !isset($contact)) {
 </footer>
 
 <style>
-/* Ø¥Ø¬Ø¨Ø§Ø± Ø§Ù„Ù…ØªØµÙØ­ Ø¹Ù„Ù‰ Ø¥Ø¸Ù‡Ø§Ø± Ø§Ù„Ù…Ø§ÙˆØ³ Ø§Ù„Ø¹Ø§Ø¯ÙŠ ÙÙŠ Ø§Ù„ÙÙˆØªØ± */
+/* إجبار المتصفح على إظهار الماوس العادي في الفوتر */
 .footer {
     background: #588b3c !important;
     color: #fff;
@@ -85,7 +85,7 @@ if (!isset($settings) || !isset($contact)) {
     gap: 20px; 
 }
 
-/* ØªØ­Ø¯ÙŠØ¯ Ù…Ø³Ø§Ø­Ø© Ø«Ø§Ø¨ØªØ© Ù„Ù„Ù‚Ø³Ù… Ø§Ù„Ø£ÙŠØ³Ø± Ø¹Ø´Ø§Ù† Ù…ÙŠØ¶ØºØ·Ø´ Ø¹Ù„Ù‰ Ø§Ù„Ù‚ÙˆØ§Ø¦Ù… */
+/* تحديد مساحة ثابتة للقسم الأيسر عشان ميضغطش على القوائم */
 .footer-left {
     flex: 0 0 32%; 
     display: flex;
@@ -93,13 +93,13 @@ if (!isset($settings) || !isset($contact)) {
     align-items: flex-start;
 }
 
-/* Ø§Ù„Ø­Ù„ Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠ Ù„Ø¶Ø¨Ø· Ø­Ø¬Ù… ÙˆÙ…ÙƒØ§Ù† Ø§Ù„Ù„ÙˆØ¬Ùˆ */
+/* الحل النهائي لضبط حجم ومكان اللوجو */
 .footer-left img {
-    width: 280px !important; /* ØªÙƒØ¨ÙŠØ± Ø§Ù„Ù„ÙˆØ¬Ùˆ */
+    width: 280px !important; /* تكبير اللوجو */
     height: auto !important;
     max-width: none !important;
-    margin-top: -65px !important; /* Ø±ÙØ¹ Ø§Ù„Ù„ÙˆØ¬Ùˆ Ù„Ø£Ø¹Ù„Ù‰ Ø¨Ø´ÙƒÙ„ Ù…Ù„Ø­ÙˆØ¸ */
-    margin-left: -20px !important; /* Ø³Ø­Ø¨ Ø§Ù„Ù„ÙˆØ¬Ùˆ Ù„Ù„ÙŠØ³Ø§Ø± Ù„ØªØ¹ÙˆÙŠØ¶ Ø§Ù„Ø­ÙˆØ§Ù Ø§Ù„Ø´ÙØ§ÙØ© */
+    margin-top: -65px !important; /* رفع اللوجو لأعلى بشكل ملحوظ */
+    margin-left: -20px !important; /* سحب اللوجو لليسار لتعويض الحواف الشفافة */
     margin-bottom: 0px !important;
     display: block !important;
 }
@@ -112,7 +112,7 @@ if (!isset($settings) || !isset($contact)) {
     padding-right: 20px;
 }
 
-/* Ø¥Ø¹Ø·Ø§Ø¡ Ø¨Ø§Ù‚ÙŠ Ø§Ù„Ù…Ø³Ø§Ø­Ø© Ù„Ù„Ù‚ÙˆØ§Ø¦Ù… ÙˆØªÙˆØ²ÙŠØ¹Ù‡Ø§ Ø¨Ø±Ø§Ø­ØªÙ‡Ø§ */
+/* إعطاء باقي المساحة للقوائم وتوزيعها براحتها */
 .footer-columns {
     flex: 0 0 65%; 
     display: flex;
@@ -138,7 +138,7 @@ if (!isset($settings) || !isset($contact)) {
     font-size: 14px;
 }
 
-/* Ø¥Ø¬Ø¨Ø§Ø± Ø¸Ù‡ÙˆØ± Ø³Ù‡Ù… Ø§Ù„ÙƒÙ„ÙŠÙƒ (Ø¹Ù„Ø§Ù…Ø© Ø§Ù„ÙŠØ¯) Ø¹Ù„Ù‰ Ø§Ù„Ù„ÙŠÙ†ÙƒØ§Øª */
+/* إجبار ظهور سهم الكليك (علامة اليد) على اللينكات */
 .footer-col a, .footer-col a * {
     color: #fff;
     text-decoration: none;

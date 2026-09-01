@@ -1,5 +1,5 @@
-﻿<?php
-// ØªÙ… Ø¥Ø²Ø§Ù„Ø© session_start() Ù„Ø£Ù†Ù‡Ø§ Ù…ÙˆØ¬ÙˆØ¯Ø© Ø¯Ø§Ø®Ù„ Ù…Ù„Ù session.php
+<?php
+// تم إزالة session_start() لأنها موجودة داخل ملف session.php
 require "includes/session.php";
 
 if (!isset($_SESSION['admin_id'])) {
@@ -32,12 +32,12 @@ $admin_full_name = $admin['full_name'] ?? '';
 $admin_email = $admin['email'] ?? '';
 $admin_avatar = $admin['avatar_url'] ?? '';
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// Ù…Ø¹Ø§Ù„Ø¬Ø© Ø§Ù„Ø·Ù„Ø¨Ø§Øª (POST Requests)
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
+// معالجة الطلبات (POST Requests)
+// ─────────────────────────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // 1. Ø¥Ø¶Ø§ÙØ© Ù…Ø³ØªØ®Ø¯Ù… Ø¬Ø¯ÙŠØ¯
+    // 1. إضافة مستخدم جديد
     if (isset($_POST['add_user'])) {
         $full_name = trim($_POST['full_name'] ?? '');
         $email = trim($_POST['email'] ?? '');
@@ -58,14 +58,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 
-                // ØªÙˆÙ„ÙŠØ¯ Ø§Ø³Ù… Ù…Ø³ØªØ®Ø¯Ù… Ø£Ø³Ø§Ø³ÙŠ
+                // توليد اسم مستخدم أساسي
                 $base_username = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $full_name));
                 if (empty($base_username)) {
                     $base_username = "user";
                 }
                 $username = $base_username;
                 
-                // Ø§Ù„ØªØ£ÙƒØ¯ Ù…Ù† Ø£Ù† Ø§Ø³Ù… Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù… ØºÙŠØ± Ù…ÙƒØ±Ø±
+                // التأكد من أن اسم المستخدم غير مكرر
                 $check_user = $conn->prepare("SELECT admin_id FROM admins WHERE username = ?");
                 $counter = 1;
                 while (true) {
@@ -97,15 +97,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->close();
         }
     } 
-    // 2. Ù…Ø³Ø­ Ù…Ø³ØªØ®Ø¯Ù… (Revoke Access)
+    // 2. مسح مستخدم (Revoke Access)
     elseif (isset($_POST['delete_user']) && !empty($_POST['delete_user_id'])) {
         $user_id_to_delete = (int)$_POST['delete_user_id'];
         
-        // Ù…Ù†Ø¹ Ø§Ù„Ø¥Ø¯Ù…Ù† Ù…Ù† Ù…Ø³Ø­ Ù†ÙØ³Ù‡
+        // منع الإدمن من مسح نفسه
         if ($user_id_to_delete === $_SESSION['admin_id']) {
             $error = "You cannot revoke your own access.";
         } else {
-            // Ù…Ø³Ø­ ØµÙˆØ±Ø© Ø§Ù„Ø£ÙØ§ØªØ§Ø± Ù…Ù† Ø§Ù„Ø³ÙŠØ±ÙØ± Ù„Ùˆ Ù…ÙˆØ¬ÙˆØ¯Ø© (Ø§Ø®ØªÙŠØ§Ø±ÙŠ Ø¨Ø³ Ø¹Ø´Ø§Ù† Ù†Ù†Ø¶Ù Ø§Ù„Ù…Ù„ÙØ§Øª)
+            // مسح صورة الأفاتار من السيرفر لو موجودة (اختياري بس عشان ننضف الملفات)
             $av_stmt = $conn->prepare("SELECT avatar_url FROM admins WHERE admin_id = ?");
             $av_stmt->bind_param("i", $user_id_to_delete);
             $av_stmt->execute();
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $av_stmt->close();
 
-            // Ù…Ø³Ø­ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù… Ù…Ù† Ù‚Ø§Ø¹Ø¯Ø© Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª
+            // مسح المستخدم من قاعدة البيانات
             $del_stmt = $conn->prepare("DELETE FROM admins WHERE admin_id = ?");
             $del_stmt->bind_param("i", $user_id_to_delete);
             if ($del_stmt->execute()) {
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $del_stmt->close();
         }
     }
-    // 3. Ù…Ø³Ø­ Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ø´Ø®ØµÙŠØ©
+    // 3. مسح الصورة الشخصية
     elseif (isset($_POST['delete_avatar'])) {
         $avatar = $admin['avatar_url'] ?? '';
         
@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $admin['avatar_url'] = null;
         $message = "Avatar deleted successfully!";
     } 
-    // 4. ØªØ­Ø¯ÙŠØ« Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø­Ø³Ø§Ø¨ Ø§Ù„Ø´Ø®ØµÙŠ
+    // 4. تحديث بيانات الحساب الشخصي
     else {
         $new_name = $_POST["fullName"] ?? $admin_full_name;
         $new_email = $_POST["email"] ?? $admin_email;
@@ -226,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Ø¬Ù„Ø¨ Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ù…Ø¯ÙŠØ±ÙŠÙ†
+// جلب قائمة المديرين
 $admins = [];
 $admins_stmt = $conn->prepare("SELECT admin_id, full_name, email, role FROM admins ORDER BY created_at DESC");
 $admins_stmt->execute();
@@ -334,21 +334,21 @@ $form_email = $_POST["email"] ?? $admin_email;
                     <div class="form-group">
                         <label>Current Password</label>
                         <div class="input-with-icon">
-                            <input type="password" name="current_password" class="password-field" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+                            <input type="password" name="current_password" class="password-field" placeholder="••••••••">
                             <i class="fas fa-eye password-toggle"></i>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>New Password (Optional)</label>
                         <div class="input-with-icon">
-                            <input type="password" name="new_password" class="password-field" id="newPassword" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+                            <input type="password" name="new_password" class="password-field" id="newPassword" placeholder="••••••••">
                             <i class="fas fa-eye password-toggle"></i>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Confirm New Password</label>
                         <div class="input-with-icon">
-                            <input type="password" name="confirm_password" class="password-field" id="confirmPassword" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+                            <input type="password" name="confirm_password" class="password-field" id="confirmPassword" placeholder="••••••••">
                             <i class="fas fa-eye password-toggle"></i>
                         </div>
                         <p id="passwordError" style="color: #EF4444; font-size: 0.75rem; margin-top: 5px; display: none;">Passwords do not match.</p>
@@ -388,7 +388,7 @@ $form_email = $_POST["email"] ?? $admin_email;
                     <div class="form-group">
                         <label>Temporary Password</label>
                         <div class="input-with-icon">
-                            <input type="password" name="password" class="password-field" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
+                            <input type="password" name="password" class="password-field" placeholder="••••••••" required>
                             <i class="fas fa-eye password-toggle"></i>
                         </div>
                     </div>
@@ -439,7 +439,7 @@ $form_email = $_POST["email"] ?? $admin_email;
                                         <?php if ($is_current_user): ?>
                                             <button class="btn-revoke" disabled style="opacity: 0.5; cursor: not-allowed;">Primary</button>
                                         <?php else: ?>
-                                            <!-- Ø²Ø±Ø§Ø± Ø§Ù„Ù…Ø³Ø­ Ø¬ÙˆØ© Form Ø¹Ø´Ø§Ù† ÙŠÙ†ÙØ° Ø£Ù…Ø± Ø§Ù„Ù€ PHP -->
+                                            <!-- زرار المسح جوة Form عشان ينفذ أمر الـ PHP -->
                                             <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to revoke access for this admin?');">
                                                 <input type="hidden" name="delete_user_id" value="<?php echo (int)$row['admin_id']; ?>">
                                                 <button type="submit" name="delete_user" class="btn-revoke" style="cursor: pointer; border: none; background: none; color: #EF4444; font-weight: 500; font-family: inherit; font-size: inherit;">Revoke Access</button>

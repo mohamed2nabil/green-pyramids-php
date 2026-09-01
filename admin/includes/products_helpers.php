@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Shared helpers for product management page + API.
 
 function pm_normalizeImagePath(?string $path): string

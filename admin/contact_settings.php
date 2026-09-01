@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require "includes/session.php";
 
 if (!isset($_SESSION["admin_id"])) {
@@ -8,14 +8,14 @@ if (!isset($_SESSION["admin_id"])) {
 
 require '../includes/db.php';
 
-// --- 1. ÙƒÙˆØ¯ Ø§Ù„Ø­ÙØ¸ Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬ (Update Logic) ---
+// --- 1. كود الحفظ المعالج (Update Logic) ---
 $update_message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'update_settings') {
     $primary_email = $_POST['primary_email'] ?? '';
     $sales_email   = $_POST['sales_email'] ?? '';
     $general_phone = $_POST['general_phone'] ?? ''; 
     
-    // Ø­Ù„ Ù…Ø´ÙƒÙ„Ø© Ø§Ù„ÙˆØ§ØªØ³Ø§Ø¨: ØªÙ†Ø¸ÙŠÙ Ø§Ù„Ø±Ù‚Ù… ÙˆØ¥Ø¶Ø§ÙØ© ÙƒÙˆØ¯ Ø§Ù„Ø¯ÙˆÙ„Ø© Ø£ÙˆØªÙˆÙ…Ø§ØªÙŠÙƒÙŠØ§Ù‹
+    // حل مشكلة الواتساب: تنظيف الرقم وإضافة كود الدولة أوتوماتيكياً
     $raw_whatsapp   = $_POST['whatsapp_number'] ?? '';
     $clean_whatsapp = preg_replace('/[^0-9]/', '', $raw_whatsapp);
     if (str_starts_with($clean_whatsapp, '01')) {
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     }
 }
 
-// --- 2. ÙƒÙˆØ¯ Ø¬Ù„Ø¨ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª (Fetch Logic) ---
+// --- 2. كود جلب البيانات (Fetch Logic) ---
 $settings = [
     'primary_email'     => '',
     'sales_email'       => '',

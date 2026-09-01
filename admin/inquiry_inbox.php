@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require "includes/session.php";
 
 if (!isset($_SESSION["admin_id"])) {
@@ -191,7 +191,7 @@ foreach ($inquiries as $inq) {
                                 <div class="lead-card-body">
                                     <div class="initials-badge"><?php echo htmlspecialchars($initials ?: 'NA'); ?></div>
                                     <div class="lead-info">
-                                        <h4><?php echo !empty($name) ? htmlspecialchars($name) : 'â€”'; ?></h4>
+                                        <h4><?php echo !empty($name) ? htmlspecialchars($name) : '—'; ?></h4>
                                         <p><?php echo htmlspecialchars(substr($inquiry['message'] ?? '', 0, 65)); ?>...</p>
                                     </div>
                                 </div>
@@ -220,20 +220,20 @@ foreach ($inquiries as $inq) {
                     </form>
                 </div>
                 <div class="message-content-area">
-                    <h2 class="message-subject"><?php echo !empty($active_inquiry) ? (!empty($active_inquiry['subject']) ? htmlspecialchars($active_inquiry['subject']) : 'â€”') : 'Select an inquiry'; ?></h2>
+                    <h2 class="message-subject"><?php echo !empty($active_inquiry) ? (!empty($active_inquiry['subject']) ? htmlspecialchars($active_inquiry['subject']) : '—') : 'Select an inquiry'; ?></h2>
                     
                     <div class="sender-info-card">
                         <div class="info-item">
                             <label>Sender Name</label>
-                            <span><?php echo !empty($active_inquiry) ? (!empty($active_inquiry['sender_name']) ? htmlspecialchars($active_inquiry['sender_name']) : 'â€”') : 'â€”'; ?></span>
+                            <span><?php echo !empty($active_inquiry) ? (!empty($active_inquiry['sender_name']) ? htmlspecialchars($active_inquiry['sender_name']) : '—') : '—'; ?></span>
                         </div>
                         <div class="info-item">
                             <label>Company</label>
-                            <span><?php echo !empty($active_inquiry) ? (!empty($active_inquiry['company_name']) ? htmlspecialchars($active_inquiry['company_name']) : 'â€”') : 'â€”'; ?></span>
+                            <span><?php echo !empty($active_inquiry) ? (!empty($active_inquiry['company_name']) ? htmlspecialchars($active_inquiry['company_name']) : '—') : '—'; ?></span>
                         </div>
                         <div class="info-item">
                             <label>Email Address</label>
-                            <span><?php echo !empty($active_inquiry) ? (!empty($active_inquiry['sender_email']) ? htmlspecialchars($active_inquiry['sender_email']) : 'â€”') : 'â€”'; ?></span>
+                            <span><?php echo !empty($active_inquiry) ? (!empty($active_inquiry['sender_email']) ? htmlspecialchars($active_inquiry['sender_email']) : '—') : '—'; ?></span>
                         </div>
                         <div class="info-item">
                             <label>Phone Number</label>
@@ -249,7 +249,7 @@ foreach ($inquiries as $inq) {
                             } elseif (!empty($active_inquiry['message'])) {
                                 echo nl2br(htmlspecialchars($active_inquiry['message']));
                             } else {
-                                echo 'â€”';
+                                echo '—';
                             }
                             ?>
                         </p>

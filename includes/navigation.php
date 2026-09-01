@@ -43,7 +43,7 @@ $navItems = [
 
     <!-- Header Actions -->
     <div class="flex items-center gap-5">
-      <a class="hidden lg:flex px-6 py-2.5 rounded-full text-[13px] font-medium tracking-wide transition-all duration-300 bg-[#8FAE5D] text-[#173F35] hover:bg-[#F6F3EC] hover:shadow-md" href="contact.php">Request Quote</a>
+      <a class="hidden lg:flex px-6 py-2.5 rounded-full text-[13px] font-medium tracking-wide transition-all duration-300 bg-[#8FAE5D] text-[#173F35] hover:bg-[#F6F3EC] hover:shadow-md" href="contact.php">Request a Quote</a>
       <button id="mobile-menu-btn" class="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-[5px] rounded-full transition-colors text-[#F6F3EC] [.is-scrolled_&]:text-[#173F35] hover:bg-white/10 z-[101]" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu-drawer">
         <span class="block h-[2px] w-5 bg-current transition-transform duration-300 origin-center"></span>
         <span class="block h-[2px] w-5 bg-current transition-opacity duration-300"></span>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require "includes/session.php";
 
 if (!isset($_SESSION["admin_id"])) {

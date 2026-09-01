@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // admin/scratch/test_google_analytics.php
 // DEVELOPMENT DIAGNOSTIC SCRIPT
 

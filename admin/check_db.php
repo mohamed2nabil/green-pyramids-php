@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require '../includes/db.php';
 $stmt = $conn->prepare('SELECT password_hash FROM admins WHERE id = ?');
 if (!$stmt) {

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require "../includes/session.php";
 require '../../includes/db.php';
 
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-// âœ… Ø§Ø³ØªÙ„Ø§Ù… Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ù…Ù† FormData
+// ✅ استلام البيانات من FormData
 $values = [
     'primary_email'     => $_POST['primary_email'] ?? '',
     'sales_email'       => $_POST['sales_email'] ?? '',
@@ -29,7 +29,7 @@ $values = [
     'linkedin_url'      => $_POST['linkedin_url'] ?? ''
 ];
 
-// ØªÙ†Ø¸ÙŠÙ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª
+// تنظيف البيانات
 foreach ($values as $k => $v) {
     $values[$k] = trim($v);
 }

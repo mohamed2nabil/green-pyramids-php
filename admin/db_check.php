@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require '../includes/db.php';
 
 echo "Database check:\n";

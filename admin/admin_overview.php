@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require "includes/session.php";
 
 if (!isset($_SESSION["admin_id"])) {
@@ -288,7 +288,7 @@ $recent_inquiries = dashboard_recent_inquiries($conn);
                     <a href="inquiry_inbox.php" class="view-all">View All Messages</a>
                 </div>
                 <div class="table-responsive">
-                    <table>
+                    <div style="overflow-x:auto; width:100%;"><table style="min-width: 700px;">
                         <thead>
                             <tr>
                                 <th>Sender</th>
@@ -326,7 +326,7 @@ $recent_inquiries = dashboard_recent_inquiries($conn);
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </tbody>
-                    </table>
+                    </table></div>
                 </div>
             </article>
 

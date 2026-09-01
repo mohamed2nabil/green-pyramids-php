@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require '../includes/db.php';
 
 $sql = "CREATE TABLE IF NOT EXISTS content_pages (
