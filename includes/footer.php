@@ -3,6 +3,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/animations.js"></script>
-    <script src="assets/js/hero.js"></script>
+    <?php if ($currentPage === "index.php"): ?><script src="assets/js/hero.js"></script><?php endif; ?>
   </body>
 </html>

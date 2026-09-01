@@ -1,6 +1,6 @@
-﻿<aside class="sidebar">
+<aside class="sidebar">
 
-    <!-- ðŸ”· Branding -->
+    <!-- �� Branding -->
     <div class="sidebar-branding">
         <div class="logo-container">
             <h2>Green Pyramids</h2>
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <!-- ðŸ”· Navigation -->
+    <!-- �� Navigation -->
     <nav class="sidebar-nav">
         <ul class="nav-list">
 
@@ -50,7 +50,7 @@
                 </a>
             </li>
 
-            <!-- âœ… NEW: Admin Settings -->
+            <!-- ✅ NEW: Admin Settings -->
             <li class="nav-item">
                 <a href="admin_settings.php" class="nav-link">
                     <i class="fas fa-user-shield"></i>
@@ -68,7 +68,7 @@
         </ul>
     </nav>
 
-    <!-- ðŸ”· Footer / Profile -->
+    <!-- �� Footer / Profile -->
     <div class="sidebar-footer">
         <div class="user-profile">
 

@@ -246,7 +246,7 @@ include "includes/header.php";
                 <div class="relative h-full w-full flex flex-col">
                   <!-- Image with Lazy Loading Support -->
                   <div class="flex-1 overflow-hidden relative bg-[#173F35]">
-                    <img src="<?= htmlspecialchars($hpImg) ?>" 
+                    <img loading="lazy" decoding="async" src="<?= htmlspecialchars($hpImg) ?>" 
                          alt="<?= $hpName ?>" 
                          loading="<?= $isFront ? 'eager' : 'lazy' ?>"
                          <?php if ($isFront): ?>fetchpriority="high"<?php endif; ?>
@@ -354,7 +354,7 @@ include "includes/header.php";
             <a href="<?= $detailUrl ?>" class="masonry-card group relative bg-[#0d2a24] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 cursor-pointer text-left block">
               <div class="relative overflow-hidden bg-[#173F35] aspect-[4/5] w-full">
                 <!-- Lazy Loaded Image -->
-                <img src="<?= htmlspecialchars($pImg) ?>" 
+                <img loading="lazy" decoding="async" src="<?= htmlspecialchars($pImg) ?>" 
                      alt="<?= $pName ?>" 
                      loading="lazy"
                      class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108" />

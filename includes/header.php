@@ -36,6 +36,8 @@ $seoMeta = [
 ];
 
 $pageSeo = $seoMeta[$currentPage] ?? $seoMeta['index.php'];
+if (isset($pageTitle)) $pageSeo['title'] = $pageTitle;
+if (isset($pageDesc)) $pageSeo['description'] = $pageDesc;
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $domain = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $currentUrl = $protocol . '://' . $domain . $_SERVER['REQUEST_URI'];
@@ -116,6 +118,6 @@ $currentUrl = $protocol . '://' . $domain . $_SERVER['REQUEST_URI'];
     }
     </script>
   </head>
-  <body class="font-sans bg-[#F6F3EC] text-[#173F35] pt-[80px] overflow-x-hidden flex flex-col min-h-screen">
+  <body class="font-sans bg-[#F6F3EC] text-[#173F35] <?= ($currentPage === 'index.php' || $currentPage === 'about.php') ? '' : 'pt-[80px]' ?> flex flex-col min-h-screen">
     <?php include 'includes/navigation.php'; ?>
     <main class="flex-1 min-w-0">

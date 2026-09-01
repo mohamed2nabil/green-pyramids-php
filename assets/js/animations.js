@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       menuDrawer.classList.toggle('translate-x-full', willClose);
       overlay.classList.toggle('opacity-0', willClose);
+      menuBtn.setAttribute('aria-expanded', !willClose);
       overlay.classList.toggle('pointer-events-none', willClose);
       document.body.style.overflow = willClose ? '' : 'hidden';
       
@@ -248,3 +249,71 @@ function initAnimatedHeadings() {
     });
   });
 }
+
+
+function initHeroAnimation() {
+  if (typeof gsap === 'undefined') return;
+  const heroSection = document.querySelector('.hero-anim-item'); // Just check if hero exists
+  if (!heroSection) return;
+  
+  // Ponytail: GSAP timeline for precise sequence, much cleaner than CSS delays.
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  
+  // Select elements (using their classes since they don't have IDs)
+  const eyebrow = document.querySelector('h1')?.previousElementSibling;
+  const h1 = document.querySelector('h1');
+  const subtextSpans = document.querySelectorAll('h1 + p span');
+  const ctas = document.querySelector('h1 + p + div');
+  const pulseText = document.querySelector('.animate-pulse');
+  
+  // Initial states
+  gsap.set([eyebrow, h1, ctas, pulseText], { opacity: 0, y: 20 });
+  if (subtextSpans.length) gsap.set(subtextSpans, { opacity: 0, y: 15, filter: 'blur(4px)' });
+  
+  // Sequence
+  if (eyebrow) tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.8 }, 0.2);
+  
+  if (h1) {
+    // Reveal progressively
+    tl.to(h1, { opacity: 1, y: 0, duration: 1.2 }, "-=0.4");
+  }
+  
+  if (subtextSpans.length) {
+    tl.to(subtextSpans, { 
+      opacity: 1, 
+      y: 0, 
+      filter: 'blur(0px)', 
+      duration: 0.8, 
+      stagger: 0.05 
+    }, "-=0.6");
+  }
+  
+  if (ctas) tl.to(ctas, { opacity: 1, y: 0, duration: 0.8 }, "-=0.4");
+  if (pulseText) tl.to(pulseText, { opacity: 1, y: 0, duration: 1 }, "-=0.2");
+}
+document.addEventListener('DOMContentLoaded', initHeroAnimation);
+
+
+function initProductCardsAnimation() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  const cards = document.querySelectorAll('.product-nav-item');
+  if (!cards.length) return;
+  
+  // Only apply stagger if not on horizontal scroll desktop (where it's pinned)
+  const isMobile = window.innerWidth < 1024;
+  if (!isMobile) return; // Desktop is handled by the horizontal scroller
+  
+  gsap.from(cards, {
+    scrollTrigger: {
+      trigger: '#product-showcase-track',
+      start: 'top 85%',
+      once: true
+    },
+    opacity: 0,
+    y: 30,
+    duration: 0.6,
+    stagger: 0.1,
+    ease: 'power2.out'
+  });
+}
+document.addEventListener('DOMContentLoaded', initProductCardsAnimation);

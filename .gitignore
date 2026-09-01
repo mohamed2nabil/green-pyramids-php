@@ -9,3 +9,5 @@ google-service-account*.json
 
 # Runtime analytics cache (never commit report data)
 /admin/cache/analytics/
+
+error_log

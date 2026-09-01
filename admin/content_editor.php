@@ -148,7 +148,7 @@ function resolveAdminImage($path) {
         <div class="editor-container">
             <!-- ================= HOME TAB ================= -->
             <div id="home-tab" class="tab-content active">
-                <h2 class="section-title" style="margin-top: 0;">ðŸ  Hero Slides</h2>
+                <h2 class="section-title" style="margin-top: 0;">  Hero Slides</h2>
                 <?php foreach ($slides as $slide): ?>
                     <div class="slide-card" data-slide-id="<?= $slide['slide_id'] ?>">
                         <div class="form-group">
@@ -177,7 +177,7 @@ function resolveAdminImage($path) {
 
             <!-- ================= ABOUT TAB ================= -->
             <div id="about-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">ðŸ“ About Page Content</h2>
+                <h2 class="section-title" style="margin-top: 0;">“ About Page Content</h2>
                 
                 <div class="section-card" data-page="about" data-section="<?= $aboutSectionKey ?>">
                     <h3 class="section-title">About Hero (Our Legacy)</h3>
@@ -206,7 +206,7 @@ function resolveAdminImage($path) {
 
             <!-- ================= PROCESS TAB ================= -->
             <div id="process-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">âš™ï¸ Process Page Sections</h2>
+                <h2 class="section-title" style="margin-top: 0;">âš™ï¸Process Page Sections</h2>
                 
                 <div class="section-card" data-page="process" data-section="hero">
                     <h3 class="section-title">Hero Section</h3>
@@ -243,7 +243,7 @@ function resolveAdminImage($path) {
 
             <!-- ================= PRODUCT TAB ================= -->
             <div id="product-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">ðŸ“¦ Product Page Hero</h2>
+                <h2 class="section-title" style="margin-top: 0;">“¦ Product Page Hero</h2>
                 <div class="section-card" data-page="production" data-section="hero">
                     <h3 class="section-title">Main Hero Content</h3>
                     <div class="form-group">
@@ -271,7 +271,7 @@ function resolveAdminImage($path) {
 
             <!-- ================= CONTACT TAB ================= -->
             <div id="contact-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">ðŸ“ž Contact Page Hero</h2>
+                <h2 class="section-title" style="margin-top: 0;">“ž Contact Page Hero</h2>
                 
                 <div class="section-card" data-page="contact" data-section="hero">
                     <h3 class="section-title">Contact Hero Image</h3>

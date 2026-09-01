@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <p>Access the admin dashboard to manage your platform.</p>
     </div>
 
-    <!-- ðŸ”¥ Ù‡Ù†Ø§ Ø§Ù„ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ù…Ù‡Ù… -->
+    <!-- ”¥ Ù‡Ù†Ø§ Ø§Ù„ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ù…Ù‡Ù… -->
     <?php if(!empty($error)): ?>
         <div style="color: red; text-align: center; margin-bottom: 15px;"><?php echo htmlspecialchars($error); ?></div>
     <?php endif; ?>
