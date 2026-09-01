@@ -1,3 +1,50 @@
+/* ===== Marquee / Testimonials ===== */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+.marquee-track {
+  display: inline-flex;
+  animation: marquee 30s linear infinite;
+  gap: 2rem;
+  will-change: transform;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* ===== NAVBAR — always visible on all pages ===== */
+#site-header nav { display: flex !important; align-items: center; gap: 1.8rem; }
+#site-header .nav-link {
+  color: #F6F3EC !important;
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.04em; opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+#site-header .nav-link:hover { opacity: 1 !important; transform: translateY(-1px); }
+#site-header .nav-link.is-active { opacity: 1 !important; border-bottom: 1px solid rgba(246,243,236,0.6); }
+#site-header.is-scrolled .nav-link { color: #173F35 !important; }
+#site-header.is-scrolled .nav-brand-text { color: #173F35 !important; }
+/* Hide hamburger on desktop, show nav; reverse on mobile */
+#mobile-menu-btn { display: none !important; }
+@media (max-width: 900px) {
+  #site-header nav { display: none !important; }
+  #mobile-menu-btn { display: flex !important; flex-direction: column; }
+  .quote-btn { display: none !important; }
+}
+/* ===== COUNT-UP ===== */
+@keyframes countPop { 0%{transform:scale(0.8)} 60%{transform:scale(1.05)} 100%{transform:scale(1)} }
+.anim-counter { display: inline-block; }
+
 :root {
     --bg-color: #F8F9FA;
     --text-primary: #1A3022;
@@ -1104,4 +1151,27 @@ canvas[hidden] {
     .page-footer {
         margin-top: 36px;
     }
+}
+.reveal-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+.reveal-fade.is-visible {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up, .reveal-fade {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

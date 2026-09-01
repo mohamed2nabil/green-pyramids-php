@@ -1,4 +1,122 @@
-<?php include "includes/header.php"; ?>
-<link rel="preload" as="image" href="https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=900&amp;h=1000&amp;fit=crop&amp;auto=format"/><div class="bg-[#050c0a] min-h-screen relative text-[#F6F3EC]"><div class="relative pt-[120px] pb-32 overflow-hidden flex items-center min-h-[75vh]"><div class="absolute inset-0 opacity-[0.15]" style="background-image:url(https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=1600&amp;h=900&amp;fit=crop&amp;auto=format);background-size:cover;background-position:center"></div><div class="absolute inset-0 bg-gradient-to-t from-[#050c0a] via-transparent to-[#050c0a]"></div><div class="absolute inset-0 bg-gradient-to-r from-[#050c0a] via-transparent to-[#050c0a]"></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] bg-[#173F35] rounded-full blur-[120px] opacity-20 pointer-events-none"></div><div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full text-center"><div class="flex items-center justify-center gap-3 mb-6 transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s"><div class="w-8 h-px bg-[#8FAE5D]"></div><p class="text-[12px] tracking-[0.3em] uppercase text-[#8FAE5D]">Our Legacy</p><div class="w-8 h-px bg-[#8FAE5D]"></div></div><h1 class="font-serif text-6xl lg:text-[100px] leading-[0.9] mb-8 transition-all duration-1000 ease-out " style="transition-delay:0s">Rooted In <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D8C7A1] to-[#8FAE5D]">Deep Soil</span></h1><p class="text-[#F6F3EC]/50 text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed flex flex-wrap gap-[0.25em]"><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0s">Connecting</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.1s">the</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.2s">world</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.30000000000000004s">to</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.4s">the</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.5s">finest</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.6000000000000001s">fresh</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.7000000000000001s">produce</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.8s">from</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.9s">Egypt&#x27;s</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:1s">most</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:1.1s">fertile</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:1.2000000000000002s">lands,</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:1.3s">engineered</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:1.4000000000000001s">for</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:1.5s">global</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:1.6s">export.</span></p></div></div><section class="py-24 max-w-7xl mx-auto px-6 lg:px-10"><div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center"><div class="order-2 lg:order-1"><div class="flex items-center gap-3 mb-6 transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s"><div class="w-5 h-px bg-[#8FAE5D]"></div><p class="text-[11px] tracking-[0.28em] uppercase text-[#8FAE5D]">Introduction</p></div><h2 class="font-serif text-4xl lg:text-5xl leading-[1.1] mb-8 transition-all duration-1000 ease-out undefined" style="transition-delay:0s">A Vision Built <br/> On Reliability.</h2><p class="text-[#F6F3EC]/60 leading-relaxed mb-6 text-[16px] transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s">Green Pyramids was founded with a clear vision: to bring the best of Egyptian agriculture to global markets with the professionalism and reliability that international buyers deserve. We specialize in sourcing, sorting, packing, and exporting premium fresh fruits and vegetables.</p><p class="text-[#F6F3EC]/60 leading-relaxed text-[16px] transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s">We work closely with a network of trusted Egyptian farms — carefully selected based on soil quality, farming practices, and yield consistency.</p></div><div class="relative order-1 lg:order-2"><div class="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden shadow-[0_0_80px_rgba(23,63,53,0.3)] border border-[#8FAE5D]/10 transition-all duration-1000 ease-out undefined" style="transition-delay:0s"><img src="https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=900&amp;h=1000&amp;fit=crop&amp;auto=format" alt="Egyptian farm operations" class="w-full h-full object-cover opacity-80"/><div class="absolute inset-0 bg-gradient-to-t from-[#050c0a] to-transparent"></div></div></div></div></section><section class="py-32 max-w-7xl mx-auto px-6 lg:px-10 relative"><div class="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#8FAE5D] rounded-full blur-[150px] opacity-[0.05] pointer-events-none -translate-y-1/2"></div><div class="flex items-center gap-3 mb-4 transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s"><div class="w-5 h-px bg-[#8FAE5D]"></div><p class="text-[11px] tracking-[0.28em] uppercase text-[#8FAE5D]">Our Values</p></div><h2 class="font-serif text-4xl lg:text-6xl leading-[1.08] mb-20 flex flex-wrap"><span class="inline-block whitespace-pre"><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0s">T</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.03s">h</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.06s">e</span><span class="inline-block w-[0.25em]"> </span></span><span class="inline-block whitespace-pre"><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.15s">F</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.18s">o</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.21s">u</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.24s">n</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.27s">d</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.3s">a</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.32999999999999996s">t</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.36s">i</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.39s">o</span><span class="inline-block transition-all duration-700 ease-out opacity-0 translate-y-4 blur-sm" style="transition-delay:0.42s">n</span><span class="inline-block w-[0.25em]"> </span></span></h2><div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10"><div class="p-10 rounded-3xl bg-gradient-to-b from-[#173F35]/20 to-[#050c0a] border border-[#8FAE5D]/10 backdrop-blur-sm hover:border-[#8FAE5D]/30 transition-colors duration-500 group transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s"><div class="font-serif text-6xl text-[#D8C7A1]/20 mb-8 leading-none group-hover:text-[#D8C7A1]/40 transition-colors">0<!-- -->1</div><h3 class="font-serif text-2xl mb-4">Quality First</h3><p class="text-[15px] text-[#F6F3EC]/50 leading-relaxed">Every product we export meets strict international quality standards before it leaves Egyptian soil.</p></div><div class="p-10 rounded-3xl bg-gradient-to-b from-[#173F35]/20 to-[#050c0a] border border-[#8FAE5D]/10 backdrop-blur-sm hover:border-[#8FAE5D]/30 transition-colors duration-500 group transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s"><div class="font-serif text-6xl text-[#D8C7A1]/20 mb-8 leading-none group-hover:text-[#D8C7A1]/40 transition-colors">0<!-- -->2</div><h3 class="font-serif text-2xl mb-4">Transparency</h3><p class="text-[15px] text-[#F6F3EC]/50 leading-relaxed">We operate with full visibility across our supply chain — from farm to destination.</p></div><div class="p-10 rounded-3xl bg-gradient-to-b from-[#173F35]/20 to-[#050c0a] border border-[#8FAE5D]/10 backdrop-blur-sm hover:border-[#8FAE5D]/30 transition-colors duration-500 group transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s"><div class="font-serif text-6xl text-[#D8C7A1]/20 mb-8 leading-none group-hover:text-[#D8C7A1]/40 transition-colors">0<!-- -->3</div><h3 class="font-serif text-2xl mb-4">Partnership</h3><p class="text-[15px] text-[#F6F3EC]/50 leading-relaxed">We build long-term relationships based on trust, reliability, and mutual growth.</p></div><div class="p-10 rounded-3xl bg-gradient-to-b from-[#173F35]/20 to-[#050c0a] border border-[#8FAE5D]/10 backdrop-blur-sm hover:border-[#8FAE5D]/30 transition-colors duration-500 group transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s"><div class="font-serif text-6xl text-[#D8C7A1]/20 mb-8 leading-none group-hover:text-[#D8C7A1]/40 transition-colors">0<!-- -->4</div><h3 class="font-serif text-2xl mb-4">Sustainability</h3><p class="text-[15px] text-[#F6F3EC]/50 leading-relaxed">We work with farms that adopt responsible practices for the long-term health of Egyptian land.</p></div></div></section><section class="py-32 text-center relative overflow-hidden"><div class="absolute inset-0 bg-[#173F35]/20"></div><div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-px bg-gradient-to-r from-transparent via-[#8FAE5D]/50 to-transparent"></div><div class="relative z-10 max-w-3xl mx-auto px-6"><div class="flex items-center justify-center gap-3 mb-8 transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s"><div class="w-8 h-px bg-[#8FAE5D]"></div><p class="text-[12px] tracking-[0.3em] uppercase text-[#8FAE5D]">Work With Us</p><div class="w-8 h-px bg-[#8FAE5D]"></div></div><h2 class="font-serif text-5xl lg:text-7xl mb-12 leading-[1.08] transition-all duration-1000 ease-out undefined" style="transition-delay:0s">Source Premium <br/> Egyptian Produce.</h2><div class=" transition-all duration-1000 ease-out opacity-0" style="transition-delay:0s"><a class="inline-flex px-10 py-5 bg-[#8FAE5D] text-[#050c0a] font-medium tracking-wide rounded-full hover:bg-[#F6F3EC] hover:scale-105 transition-all duration-300 text-[14px]" href="contact.php">Partner With Us</a></div></div></section></div>
+<?php 
+$currentPage = "about.php";
+include "includes/header.php"; 
+?>
+<main class="w-full relative bg-[#F9F8F6] text-[#173F35] font-sans selection:bg-[#8FAE5D]/30">
+
+  <!-- 1. Premium Hero -->
+  <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="assets/images/hero-farm.jpg" alt="Egyptian agricultural farm" class="w-full h-full object-cover object-center opacity-80" />
+      <div class="absolute inset-0 bg-gradient-to-b from-[#F9F8F6]/90 via-[#F9F8F6]/70 to-[#F9F8F6]"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10 text-center flex flex-col items-center">
+      <div class="inline-flex items-center gap-3 mb-6 reveal-up">
+        <div class="w-8 h-px bg-[#8FAE5D]"></div>
+        <p class="text-[12px] tracking-[0.25em] uppercase text-[#8FAE5D] font-medium">Our Legacy</p>
+        <div class="w-8 h-px bg-[#8FAE5D]"></div>
+      </div>
+      <h1 class="hero-typing-anim font-serif text-5xl sm:text-7xl lg:text-[5.5rem] text-[#173F35] leading-[1.05] max-w-4xl mx-auto mb-8 drop-shadow-sm">Rooted in Deep Soil.</h1>
+      <p class="text-[#173F35]/80 text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed reveal-fade">
+        Connecting the world to the finest fresh produce from Egypt's most fertile lands, engineered for global export.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. Our Story -->
+  <section class="py-20 lg:py-32 max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div class="relative rounded-2xl overflow-hidden aspect-[4/5] lg:aspect-square reveal-up shadow-xl">
+        <img src="assets/images/product-harvest.jpg" alt="Egyptian farm harvest" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"/>
+        <div class="absolute inset-0 bg-[#173F35]/5 pointer-events-none"></div>
+      </div>
+      <div>
+        <div class="flex items-center gap-3 mb-6 reveal-up">
+          <div class="w-6 h-px bg-[#8FAE5D]"></div>
+          <p class="text-[11px] tracking-[0.25em] uppercase text-[#8FAE5D]">Introduction</p>
+        </div>
+        <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] mb-8">A Vision Built On Reliability.</h2>
+        <div class="space-y-6 text-[#173F35]/75 leading-relaxed text-[16px] reveal-up" style="transition-delay: 100ms;">
+          <p>Green Pyramids was founded with a clear vision: to bring the best of Egyptian agriculture to global markets with the professionalism and reliability that international buyers deserve.</p>
+          <p>We specialize in sourcing, sorting, packing, and exporting premium fresh fruits and vegetables.</p>
+          <p>We work closely with a network of trusted Egyptian farms - carefully selected based on soil quality, farming practices, and yield consistency.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Egyptian Agricultural Advantage -->
+  <section class="py-24 lg:py-36 bg-[#EBE7DF]">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 text-center mb-16">
+      <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] max-w-3xl mx-auto">The Egyptian Advantage</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6 lg:px-10">
+      <div class="bg-[#F9F8F6] p-10 rounded-2xl reveal-up border border-[#173F35]/5 shadow-sm hover:shadow-md transition-shadow">
+        <h3 class="anim-heading font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-500 hover:text-[#8FAE5D] text-[#173F35] mb-4">Fertile Lands</h3>
+        <p class="text-[#173F35]/70 text-[15px] leading-relaxed">The Nile Delta provides incredibly rich alluvial soil, producing crops with exceptional taste, size, and nutritional value.</p>
+      </div>
+      <div class="bg-[#F9F8F6] p-10 rounded-2xl reveal-up border border-[#173F35]/5 shadow-sm hover:shadow-md transition-shadow" style="transition-delay: 100ms;">
+        <h3 class="anim-heading font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-500 hover:text-[#8FAE5D] text-[#173F35] mb-4">Ideal Climate</h3>
+        <p class="text-[#173F35]/70 text-[15px] leading-relaxed">Abundant sunshine and favorable weather allow for extended growing seasons and early harvests compared to Europe.</p>
+      </div>
+      <div class="bg-[#F9F8F6] p-10 rounded-2xl reveal-up border border-[#173F35]/5 shadow-sm hover:shadow-md transition-shadow" style="transition-delay: 200ms;">
+        <h3 class="anim-heading font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-500 hover:text-[#8FAE5D] text-[#173F35] mb-4">Strategic Location</h3>
+        <p class="text-[#173F35]/70 text-[15px] leading-relaxed">Situated at the crossroads of three continents, enabling fast transit times and fresh delivery to global markets.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Quality Commitment & Values -->
+  <section class="py-24 lg:py-36 bg-[#173F35] text-[#F6F3EC] relative overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-10">
+      <img src="assets/images/process-facility.jpg" alt="Agricultural background" class="w-full h-full object-cover grayscale mix-blend-overlay" />
+    </div>
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+      <div class="text-center mb-20">
+        <div class="flex items-center justify-center gap-3 mb-6 reveal-up">
+          <div class="w-6 h-px bg-[#8FAE5D]"></div>
+          <p class="text-[11px] tracking-[0.25em] uppercase text-[#8FAE5D]">Our Foundation</p>
+          <div class="w-6 h-px bg-[#8FAE5D]"></div>
+        </div>
+        <h2 class="anim-heading font-serif text-4xl lg:text-5xl leading-[1.1] max-w-2xl mx-auto">Our Core Values</h2>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+        <div class="reveal-up">
+          <span class="block text-4xl font-serif text-[#D8C7A1] mb-6" data-count="1" data-prefix="0">01</span>
+          <h3 class="text-xl font-medium mb-3 tracking-wide">Quality First</h3>
+          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">Every product we export meets strict international quality standards before it leaves Egyptian soil.</p>
+        </div>
+        <div class="reveal-up" style="transition-delay: 100ms;">
+          <span class="block text-4xl font-serif text-[#D8C7A1] mb-6">02</span>
+          <h3 class="text-xl font-medium mb-3 tracking-wide">Transparency</h3>
+          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">We operate with full visibility across our supply chain - from farm to destination.</p>
+        </div>
+        <div class="reveal-up" style="transition-delay: 200ms;">
+          <span class="block text-4xl font-serif text-[#D8C7A1] mb-6">03</span>
+          <h3 class="text-xl font-medium mb-3 tracking-wide">Partnership</h3>
+          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">We build long-term relationships based on trust, reliability, and mutual growth.</p>
+        </div>
+        <div class="reveal-up" style="transition-delay: 300ms;">
+          <span class="block text-4xl font-serif text-[#D8C7A1] mb-6">04</span>
+          <h3 class="text-xl font-medium mb-3 tracking-wide">Sustainability</h3>
+          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">We work with farms that adopt responsible practices for the long-term health of Egyptian land.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Partnership / CTA -->
+  <section class="py-24 lg:py-32 bg-[#F9F8F6]">
+    <div class="max-w-4xl mx-auto px-6 lg:px-10 text-center">
+      <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] mb-8">Work With Us</h2>
+      <p class="text-[#173F35]/70 text-lg mb-10 reveal-fade">Source Premium Egyptian Produce for your market.</p>
+      <a class="inline-flex items-center gap-2 px-10 py-4 bg-[#8FAE5D] text-[#173F35] font-medium tracking-wide rounded-full hover:bg-[#173F35] hover:text-[#F6F3EC] transition-all duration-300 reveal-up" href="contact.php">
+        Request a Quote<span class="ml-1">&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+</main>
 <?php include "includes/footer.php"; ?>
-<script src="assets/js/about-journey.js"></script>
