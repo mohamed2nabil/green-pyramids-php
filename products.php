@@ -91,14 +91,22 @@ foreach ($filterTabs as $index => &$tab) {
     $tabSlug = $tab['slug'];
     $tabLabelSlug = slugify_category($tab['label']);
     
-    if (
-        $rawCategory === $tabSlug || 
-        $rawCategory === $tabLabelSlug || 
-        ($tabSlug === 'seasonal-crops' && $rawCategory === 'dates')
-    ) {
-        $activeTabIndex = $index;
-        $tab['active'] = true;
+    $isMatch = false;
+    if ($rawCategory === $tabSlug || $rawCategory === $tabLabelSlug) {
+        $isMatch = true;
+    } elseif ($tabSlug === 'fruits' && (strpos($rawCategory, 'fruit') !== false)) {
+        $isMatch = true;
+    } elseif ($tabSlug === 'vegetables' && (strpos($rawCategory, 'veg') !== false)) {
+        $isMatch = true;
+    } elseif ($tabSlug === 'citrus' && (strpos($rawCategory, 'citrus') !== false)) {
+        $isMatch = true;
+    } elseif ($tabSlug === 'seasonal-crops' && (strpos($rawCategory, 'date') !== false || strpos($rawCategory, 'season') !== false || strpos($rawCategory, 'crop') !== false)) {
+        $isMatch = true;
     } elseif (is_numeric($rawCategory) && in_array((int)$rawCategory, $tab['cat_ids'])) {
+        $isMatch = true;
+    }
+
+    if ($isMatch) {
         $activeTabIndex = $index;
         $tab['active'] = true;
     } else {
@@ -106,6 +114,12 @@ foreach ($filterTabs as $index => &$tab) {
     }
 }
 unset($tab);
+
+// Set chosen tab active
+foreach ($filterTabs as $index => &$t) {
+    $t['active'] = ($index === $activeTabIndex);
+}
+unset($t);
 
 $activeTab = $filterTabs[$activeTabIndex];
 $targetCatIds = $activeTab['cat_ids'];

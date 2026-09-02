@@ -1,440 +1,276 @@
-document.addEventListener('DOMContentLoaded', () => {
-  gsap.registerPlugin(ScrollTrigger);
+(() => {
+  'use strict';
 
-  // Intersection Observer for basic scroll reveals
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        const elements = entry.target.querySelectorAll('.word, .letter');
-        elements.forEach((el, index) => {
-          el.style.transitionDelay = (index * 0.05) + 's';
-        });
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.reveal-fade, .reveal-up').forEach(el => observer.observe(el));
-
-  initHeroTypingAnimation();
-  initPremiumHeadings();
-  initProductCardsAnimation();
-  initStickyHorizontalGallery();
-  initHeroSequence();
-  initCounterAnimation();
-  initAboutCategoryGallery();
-  initIndexCategoryGallery();
-});
-
-function initHeroTypingAnimation() {
-  const h1 = document.querySelector('.hero-typing-anim');
-  if (!h1) return;
-  
-  const mediaQueryReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (mediaQueryReducedMotion.matches) return;
-
-  function wrapCharacters(node) {
-    if (node.nodeType === Node.TEXT_NODE) {
-      const chars = node.textContent.split('');
-      const fragment = document.createDocumentFragment();
-      chars.forEach(char => {
-        if (char.trim() === '') {
-          fragment.appendChild(document.createTextNode(char));
-        } else {
-          const span = document.createElement('span');
-          span.textContent = char;
-          span.style.opacity = '0';
-          span.className = 'typing-char inline-block';
-          fragment.appendChild(span);
-        }
-      });
-      node.parentNode.replaceChild(fragment, node);
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      if (node.tagName.toLowerCase() !== 'br') {
-        Array.from(node.childNodes).forEach(wrapCharacters);
-      }
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
     }
-  }
-  
-  wrapCharacters(h1);
-  
-  const chars = h1.querySelectorAll('.typing-char');
-  if (chars.length === 0) return;
-  
-  setTimeout(() => {
-    let delay = 0;
-    chars.forEach((char) => {
-      setTimeout(() => {
-        char.style.opacity = '1';
-        char.style.transition = 'opacity 0.1s ease-out';
-      }, delay);
-      delay += 50;
+
+    initPremiumHeadings();
+    initCounters();
+    initIndexCategoryGallery();
+    initScrollReveals();
+
+    // Safety refresh on load after images render
+    window.addEventListener('load', () => {
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh();
+          }
+        }, 150);
+      });
     });
-  }, 400);
-}
+  });
 
-function initHeroSequence() {
-  if (typeof gsap === 'undefined') return;
-  const h1 = document.querySelector('.hero-typing-anim');
-  if (!h1) return;
-  
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  
-  const eyebrow = h1.previousElementSibling;
-  const subtextSpans = document.querySelectorAll('h1 + p span');
-  const ctas = document.querySelector('h1 + p + div');
-  const pulseText = document.querySelector('.animate-pulse');
-  
-  // Remove Tailwind's opacity-0 which acts as !important or gets stuck
-  const elements = [eyebrow, ...subtextSpans, ctas, pulseText].filter(Boolean);
-  elements.forEach(el => el.classList.remove('opacity-0'));
-  
-  // Set initial states explicitly via GSAP
-  if (eyebrow) gsap.set(eyebrow, { opacity: 0, y: 20 });
-  if (subtextSpans.length) gsap.set(subtextSpans, { opacity: 0, y: 15, filter: 'blur(4px)' });
-  if (ctas) gsap.set(ctas, { opacity: 0, y: 20 });
-  if (pulseText) gsap.set(pulseText, { opacity: 0, y: 20 });
-  
-  // Sequence
-  if (eyebrow) tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.8 }, 0.2);
-  
-  // Typing animation handles H1, so we just wait a bit for it to finish typing before animating rest
-  if (subtextSpans.length) {
-    tl.to(subtextSpans, { 
-      opacity: 1, 
-      y: 0, 
-      filter: 'blur(0px)', 
-      duration: 0.8, 
-      stagger: 0.05 
-    }, 1.5); // wait 1.5s for typing
-  }
-  
-  if (ctas) tl.to(ctas, { opacity: 1, y: 0, duration: 0.8 }, "-=0.4");
-  if (pulseText) tl.to(pulseText, { opacity: 1, y: 0, duration: 1 }, "-=0.2");
-}
+  /* =========================================
+     TEXT SPLITTER (Per-letter Span Creator)
+  ========================================= */
+  function splitText(el, className) {
+    if (!el || el.dataset.split === 'true') {
+      return [...(el.querySelectorAll('.' + className) || [])];
+    }
 
-function initPremiumHeadings() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  const headings = document.querySelectorAll('.anim-heading');
-  if (!headings.length) return;
-  
-  const mediaQueryReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (mediaQueryReducedMotion.matches) return;
+    const original = el.textContent;
+    el.dataset.split = 'true';
+    el.setAttribute('aria-label', original.trim());
 
-  headings.forEach(heading => {
-    if (heading.dataset.splitted) return;
-    
-    function wrapSafe(node) {
+    const chars = [];
+
+    const walk = node => {
       if (node.nodeType === Node.TEXT_NODE) {
-        const chars = node.textContent.split('');
         const fragment = document.createDocumentFragment();
-        chars.forEach(char => {
-          if (char.trim() === '') {
+        [...node.nodeValue].forEach(char => {
+          if (/\s/.test(char)) {
             fragment.appendChild(document.createTextNode(char));
           } else {
             const span = document.createElement('span');
+            span.className = className;
             span.textContent = char;
-            span.className = 'inline-block anim-char';
+            span.setAttribute('aria-hidden', 'true');
             fragment.appendChild(span);
+            chars.push(span);
           }
         });
         node.parentNode.replaceChild(fragment, node);
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        if (node.tagName.toLowerCase() !== 'br') {
-          Array.from(node.childNodes).forEach(wrapSafe);
-        }
+        return;
       }
-    }
-    
-    wrapSafe(heading);
-    heading.dataset.splitted = 'true';
-    
-    gsap.from(heading.querySelectorAll('.anim-char'), {
-      scrollTrigger: { trigger: heading, start: 'top 85%' },
-      opacity: 0,
-      y: 25,
-      filter: 'blur(8px)',
-      duration: 0.8,
-      stagger: 0.02,
-      ease: 'power2.out'
-    });
-  });
-}
 
-function initProductCardsAnimation() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  const cards = document.querySelectorAll('.product-nav-item');
-  if (!cards.length) return;
-  
-  const mediaQueryReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (mediaQueryReducedMotion.matches) return;
-  
-  gsap.from(cards, {
-    scrollTrigger: {
-      trigger: '#product-showcase-stage',
-      start: 'top 85%',
-      once: true
-    },
-    opacity: 0,
-    y: 30,
-    duration: 0.6,
-    stagger: 0.1,
-    ease: 'power2.out'
-  });
-}
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'BR') {
+        [...node.childNodes].forEach(walk);
+      }
+    };
 
-function initStickyHorizontalGallery() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  
-  const stage = document.querySelector('.horizontal-stage, #product-showcase-stage');
-  const track = document.querySelector('.horizontal-track, #product-showcase-track');
-  
-  if (!stage || !track) return;
+    [...el.childNodes].forEach(walk);
+    return chars;
+  }
 
-  const images = track.querySelectorAll('img');
-  const imagePromises = Array.from(images).map(img => {
-    if (img.complete) return Promise.resolve();
-    return new Promise(resolve => {
-      img.addEventListener('load', resolve, { once: true });
-      img.addEventListener('error', resolve, { once: true });
-    });
-  });
+  /* =========================================
+     PER-LETTER HEADING REVEAL ANIMATION
+     (Fades in, slides up, reduces blur)
+  ========================================= */
+  function initPremiumHeadings() {
+    const headings = document.querySelectorAll('.anim-heading');
+    if (!headings.length) return;
 
-  Promise.all(imagePromises).then(() => {
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        let mm = gsap.matchMedia();
-        
-        mm.add({
-          isDesktop: "(min-width: 1024px)",
-          isMobile: "(max-width: 1023px)",
-          reduceMotion: "(prefers-reduced-motion: reduce)"
-        }, (context) => {
-          let { isDesktop, reduceMotion } = context.conditions;
-          
-          if (isDesktop && !reduceMotion) {
-            const getDistance = () => Math.max(0, track.scrollWidth - stage.clientWidth);
-            
-            if (getDistance() > 0) {
-              gsap.to(track, {
-                x: () => -getDistance(),
-                ease: "none",
-                scrollTrigger: {
-                  trigger: stage,
-                  start: "top top",
-                  end: () => "+=" + getDistance(),
-                  pin: true,
-                  scrub: 1,
-                  invalidateOnRefresh: true,
-                  anticipatePin: 1
-                }
-              });
+    headings.forEach(heading => {
+      const chars = splitText(heading, 'anim-char');
+      if (!chars.length) return;
+
+      if (typeof gsap === 'undefined') {
+        chars.forEach(c => {
+          c.style.opacity = '1';
+          c.style.transform = 'none';
+          c.style.filter = 'none';
+        });
+        return;
+      }
+
+      // Check if heading is in the initial visible viewport
+      const rect = heading.getBoundingClientRect();
+      const inViewport = rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
+
+      if (inViewport) {
+        // Immediate timeline reveal for top/hero headings
+        gsap.fromTo(chars,
+          {
+            opacity: 0,
+            y: 20,
+            filter: 'blur(8px)'
+          },
+          {
+            opacity: 1,
+            y: 0,
+            filter: 'blur(0px)',
+            duration: 0.75,
+            stagger: 0.022,
+            ease: 'power3.out',
+            delay: 0.08
+          }
+        );
+      } else if (typeof ScrollTrigger !== 'undefined') {
+        // Scroll-triggered reveal for sections further down
+        gsap.fromTo(chars,
+          {
+            opacity: 0,
+            y: 24,
+            filter: 'blur(8px)'
+          },
+          {
+            opacity: 1,
+            y: 0,
+            filter: 'blur(0px)',
+            duration: 0.75,
+            stagger: 0.02,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: heading,
+              start: 'top 85%',
+              once: true
             }
-          } else {
-            // Revert on mobile: horizontal scroll natively
-            gsap.set(track, { clearProps: "all" });
-            track.style.overflowX = 'auto';
-            track.style.overflowY = 'hidden';
-            track.style.scrollSnapType = 'x mandatory';
-            track.querySelectorAll('.relative.z-10').forEach(el => {
-                el.style.scrollSnapAlign = 'center';
-            });
           }
-        });
-        
-        ScrollTrigger.refresh();
-      }, 100);
-    });
-  });
-}
-function initCounterAnimation() {
-  const counters = document.querySelectorAll('[data-count]');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const target = +el.dataset.count;
-      const suffix = el.dataset.suffix || '';
-      const prefix = el.dataset.prefix || '';
-      let start = 0;
-      const duration = 2000;
-      const startTime = performance.now();
-      
-      if (reduced) { el.textContent = prefix + target + suffix; obs.unobserve(el); return; }
-      
-      function update(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = prefix + Math.floor(eased * target) + suffix;
-        if (progress < 1) requestAnimationFrame(update);
-        else { el.textContent = prefix + target + suffix; obs.unobserve(el); }
+        );
       }
-      requestAnimationFrame(update);
-    });
-  }, { threshold: 0.5 });
-  
-  counters.forEach(el => obs.observe(el));
-}
-
-/**
- * About page: categories sticky horizontal scroll.
- * Uses CSS sticky (the inner div) + GSAP ScrollTrigger to drive translateX.
- * The outer section gets height = track scrollWidth − viewport width
- * so the scroll distance maps exactly to the horizontal travel distance.
- */
-function initAboutCategoryGallery() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-
-  const stage = document.getElementById('about-cat-stage');
-  const track = document.getElementById('about-cat-track');
-  if (!stage || !track) return;
-
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduced) return;
-
-  function setup() {
-    // Only pin-scroll on desktop; mobile gets native touch-scroll
-    const mm = gsap.matchMedia();
-
-    mm.add('(min-width: 1024px)', () => {
-      // Wait one rAF so layout is stable
-      requestAnimationFrame(() => {
-        const trackW   = track.scrollWidth;
-        const viewW    = window.innerWidth;
-        const distance = trackW - viewW + 64; // 64 = 2×px-8 padding
-
-        if (distance <= 0) return;
-
-        // Set section height so normal page scroll = horizontal travel
-        stage.style.height = (window.innerHeight + distance) + 'px';
-
-        gsap.to(track, {
-          x: -distance,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: stage,
-            start: 'top top',
-            end: () => '+=' + distance,
-            scrub: 1.2,
-            invalidateOnRefresh: true,
-            // no pin needed — inner div uses CSS sticky
-          }
-        });
-
-        ScrollTrigger.refresh();
-      });
-
-      // cleanup on matchMedia revert
-      return () => {
-        stage.style.height = '';
-        gsap.set(track, { clearProps: 'x' });
-        ScrollTrigger.getAll()
-          .filter(st => st.vars.trigger === stage)
-          .forEach(st => st.kill());
-      };
-    });
-
-    // Mobile: native horizontal scroll with snap
-    mm.add('(max-width: 1023px)', () => {
-      track.style.overflowX = 'auto';
-      track.style.scrollSnapType = 'x mandatory';
-      track.querySelectorAll('.about-cat-card').forEach(c => {
-        c.style.scrollSnapAlign = 'start';
-      });
-      stage.style.height = '';
-      return () => {
-        track.style.overflowX = '';
-        track.style.scrollSnapType = '';
-      };
     });
   }
 
-  // Wait for images to load so widths are accurate
-  const imgs = track.querySelectorAll('img');
-  const promises = Array.from(imgs).map(img => img.complete
-    ? Promise.resolve()
-    : new Promise(r => { img.onload = r; img.onerror = r; })
-  );
-  Promise.all(promises).then(setup);
-}
+  /* =========================================
+     DYNAMIC COUNT-UP ANIMATION
+  ========================================= */
+  function initCounters() {
+    const counterElements = document.querySelectorAll('.anim-counter, [data-count]');
+    if (!counterElements.length) return;
 
-/* Index page categories sticky horizontal scroll */
-function initIndexCategoryGallery() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  const stage = document.getElementById('idx-cat-stage');
-  const track = document.getElementById('idx-cat-track');
-  if (!stage || !track) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        obs.unobserve(el);
 
-  // Hover: scale image
-  track.querySelectorAll('.idx-cat-card').forEach(card => {
-    const img = card.querySelector('img');
-    if (!img) return;
-    card.addEventListener('mouseenter', () => { img.style.transform = 'scale(1.07)'; });
-    card.addEventListener('mouseleave', () => { img.style.transform = ''; });
-    // Arrow nudge
-    const arrow = card.querySelector('.cat-explore span');
-    if (arrow) {
-      card.addEventListener('mouseenter', () => { arrow.style.transform = 'translateX(5px)'; });
-      card.addEventListener('mouseleave', () => { arrow.style.transform = ''; });
-    }
-  });
+        const target = parseFloat(el.dataset.count) || 0;
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const duration = 1800;
+        const startTime = performance.now();
 
-  // Drag-to-scroll on mobile
-  let isDown = false, startX, scrollLeft;
-  track.addEventListener('mousedown', e => { isDown = true; track.style.cursor = 'grabbing'; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
-  track.addEventListener('mouseleave', () => { isDown = false; track.style.cursor = 'grab'; });
-  track.addEventListener('mouseup', () => { isDown = false; track.style.cursor = 'grab'; });
-  track.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - track.offsetLeft; track.scrollLeft = scrollLeft - (x - startX) * 1.5; });
+        function update(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // Cubic ease-out deceleration
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.floor(eased * target);
 
-  function setup() {
-    const mm = gsap.matchMedia();
-    mm.add('(min-width: 1024px)', () => {
-      requestAnimationFrame(() => {
-        const trackW   = track.scrollWidth;
-        const viewW    = window.innerWidth;
-        const padding  = 128; // 2 × 4rem padding
-        const distance = trackW - viewW + padding;
-        if (distance <= 0) return;
+          el.textContent = prefix + current.toLocaleString() + suffix;
 
-        stage.style.height = (window.innerHeight + distance) + 'px';
-
-        gsap.to(track, {
-          x: -distance,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: stage,
-            start: 'top top',
-            end: () => '+=' + distance,
-            scrub: 1.0,
-            invalidateOnRefresh: true,
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          } else {
+            el.textContent = prefix + target.toLocaleString() + suffix;
+            el.style.animation = 'countPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
           }
-        });
-        ScrollTrigger.refresh();
+        }
+
+        requestAnimationFrame(update);
       });
-      return () => {
-        stage.style.height = '';
-        gsap.set(track, { clearProps: 'x' });
-        ScrollTrigger.getAll().filter(st => st.vars.trigger === stage).forEach(st => st.kill());
-      };
-    });
-    mm.add('(max-width: 1023px)', () => {
-      track.style.overflowX = 'auto';
-      track.style.scrollSnapType = 'x mandatory';
-      track.querySelectorAll('.idx-cat-card').forEach(c => c.style.scrollSnapAlign = 'start');
-      stage.style.height = 'auto';
-      return () => { track.style.overflowX = ''; stage.style.height = ''; };
+    }, { threshold: 0.25 });
+
+    counterElements.forEach(el => observer.observe(el));
+  }
+
+  /* =========================================
+     STICKY HORIZONTAL SCROLL CATEGORY GALLERY
+     Vertical scroll locks, cards slide horizontally.
+     Scroll down = left, scroll up = right (bidirectional via scrub).
+  ========================================= */
+  function initIndexCategoryGallery() {
+    const section = document.getElementById('idx-cat-section');
+    const pinWrapper = document.getElementById('idx-cat-pin-wrapper');
+    const pinned = document.getElementById('idx-cat-pinned');
+    const track = document.getElementById('idx-cat-track');
+    if (!section || !pinWrapper || !pinned || !track) return;
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    // ponytail: small delay ensures DOM is fully rendered & card widths are accurate
+    waitForLayout(track).then(() => {
+      // How far the track needs to slide: total track width minus one viewport width
+      const scrollDistance = track.scrollWidth - window.innerWidth;
+      if (scrollDistance <= 0) return; // all cards fit on screen, no pin needed
+
+      // Set wrapper height = viewport + scroll distance so there's enough room to scrub
+      pinWrapper.style.height = (window.innerHeight + scrollDistance) + 'px';
+
+      gsap.to(track, {
+        x: -scrollDistance,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: pinWrapper,
+          start: 'top top',
+          end: 'bottom bottom',
+          pin: pinned,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onRefresh: (self) => {
+            // Recalculate on resize
+            const newDist = track.scrollWidth - window.innerWidth;
+            if (newDist > 0) {
+              pinWrapper.style.height = (window.innerHeight + newDist) + 'px';
+            }
+          }
+        }
+      });
     });
   }
 
-  const imgs = track.querySelectorAll('img');
-  const promises = Array.from(imgs).map(img => img.complete
-    ? Promise.resolve()
-    : new Promise(r => { img.onload = r; img.onerror = r; })
-  );
-  Promise.all(promises).then(setup);
-}
+  /* =========================================
+     WAIT FOR IMAGES & DOM LAYOUT
+  ========================================= */
+  function waitForLayout(container) {
+    const images = [...container.querySelectorAll('img')];
+    const pending = images.map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(resolve => {
+        img.addEventListener('load', resolve, { once: true });
+        img.addEventListener('error', resolve, { once: true });
+      });
+    });
+
+    // Card widths are fixed, so do not let an off-screen lazy image delay the gallery forever.
+    return Promise.race([
+      Promise.all(pending),
+      new Promise(resolve => setTimeout(resolve, 700))
+    ]).then(() => {
+      return new Promise(resolve => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setTimeout(resolve, 80);
+          });
+        });
+      });
+    });
+  }
+
+  /* =========================================
+     GENERAL SCROLL REVEALS
+  ========================================= */
+  function initScrollReveals() {
+    if (typeof ScrollTrigger === 'undefined' || typeof gsap === 'undefined') return;
+
+    document.querySelectorAll('.reveal-up').forEach(el => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 88%',
+            once: true
+          }
+        }
+      );
+    });
+  }
+
+})();

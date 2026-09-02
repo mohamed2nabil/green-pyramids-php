@@ -11,28 +11,11 @@ $navItems = [
     'quality.php' => 'Quality',
     'contact.php' => 'Contact'
 ];
-
-if ($currentPage === 'index.php') {
-    $headerBgClass = 'bg-transparent';
-} else {
-    $headerBgClass = 'bg-[#173F35]';
-}
 ?>
-<header id="site-header" class="group fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ease-in-out <?= $headerBgClass ?> shadow-md border-b border-[#D8C7A1]/20">
+<header id="site-header" class="group fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ease-in-out shadow-md">
   <div class="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between h-[80px]">
-    <a class="nav-brand flex items-center gap-3 group flex-shrink-0 transition-colors duration-300 text-[#F6F3EC]" href="index.php">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <polygon points="12,2 2,21 12,21" fill="#1f5245" class="nav-brand-poly1 transition-colors"></polygon>
-        <polygon points="12,2 22,21 12,21" fill="#0d2a24" class="nav-brand-poly2 transition-colors"></polygon>
-        <line x1="12" y1="2" x2="12" y2="21" stroke="#8FAE5D" stroke-width="0.7" opacity="0.5"></line>
-        <polygon points="12,2 2,21 22,21" fill="none" stroke="#8FAE5D" stroke-width="0.9" stroke-linejoin="round"></polygon>
-        <line x1="7" y1="11.5" x2="17" y2="11.5" stroke="#D8C7A1" class="nav-brand-line1 transition-colors" stroke-width="0.5" opacity="0.45"></line>
-        <line x1="4.5" y1="16.5" x2="19.5" y2="16.5" stroke="#D8C7A1" class="nav-brand-line2 transition-colors" stroke-width="0.5" opacity="0.35"></line>
-      </svg>
-      <div>
-        <div class="nav-brand-text font-serif text-[18px] leading-none tracking-wide text-[#F6F3EC]">Green Pyramids</div>
-        <div class="text-[9px] tracking-[0.2em] uppercase mt-1 text-[#8FAE5D] font-medium">Agricultural Exports</div>
-      </div>
+    <a class="nav-brand flex items-center group flex-shrink-0 py-1" href="index.php" aria-label="Green Pyramids home">
+      <img src="assets/Logo.svg" alt="Green Pyramids" width="118" height="48" class="h-11 md:h-12 w-auto max-w-[145px] object-contain transition-transform duration-300 group-hover:scale-105" fetchpriority="high">
     </a>
 
     <!-- Desktop Navigation Menu (visibility controlled by main.css) -->
@@ -47,31 +30,25 @@ if ($currentPage === 'index.php') {
     </nav>
 
     <!-- Header Actions -->
-    <div class="flex items-center gap-5">
+    <div class="flex items-center gap-4 sm:gap-5">
       <a class="quote-btn px-6 py-2.5 rounded-full text-[13px] font-medium tracking-wide transition-all duration-300 bg-[#8FAE5D] text-[#173F35] hover:bg-[#F6F3EC] hover:shadow-md flex-shrink-0" href="contact.php">Request a Quote</a>
-      <button id="mobile-menu-btn" class="nav-mobile-btn lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-[5px] rounded-full transition-colors text-[#F6F3EC] hover:bg-white/10 z-[101]" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu-drawer">
-        <span class="block h-[2px] w-5 bg-current transition-transform duration-300 origin-center"></span>
-        <span class="block h-[2px] w-5 bg-current transition-opacity duration-300"></span>
-        <span class="block h-[2px] w-5 bg-current transition-transform duration-300 origin-center"></span>
+      <button id="mobile-menu-btn" class="nav-mobile-btn lg:hidden flex flex-col justify-center items-center p-2 text-[#F6F3EC] focus:outline-none z-[101]" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu-drawer">
+        <span class="block h-[2.5px] w-6 bg-[#F6F3EC] rounded-full transition-transform duration-300 origin-center"></span>
+        <span class="block h-[2.5px] w-6 bg-[#F6F3EC] rounded-full transition-opacity duration-300"></span>
+        <span class="block h-[2.5px] w-6 bg-[#F6F3EC] rounded-full transition-transform duration-300 origin-center"></span>
       </button>
     </div>
   </div>
 </header>
 
 <!-- Mobile Navigation Overlay -->
-<div id="mobile-menu-overlay" class="fixed inset-0 z-[89] bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-500 lg:hidden"></div>
+<div id="mobile-menu-overlay" class="fixed inset-0 z-[89] bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-500 lg:hidden"></div>
 
 <!-- Mobile Navigation Drawer -->
-<div id="mobile-menu-drawer" class="fixed top-0 bottom-0 right-0 z-[90] w-[min(380px,82vw)] bg-[#173F35] flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] translate-x-full lg:hidden shadow-2xl border-l border-[#D8C7A1]/20">
+<div id="mobile-menu-drawer" class="fixed top-0 bottom-0 right-0 z-[90] w-[min(380px,82vw)] bg-gradient-to-b from-[#0d2a24] to-[#173F35] flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] translate-x-full lg:hidden shadow-2xl border-l border-[#D8C7A1]/20">
   <div class="flex items-center justify-start px-8 h-[80px] border-b border-[#F6F3EC]/10 shrink-0">
-    <a class="flex items-center gap-3" href="index.php">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <polygon points="12,2 2,21 12,21" fill="#1f5245"></polygon>
-        <polygon points="12,2 22,21 12,21" fill="#0d2a24"></polygon>
-        <line x1="12" y1="2" x2="12" y2="21" stroke="#8FAE5D" stroke-width="0.7" opacity="0.5"></line>
-        <polygon points="12,2 2,21 22,21" fill="none" stroke="#8FAE5D" stroke-width="0.9" stroke-linejoin="round"></polygon>
-      </svg>
-      <span class="font-serif text-[#F6F3EC] text-[16px] tracking-wide">Green Pyramids</span>
+    <a class="flex items-center" href="index.php" aria-label="Green Pyramids home">
+      <img src="assets/Logo.svg" alt="Green Pyramids" width="115" height="46" class="h-11 w-auto max-w-[140px] object-contain">
     </a>
   </div>
   <nav class="flex flex-col px-8 py-8 gap-5 overflow-y-auto grow">

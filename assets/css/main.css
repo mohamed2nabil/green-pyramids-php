@@ -1,3 +1,10 @@
+:root {
+    --color-emerald: #173F35;
+    --color-emerald-dark: #0d2a24;
+    --color-sage: #8FAE5D;
+    --color-sand: #F6F3EC;
+    --color-gold: #D8C7A1;
+}
 /* ===== Marquee / Testimonials ===== */
 @keyframes marquee {
   from { transform: translateX(0); }
@@ -10,40 +17,152 @@
 }
 .marquee-track {
   display: inline-flex;
-  animation: marquee 30s linear infinite;
-  gap: 2rem;
+  animation: marquee 26s linear infinite;
+  gap: 1.5rem;
   will-change: transform;
 }
-.marquee-track:hover { animation-play-state: paused; }
 
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; }
+/* Category Carousel Track styling & Guaranteed Card Dimensions */
+#idx-cat-track {
+  display: flex !important;
+  gap: 1.5rem !important;
 }
 
-/* ===== NAVBAR — always visible on all pages ===== */
-#site-header nav { display: flex !important; align-items: center; gap: 1.8rem; }
+.idx-cat-card {
+  width: 250px !important;
+  min-width: 250px !important;
+  max-width: 250px !important;
+  height: 330px !important;
+  flex-shrink: 0 !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  position: relative !important;
+  display: block !important;
+  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(216, 199, 161, 0.25) !important;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease !important;
+  background-color: #173F35 !important;
+}
+.idx-cat-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(143, 174, 93, 0.3) !important;
+  border-color: rgba(143, 174, 93, 0.7) !important;
+}
+.idx-cat-card img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+.idx-cat-card:hover img {
+  transform: scale(1.1) !important;
+}
+
+/* ===== BRAND COLOR GRADIENTS ===== */
+.bg-gradient-nav {
+  background: linear-gradient(135deg, rgba(8, 26, 22, 0.98) 0%, rgba(23, 63, 53, 0.94) 50%, rgba(13, 42, 36, 0.98) 100%) !important;
+}
+.bg-gradient-hero {
+  background: linear-gradient(180deg, rgba(5, 12, 10, 0.25) 0%, rgba(13, 42, 36, 0.5) 40%, rgba(23, 63, 53, 0.9) 100%) !important;
+}
+.bg-gradient-stats {
+  background: linear-gradient(135deg, #091c18 0%, #173F35 30%, #1f5245 70%, #081a15 100%) !important;
+}
+.bg-gradient-category {
+  background: linear-gradient(135deg, #05100d 0%, #11382f 35%, #173F35 65%, #081a15 100%) !important;
+}
+.bg-gradient-footer {
+  background: linear-gradient(180deg, #1f5245 0%, #11382f 40%, #05100d 100%) !important;
+}
+.text-gradient-gold {
+  background: linear-gradient(135deg, #F6F3EC 0%, #D8C7A1 45%, #8FAE5D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== NAVBAR — elegant glass with subtle emerald gradation ===== */
+#site-header {
+  background: linear-gradient(135deg, rgba(13, 42, 36, 0.96) 0%, rgba(23, 63, 53, 0.92) 50%, rgba(31, 82, 69, 0.96) 100%) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(216, 199, 161, 0.25);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+#site-header.is-scrolled {
+  background: linear-gradient(135deg, rgba(10, 34, 29, 0.98) 0%, rgba(18, 52, 44, 0.98) 50%, rgba(25, 68, 57, 0.98) 100%) !important;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+}
+#site-header nav { display: flex !important; align-items: center; gap: 2rem; }
 #site-header .nav-link {
   color: #F6F3EC !important;
-  font-size: 13px; font-weight: 500;
-  letter-spacing: 0.04em; opacity: 0.8;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  opacity: 0.9;
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
   white-space: nowrap;
   text-decoration: none;
+  padding: 4px 0;
 }
-#site-header .nav-link:hover { opacity: 1 !important; transform: translateY(-1px); }
-#site-header .nav-link.is-active { opacity: 1 !important; border-bottom: 1px solid rgba(246,243,236,0.6); }
-#site-header.is-scrolled .nav-link { color: #173F35 !important; }
-#site-header.is-scrolled .nav-brand-text { color: #173F35 !important; }
-/* Hide hamburger on desktop, show nav; reverse on mobile */
+#site-header .nav-link:hover {
+  opacity: 1;
+  color: #8FAE5D !important;
+  transform: translateY(-1px);
+}
+#site-header .nav-link.is-active {
+  opacity: 1;
+  color: #FFFFFF !important;
+  border-bottom: 2px solid #8FAE5D;
+}
+
+/* Mobile Hamburger: Light lines, NO circular ring, NO box background */
 #mobile-menu-btn { display: none !important; }
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   #site-header nav { display: none !important; }
-  #mobile-menu-btn { display: flex !important; flex-direction: column; }
+  #mobile-menu-btn {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    cursor: pointer !important;
+    padding: 8px 6px !important;
+    gap: 5.5px !important;
+    border-radius: 0 !important;
+  }
+  #mobile-menu-btn span {
+    display: block !important;
+    width: 25px !important;
+    height: 2.5px !important;
+    background-color: #F6F3EC !important;
+    border-radius: 9999px !important;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.2s ease !important;
+  }
+  #mobile-menu-btn:hover span {
+    background-color: #8FAE5D !important;
+  }
   .quote-btn { display: none !important; }
 }
 /* ===== COUNT-UP ===== */
 @keyframes countPop { 0%{transform:scale(0.8)} 60%{transform:scale(1.05)} 100%{transform:scale(1)} }
-.anim-counter { display: inline-block; }
+.anim-counter { display: inline-block; font-variant-numeric: tabular-nums; }
+
+/* ===== PER-LETTER HEADING ANIMATION ===== */
+.anim-char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+  transition: color 0.3s ease;
+}
+
+.anim-heading {
+  letter-spacing: -0.025em;
+  font-feature-settings: "kern" 1;
+  transition: color 300ms ease;
+}
 
 :root {
     --bg-color: #F8F9FA;
@@ -1168,10 +1287,4 @@ canvas[hidden] {
 .reveal-fade.is-visible {
   opacity: 1;
 }
-@media (prefers-reduced-motion: reduce) {
-  .reveal-up, .reveal-fade {
-    transition: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
+

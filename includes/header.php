@@ -41,6 +41,11 @@ if (isset($pageDesc)) $pageSeo['description'] = $pageDesc;
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $domain = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $currentUrl = $protocol . '://' . $domain . $_SERVER['REQUEST_URI'];
+$assetVersion = static function (string $path): string {
+    $modified = @filemtime(__DIR__ . '/../' . $path);
+    return $modified ? (string) $modified : '1';
+};
+$usesMotion = in_array($currentPage, ['index.php', 'about.php', 'products.php'], true);
 ?>
 <!doctype html>
 <html lang="en">
@@ -65,35 +70,13 @@ $currentUrl = $protocol . '://' . $domain . $_SERVER['REQUEST_URI'];
     <meta name="twitter:description" content="<?= htmlspecialchars($pageSeo['description']) ?>">
     <meta name="twitter:image" content="<?= $protocol ?>://<?= $domain ?>/assets/images/static/hero_background.png">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              emerald: {
-                DEFAULT: '#173F35',
-                dark: '#0d2a24',
-                light: '#1f5245'
-              },
-              sage: '#8FAE5D',
-              sand: '#F6F3EC',
-              gold: '#D8C7A1'
-            },
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              serif: ['Playfair Display', 'serif']
-            }
-          }
-        }
-      }
-    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/main.css?v=<?php echo time(); ?>">
-    <link rel="stylesheet" href="assets/css/animations.css?v=<?php echo time(); ?>">
-    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="stylesheet" href="assets/css/tailwind.css?v=<?= $assetVersion('assets/css/tailwind.css') ?>">
+    <link rel="stylesheet" href="assets/css/main.css?v=<?= $assetVersion('assets/css/main.css') ?>">
+    <link rel="stylesheet" href="assets/css/animations.css?v=<?= $assetVersion('assets/css/animations.css') ?>">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 
     <!-- Schema.org JSON-LD Structured Data for B2B Agricultural Exporter -->
     <script type="application/ld+json">
@@ -102,7 +85,7 @@ $currentUrl = $protocol . '://' . $domain . $_SERVER['REQUEST_URI'];
       "@type": "Organization",
       "name": "Green Pyramids Export",
       "url": "<?= htmlspecialchars($currentUrl) ?>",
-      "logo": "<?= $protocol ?>://<?= $domain ?>/assets/images/favicon.svg",
+      "logo": "<?= $protocol ?>://<?= $domain ?>/assets/Logo.svg",
       "description": "<?= htmlspecialchars($pageSeo['description']) ?>",
       "address": {
         "@type": "PostalAddress",
@@ -117,7 +100,17 @@ $currentUrl = $protocol . '://' . $domain . $_SERVER['REQUEST_URI'];
       }
     }
     </script>
+    <?php if ($usesMotion): ?>
+      <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+      <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <?php endif; ?>
+
+    <!-- Local JS (with cache-busting) -->
+    <script defer src="assets/js/main.js?v=<?= $assetVersion('assets/js/main.js') ?>"></script>
+    <?php if ($usesMotion): ?><script defer src="assets/js/animations.js?v=<?= $assetVersion('assets/js/animations.js') ?>"></script><?php endif; ?>
   </head>
   <body class="font-sans bg-[#F6F3EC] text-[#173F35] <?= ($currentPage === 'index.php' || $currentPage === 'about.php') ? '' : 'pt-[80px]' ?> flex flex-col min-h-screen">
     <?php include 'includes/navigation.php'; ?>
     <main class="flex-1 min-w-0">
+
+
