@@ -63,7 +63,7 @@ if ($stmt->execute()) {
     $settings_result = $conn->query("SELECT footer_email FROM site_settings LIMIT 1");
     $admin_email = ($settings_result && $settings_result->num_rows > 0) 
         ? $settings_result->fetch_assoc()['footer_email'] 
-        : 'info@greenlightexport.com';
+        : 'info@greenpyramids.eg';
     
     // Email headers
     $headers = "MIME-Version: 1.0" . "\r\n";
@@ -92,7 +92,7 @@ if ($stmt->execute()) {
     @mail($admin_email, $admin_subject, $admin_body, $headers);
     
     // Send confirmation email to user
-    $user_subject = "Thank you for your inquiry - Green Light for Export";
+    $user_subject = "Thank you for your inquiry - Green Pyramids Export";
     $user_body = "
     <html>
     <body style='font-family: Arial, sans-serif; color: #333;'>
@@ -106,9 +106,9 @@ if ($stmt->execute()) {
         <p>Our team will review your message and respond within 24-48 hours.</p>
         <hr>
         <p style='color: #999; font-size: 12px;'>
-            Green Light for Export<br>
-            Premium Agricultural Exports<br>
-            <a href='https://greenlightexport.com'>www.greenlightexport.com</a>
+            Green Pyramids Export<br>
+            Premium Egyptian Agricultural Exports<br>
+            <a href='https://greenpyramids.eg'>www.greenpyramids.eg</a>
         </p>
     </body>
     </html>";

@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('linkedin_url', formInputs.linkedin?.value?.trim() ?? '');
 
             try {
-                const res = await fetch('/green-light-admin/api/save_settings.php', {
+                const res = await fetch('api/save_settings.php', {
                     method: 'POST',
                     body: formData
                 });

@@ -57,7 +57,7 @@ if (isset($pageTitle)) $pageSeo['title'] = $pageTitle;
 if (isset($pageDesc)) $pageSeo['description'] = $pageDesc;
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $domain = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$currentUrl = $protocol . '://' . $domain . $_SERVER['REQUEST_URI'];
+$currentUrl = isset($pageCanonical) ? $pageCanonical : $protocol . '://' . $domain . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $assetVersion = static function (string $path): string {
     $modified = @filemtime(__DIR__ . '/../' . $path);
     return $modified ? (string) $modified : '1';
@@ -106,12 +106,12 @@ $usesMotion = true;
       "description": "<?= htmlspecialchars($pageSeo['description']) ?>",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Cairo",
+        "addressLocality": "<?= htmlspecialchars($global_location) ?>",
         "addressCountry": "EG"
       },
       "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "+20-2-000-0000",
+        "telephone": "<?= htmlspecialchars($global_phone) ?>",
         "contactType": "sales",
         "areaServed": ["EU", "GCC", "Asia", "Worldwide"]
       }

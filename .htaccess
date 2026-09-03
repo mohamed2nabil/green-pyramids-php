@@ -1,0 +1,25 @@
+RewriteEngine On
+RewriteBase /
+
+# Force HTTPS and www (commented out for local testing, would uncomment for production)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Categories
+RewriteRule ^category/([^/]+)/?$ products.php?category=$1 [L,QSA]
+
+# Products
+RewriteRule ^products/([^/]+)/?$ productdetail.php?id=$1 [L,QSA]
+
+# Market Pages
+RewriteRule ^markets/([^/]+)/?$ market.php?country=$1 [L,QSA]
+RewriteRule ^exports/([^/]+)-to-([^/]+)/?$ market.php?product=$1&country=$2 [L,QSA]
+
+# Topical Guides
+RewriteRule ^insights/([^/]+)/?$ guide.php?topic=$1 [L,QSA]
+
+# 404
+ErrorDocument 404 /404.php

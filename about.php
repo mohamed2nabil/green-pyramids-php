@@ -1,5 +1,13 @@
 <?php 
 $currentPage = "about.php";
+require_once "includes/db.php";
+$aboutHero = ['heading' => 'Rooted in Deep Soil.', 'subtext' => "Connecting the world to the finest fresh produce from Egypt's most fertile lands, engineered for global export.", 'image_path' => 'assets/images/hero-farm.jpg'];
+if (isset($conn)) {
+    $r = $conn->query("SELECT * FROM page_sections WHERE page='about' AND section='hero'");
+    if ($r && $r->num_rows > 0) {
+        $aboutHero = $r->fetch_assoc();
+    }
+}
 include "includes/header.php"; 
 ?>
 <main class="w-full relative bg-[#F9F8F6] text-[#173F35] font-sans selection:bg-[#8FAE5D]/30">
@@ -7,7 +15,8 @@ include "includes/header.php";
   <!-- 1. Premium Hero -->
   <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
     <div class="absolute inset-0 z-0">
-      <img src="assets/images/hero-farm.jpg" alt="Egyptian agricultural farm" class="w-full h-full object-cover object-center opacity-80" />
+      <?php $resolvedImage = !empty($aboutHero['image_path']) ? $aboutHero['image_path'] : 'assets/images/hero-farm.jpg'; ?>
+      <img src="<?= htmlspecialchars($resolvedImage) ?>" alt="Egyptian agricultural farm" class="w-full h-full object-cover object-center opacity-80" />
       <div class="absolute inset-0 bg-gradient-to-b from-[#F9F8F6]/90 via-[#F9F8F6]/70 to-[#F9F8F6]"></div>
     </div>
     
@@ -17,9 +26,9 @@ include "includes/header.php";
         <p class="text-[12px] tracking-[0.25em] uppercase text-[#8FAE5D] font-medium">Our Legacy</p>
         <div class="w-8 h-px bg-[#8FAE5D]"></div>
       </div>
-      <h1 class="hero-typing-anim font-serif text-5xl sm:text-7xl lg:text-[5.5rem] text-[#173F35] leading-[1.05] max-w-4xl mx-auto mb-8 drop-shadow-sm">Rooted in Deep Soil.</h1>
+      <h1 class="hero-typing-anim font-serif text-5xl sm:text-7xl lg:text-[5.5rem] text-[#173F35] leading-[1.05] max-w-4xl mx-auto mb-8 drop-shadow-sm"><?= nl2br(htmlspecialchars($aboutHero['heading'])) ?></h1>
       <p class="text-[#173F35]/80 text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed reveal-fade">
-        Connecting the world to the finest fresh produce from Egypt's most fertile lands, engineered for global export.
+        <?= nl2br(htmlspecialchars($aboutHero['subtext'])) ?>
       </p>
     </div>
   </section>

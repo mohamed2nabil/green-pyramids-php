@@ -58,7 +58,7 @@ if (str_starts_with($wa_clean, '01')) {
             </a>
 
             <!-- Email (يسحب من عمود primary_email) -->
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?= urlencode($contact['primary_email'] ?? 'export@greenlight-eg.com') ?>&su=Inquiry&body=Hello, I want to contact you"
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?= urlencode($contact['primary_email'] ?? 'info@greenpyramids.eg') ?>&su=Inquiry&body=Hello, I want to contact you"
                class="nav-icon-btn" 
                target="_blank">
                 <img src="<?= htmlspecialchars(asset_url('assets/images/email.png')) ?>" alt="Email icon" class="nav-icon-img">

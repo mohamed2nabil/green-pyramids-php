@@ -1,3 +1,13 @@
+<?php
+// Defensive fallbacks in case header.php variables are not set
+if (!isset($global_email))    $global_email    = 'info@greenpyramids.eg';
+if (!isset($global_phone))    $global_phone    = '+20 100 000 0000';
+if (!isset($global_wa))       $global_wa       = '201000000000';
+if (!isset($global_location)) $global_location = 'Cairo, Egypt';
+if (!isset($global_title))    $global_title    = 'Green Pyramids Export';
+if (!isset($currentPage))     $currentPage     = basename($_SERVER['PHP_SELF'] ?? 'index.php');
+if (!isset($assetVersion))    $assetVersion    = fn($p) => (string)(@filemtime(__DIR__ . '/../' . $p) ?: '1');
+?>
 <footer class="bg-gradient-footer text-[#F6F3EC] border-t border-[#D8C7A1]/30">
   <div class="max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-16">
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -9,7 +19,7 @@
         <p class="text-[13px] text-[#F6F3EC]/70 leading-relaxed max-w-sm font-light">Premium Egyptian agricultural crops sourced, packed, and delivered to global markets with uncompromising quality.</p>
         <div class="flex gap-5 mt-5">
           <a href="#" class="text-[11px] uppercase tracking-widest text-[#D8C7A1] hover:text-white transition-colors font-medium border-b border-[#D8C7A1]/30 hover:border-white pb-0.5">LinkedIn</a>
-          <a href="#" class="text-[11px] uppercase tracking-widest text-[#D8C7A1] hover:text-white transition-colors font-medium border-b border-[#D8C7A1]/30 hover:border-white pb-0.5">WhatsApp</a>
+          <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $global_wa) ?>" class="text-[11px] uppercase tracking-widest text-[#D8C7A1] hover:text-white transition-colors font-medium border-b border-[#D8C7A1]/30 hover:border-white pb-0.5">WhatsApp</a>
         </div>
       </div>
 
@@ -51,7 +61,7 @@
         <ul class="space-y-4">
           <li class="flex items-start gap-3"><span class="text-[#D8C7A1] text-sm mt-0.5">✉</span><span class="text-[13px] text-[#F6F3EC]/80 break-all"><?= htmlspecialchars($global_email) ?></span></li>
           <li class="flex items-start gap-3"><span class="text-[#D8C7A1] text-sm mt-0.5">☎</span><span class="text-[13px] text-[#F6F3EC]/80"><?= htmlspecialchars($global_phone) ?></span></li>
-          <li class="flex items-start gap-3"><span class="text-[#D8C7A1] text-sm mt-0.5">◑</span><span class="text-[13px] text-[#F6F3EC]/80">WhatsApp Available</span></li>
+          <li class="flex items-start gap-3"><span class="text-[#D8C7A1] text-sm mt-0.5">◑</span><span class="text-[13px] text-[#F6F3EC]/80"><a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $global_wa) ?>" class="hover:text-white transition-colors"><?= htmlspecialchars($global_wa) ?></a></span></li>
           <li class="flex items-start gap-3"><span class="text-[#D8C7A1] text-sm mt-0.5">◎</span><span class="text-[13px] text-[#F6F3EC]/80"><?= htmlspecialchars($global_location) ?></span></li>
         </ul>
       </div>

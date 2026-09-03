@@ -49,7 +49,7 @@ if (!isset($settings) || !isset($contact)) {
             <div class="footer-col">
                 <h4>Contact Info</h4>
                 <ul>
-                    <li><?= htmlspecialchars($contact['primary_email'] ?? 'info@greenlightexport.com') ?></li>
+                    <li><?= htmlspecialchars($contact['primary_email'] ?? 'info@greenpyramids.eg') ?></li>
                     <li><?= htmlspecialchars($contact['general_phone'] ?? '+20 123 456 7890') ?></li>
                     <li><?= htmlspecialchars($contact['physical_address'] ?? 'Cairo, Egypt') ?></li>
                 </ul>

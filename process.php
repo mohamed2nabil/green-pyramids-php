@@ -12,8 +12,8 @@ if (isset($conn)) {
 <div class="bg-white min-h-screen pt-32 pb-32 relative text-[#173F35] overflow-hidden" id="process-wrapper">
   
   <div class="max-w-3xl mx-auto px-6 relative z-10 text-center mb-24">
-    <h1 class="anim-heading font-serif text-5xl lg:text-6xl mb-4 text-[#173F35]">The Journey</h1>
-    <p class="text-[#173F35]/60 text-lg">Every great journey starts with a single step. A transparent path from Egyptian soil to global markets.</p>
+    <h1 class="anim-heading font-serif text-5xl lg:text-6xl mb-4 text-[#173F35]"><?= htmlspecialchars($sections['hero']['heading'] ?? 'The Journey') ?></h1>
+    <p class="text-[#173F35]/60 text-lg"><?= htmlspecialchars($sections['hero']['subtext'] ?? 'Every great journey starts with a single step. A transparent path from Egyptian soil to global markets.') ?></p>
   </div>
 
   <style>

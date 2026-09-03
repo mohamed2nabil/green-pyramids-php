@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /get_products.php
+Disallow: /scratch/
+Sitemap: https://greenpyramids.eg/sitemap.xml

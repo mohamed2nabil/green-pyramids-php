@@ -25,10 +25,10 @@ try {
     }
 
     // Database connection
-    require_once dirname(__FILE__) . "/db_connection.php";
+    require_once dirname(__FILE__) . '/../../includes/db.php';
     
     // Validate DB connection before any operation
-    if ($conn->connect_error) {
+    if (!$conn || $conn->connect_error) {
         http_response_code(500);
         echo json_encode([
             'success' => false,
@@ -141,8 +141,9 @@ try {
 
         // Delete old image file if exists
         if ($currentImage && !empty($currentImage['image_path'])) {
-            $oldFilePath = dirname(__FILE__) . '/../' . $currentImage['image_path'];
-            if (file_exists($oldFilePath)) {
+            $oldRel = ltrim(str_replace('../', '', $currentImage['image_path']), '/');
+            $oldFilePath = dirname(__FILE__) . '/../../' . $oldRel;
+            if (file_exists($oldFilePath) && is_file($oldFilePath)) {
                 unlink($oldFilePath);
             }
         }
@@ -321,8 +322,11 @@ try {
 
         // Delete old image file if exists
         if ($currentImage && !empty($currentImage['image_path'])) {
-            $oldFilePath = dirname(__FILE__) . '/../' . $currentImage['image_path'];
-            if (file_exists($oldFilePath)) {
+            // stored as '../assets/images/pages/...' relative to admin/
+            // absolute: projectRoot/assets/images/pages/...
+            $oldRel = ltrim(str_replace('../', '', $currentImage['image_path']), '/');
+            $oldFilePath = dirname(__FILE__) . '/../../' . $oldRel;
+            if (file_exists($oldFilePath) && is_file($oldFilePath)) {
                 unlink($oldFilePath);
             }
         }
@@ -368,13 +372,48 @@ try {
         exit;
     }
 
-    // Unknown action
-    throw new Exception('Unknown action: ' . htmlspecialchars($action));
+        if ($action === "update_section_image_text") {
+        $page = trim($_POST['page'] ?? '');
+        $section = trim($_POST['section'] ?? '');
+        $text = trim($_POST['text'] ?? '');
+        
+        $stmt = $conn->prepare("
+            INSERT INTO page_sections (page, section, image_path, updated_at)
+            VALUES (?, ?, ?, NOW())
+            ON DUPLICATE KEY UPDATE
+                image_path = VALUES(image_path),
+                updated_at = NOW()
+        ");
+        $stmt->bind_param("sss", $page, $section, $text);
+        $stmt->execute();
+        echo json_encode(["success" => true]);
+        exit;
+    }
 
+    if ($action === "upload_category_image") {
+        $id = intval($_POST["id"] ?? 0);
+        if (!isset($_FILES["image"]) || $_FILES["image"]["error"] !== UPLOAD_ERR_OK) {
+            throw new Exception("Invalid image upload");
+        }
+        
+        $ext = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
+        if (!in_array($ext, ["jpg", "jpeg", "png", "webp"])) throw new Exception("Invalid format");
+        
+        $filename = uniqid("cat_") . "." . $ext;
+        $path = "../../assets/images/products/" . $filename;
+        
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $path)) {
+            $db_path = "assets/images/products/" . $filename;
+            $stmt = $conn->prepare("UPDATE categories SET image_path = ? WHERE category_id = ?");
+            $stmt->bind_param("si", $db_path, $id);
+            $stmt->execute();
+            echo json_encode(["success" => true, "image_path" => $db_path]);
+        } else {
+            throw new Exception("Move failed");
+        }
+        exit;
+    }
 
-    // ===========================
-    // UPDATE PHCARD
-    // ===========================
     if ($action === "update_phcard") {
         $card_id = intval($_POST["card_id"] ?? 0);
         $field = $_POST["field"] ?? "";
@@ -398,7 +437,7 @@ try {
         if (!in_array($ext, ["jpg", "jpeg", "png", "webp"])) throw new Exception("Invalid format");
         
         $filename = uniqid("phcard_") . "." . $ext;
-        $path = "../../assets/images/products/" . $filename;
+        $path = dirname(__FILE__) . "/../../assets/images/products/" . $filename;
         
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $path)) {
             $db_path = "assets/images/products/" . $filename;
@@ -411,6 +450,61 @@ try {
         }
         exit;
     }
+
+    if ($action === "add_cert") {
+        $stmt = $conn->prepare("INSERT INTO certifications (title, is_active, sort_order) VALUES ('New Certification', 1, 99)");
+        $stmt->execute();
+        echo json_encode(["success" => true]);
+        exit;
+    }
+
+    if ($action === "delete_cert") {
+        $id = intval($_POST["id"] ?? 0);
+        $stmt = $conn->prepare("DELETE FROM certifications WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        echo json_encode(["success" => true]);
+        exit;
+    }
+
+    if ($action === "update_cert") {
+        $id = intval($_POST["id"] ?? 0);
+        $title = trim($_POST["title"] ?? "");
+        $is_active = intval($_POST["is_active"] ?? 0);
+        
+        $stmt = $conn->prepare("UPDATE certifications SET title = ?, is_active = ? WHERE id = ?");
+        $stmt->bind_param("sii", $title, $is_active, $id);
+        $stmt->execute();
+        echo json_encode(["success" => true]);
+        exit;
+    }
+
+    if ($action === "upload_cert_image") {
+        $id = intval($_POST["id"] ?? 0);
+        if (!isset($_FILES["image"]) || $_FILES["image"]["error"] !== UPLOAD_ERR_OK) {
+            throw new Exception("Invalid image upload");
+        }
+        
+        $ext = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
+        if (!in_array($ext, ["jpg", "jpeg", "png", "webp", "svg"])) throw new Exception("Invalid format");
+        
+        $filename = uniqid("cert_") . "." . $ext;
+        $path = dirname(__FILE__) . "/../../assets/images/static/" . $filename;
+        
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $path)) {
+            $db_path = "assets/images/static/" . $filename;
+            $stmt = $conn->prepare("UPDATE certifications SET image_path = ? WHERE id = ?");
+            $stmt->bind_param("si", $db_path, $id);
+            $stmt->execute();
+            echo json_encode(["status" => "success", "path" => $db_path]);
+        } else {
+            throw new Exception("Move failed");
+        }
+        exit;
+    }
+
+    // Unknown action
+    throw new Exception('Unknown action: ' . htmlspecialchars($action));
 } catch (Exception $e) {
     http_response_code(400);
     header('Content-Type: application/json; charset=utf-8');

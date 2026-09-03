@@ -2,17 +2,63 @@
 $currentPage = "quality.php";
 require_once "includes/db.php";
 $qualityHero = [];
-if(isset($conn)){
+$standardsData = [];
+$certsList = [];
+
+if (isset($conn) && $conn) {
+    // Hero
     $rq = $conn->query("SELECT * FROM page_sections WHERE page='quality' AND section='hero'");
-    if($rq && $rq->num_rows>0) $qualityHero = $rq->fetch_assoc();
+    if ($rq && $rq->num_rows > 0) $qualityHero = $rq->fetch_assoc();
+
+    // Standards 1-6
+    $rs = $conn->query("SELECT * FROM page_sections WHERE page='quality' AND section LIKE 'standard%' ORDER BY section ASC");
+    if ($rs && $rs->num_rows > 0) {
+        while ($row = $rs->fetch_assoc()) {
+            $standardsData[$row['section']] = $row;
+        }
+    }
+
+    // Certifications
+    $chkTable = $conn->query("SHOW TABLES LIKE 'certifications'");
+    if ($chkTable && $chkTable->num_rows > 0) {
+        $rc = $conn->query("SELECT * FROM certifications WHERE is_active = 1 ORDER BY sort_order ASC");
+        if ($rc && $rc->num_rows > 0) {
+            while ($row = $rc->fetch_assoc()) {
+                $certsList[] = $row;
+            }
+        }
+    }
 }
+
+// Fallback standards if not in DB
+$defaultStandards = [
+    'standard1' => ['Farm Selection', 'We audit and approve farms based on soil quality, water source, pest management practices, and historical yield performance before any partnership begins.'],
+    'standard2' => ['Product Inspection', 'Incoming produce is inspected at arrival in our packing facilities. Size, color, firmness, and visual quality are assessed against our export grading criteria.'],
+    'standard3' => ['Sorting & Grading', 'Products are mechanically and manually sorted into export grades — ensuring uniformity that meets international market requirements.'],
+    'standard4' => ['Packing Standards', 'We use export-standard cartons and packaging materials that protect produce during long-haul refrigerated transport.'],
+    'standard5' => ['Cold Chain', 'Temperature-controlled storage and refrigerated transport maintain product freshness from packing house to destination port.'],
+    'standard6' => ['Export Documentation', 'We prepare all required documentation including phytosanitary certificates, origin certificates, and customs clearance paperwork.']
+];
+
+// Fallback certifications if not in DB
+if (empty($certsList)) {
+    $certsList = [
+        ['title' => 'Phytosanitary Certificate', 'image_path' => ''],
+        ['title' => 'Certificate of Origin', 'image_path' => ''],
+        ['title' => 'Export License', 'image_path' => ''],
+        ['title' => 'GlobalG.A.P. Certified', 'image_path' => ''],
+        ['title' => 'ISO 22000 Food Safety', 'image_path' => ''],
+        ['title' => 'BRCGS Packaging Standard', 'image_path' => '']
+    ];
+}
+
 include "includes/header.php"; 
 ?>
 <link rel="preload" as="image"
     href="https://images.unsplash.com/photo-1652211955967-99c892925469?w=900&amp;h=700&amp;fit=crop&amp;auto=format" />
 <div class="bg-[#F6F3EC] min-h-screen">
     <div class="bg-[#173F35] pt-[72px] relative overflow-hidden">
-        <?php $qualityHeroImg = !empty($qualityHero['image_path']) ? asset_url($qualityHero['image_path']) : 'assets/images/static/farm_sunset.jpg'; ?>
+        <?php $qualityHeroImg = !empty($qualityHero['image_path']) ? asset_url($qualityHero['image_path']) : 'assets/images/static/hero_background.png'; ?>
         <div class="absolute inset-0 z-0">
             <img src="<?= htmlspecialchars($qualityHeroImg) ?>" alt="Quality Assurance"
                 class="w-full h-full object-cover opacity-25 pointer-events-none" />
@@ -98,70 +144,22 @@ include "includes/header.php";
                 <p class="text-[11px] tracking-[0.28em] uppercase text-[#8FAE5D]">The System</p>
             </div>
             <h2 class="font-serif text-4xl lg:text-5xl text-[#F6F3EC] leading-[1.08] mb-14">Quality Standards</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div
-                    class="p-7 rounded-xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/[0.04] hover:bg-[#F6F3EC]/[0.08] transition-colors">
-                    <div class="font-serif text-4xl text-[#D8C7A1]/40 mb-5">0
-                        <!-- -->1
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php for($i = 1; $i <= 6; $i++): 
+                    $stdKey = "standard{$i}";
+                    $stdTitle = $standardsData[$stdKey]['heading'] ?? $defaultStandards[$stdKey][0];
+                    $stdDesc = $standardsData[$stdKey]['subtext'] ?? $defaultStandards[$stdKey][1];
+                    $numFormatted = sprintf("%02d", $i);
+                ?>
+                <div class="p-8 rounded-2xl border border-[#D8C7A1]/20 bg-[#F6F3EC]/[0.06] hover:bg-[#F6F3EC]/[0.10] hover:border-[#8FAE5D]/50 transition-all duration-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="font-serif text-4xl text-[#D8C7A1] mb-4"><?= $numFormatted ?></div>
+                        <div class="w-8 h-px bg-[#8FAE5D] mb-4"></div>
+                        <h3 class="font-serif text-xl text-[#F6F3EC] mb-3 font-semibold tracking-wide"><?= htmlspecialchars($stdTitle) ?></h3>
+                        <p class="text-[14px] text-[#F6F3EC]/90 leading-relaxed font-light"><?= nl2br(htmlspecialchars($stdDesc)) ?></p>
                     </div>
-                    <div class="w-6 h-px bg-[#8FAE5D]/40 mb-4"></div>
-                    <h3 class="font-serif text-lg text-[#F6F3EC] mb-3">Farm Selection</h3>
-                    <p class="text-[13px] text-[#F6F3EC]/52 leading-relaxed">We audit and approve farms based on soil
-                        quality, water source, pest management practices, and historical yield performance before any
-                        partnership begins.</p>
                 </div>
-                <div
-                    class="p-7 rounded-xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/[0.04] hover:bg-[#F6F3EC]/[0.08] transition-colors">
-                    <div class="font-serif text-4xl text-[#D8C7A1]/40 mb-5">0
-                        <!-- -->2
-                    </div>
-                    <div class="w-6 h-px bg-[#8FAE5D]/40 mb-4"></div>
-                    <h3 class="font-serif text-lg text-[#F6F3EC] mb-3">Product Inspection</h3>
-                    <p class="text-[13px] text-[#F6F3EC]/52 leading-relaxed">Incoming produce is inspected at arrival in
-                        our packing facilities. Size, color, firmness, and visual quality are assessed against our
-                        export grading criteria.</p>
-                </div>
-                <div
-                    class="p-7 rounded-xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/[0.04] hover:bg-[#F6F3EC]/[0.08] transition-colors">
-                    <div class="font-serif text-4xl text-[#D8C7A1]/40 mb-5">0
-                        <!-- -->3
-                    </div>
-                    <div class="w-6 h-px bg-[#8FAE5D]/40 mb-4"></div>
-                    <h3 class="font-serif text-lg text-[#F6F3EC] mb-3">Sorting &amp; Grading</h3>
-                    <p class="text-[13px] text-[#F6F3EC]/52 leading-relaxed">Products are mechanically and manually
-                        sorted into export grades — ensuring uniformity that meets international market requirements.
-                    </p>
-                </div>
-                <div
-                    class="p-7 rounded-xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/[0.04] hover:bg-[#F6F3EC]/[0.08] transition-colors">
-                    <div class="font-serif text-4xl text-[#D8C7A1]/40 mb-5">0
-                        <!-- -->4
-                    </div>
-                    <div class="w-6 h-px bg-[#8FAE5D]/40 mb-4"></div>
-                    <h3 class="font-serif text-lg text-[#F6F3EC] mb-3">Packing Standards</h3>
-                    <p class="text-[13px] text-[#F6F3EC]/52 leading-relaxed">We use export-standard cartons and
-                        packaging materials that protect produce during long-haul refrigerated transport.</p>
-                </div>
-                <div
-                    class="p-7 rounded-xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/[0.04] hover:bg-[#F6F3EC]/[0.08] transition-colors">
-                    <div class="font-serif text-4xl text-[#D8C7A1]/40 mb-5">0
-                        <!-- -->5
-                    </div>
-                    <div class="w-6 h-px bg-[#8FAE5D]/40 mb-4"></div>
-                    <h3 class="font-serif text-lg text-[#F6F3EC] mb-3">Cold Chain</h3>
-                    <p class="text-[13px] text-[#F6F3EC]/52 leading-relaxed">Temperature-controlled storage and
-                        refrigerated transport maintain product freshness from packing house to destination port.</p>
-                </div>
-                <div
-                    class="p-7 rounded-xl border border-[#F6F3EC]/8 bg-[#F6F3EC]/[0.04] hover:bg-[#F6F3EC]/[0.08] transition-colors">
-                    <div class="font-serif text-4xl text-[#D8C7A1]/40 mb-5">0
-                        <!-- -->6
-                    </div>
-                    <div class="w-6 h-px bg-[#8FAE5D]/40 mb-4"></div>
-                    <h3 class="font-serif text-lg text-[#F6F3EC] mb-3">Export Documentation</h3>
-                    <p class="text-[13px] text-[#F6F3EC]/52 leading-relaxed">We prepare all required documentation
-                        including phytosanitary certificates, origin certificates, and customs clearance paperwork.</p>
-                </div>
+                <?php endfor; ?>
             </div>
         </div>
     </section>
@@ -174,92 +172,28 @@ include "includes/header.php";
         <p class="text-[#173F35]/55 max-w-xl mb-12 leading-relaxed text-[14px]">Green Pyramids operates in compliance
             with international export and food safety standards. Our official certifications are maintained and renewed
             annually.</p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div class="rounded-xl p-6 text-center border border-[#8FAE5D]/30 bg-[#8FAE5D]/5">
-                <div class="w-10 h-10 rounded-full bg-[#D8C7A1]/25 mx-auto mb-4 flex items-center justify-center"><svg
-                        width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <rect x="3" y="2" width="12" height="14" rx="2" stroke="#8FAE5D" stroke-width="1.2"></rect>
-                        <line x1="6" y1="6" x2="12" y2="6" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="9" x2="12" y2="9" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="12" x2="10" y2="12" stroke="#8FAE5D" stroke-width="0.9"></line>
-                    </svg></div>
-                <p class="text-[11px] text-[#173F35]/58 leading-snug">Phytosanitary Certificate</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+            <?php foreach ($certsList as $cert): 
+                $certImg = !empty($cert['image_path']) ? asset_url($cert['image_path']) : '';
+                $certTitle = htmlspecialchars($cert['title']);
+            ?>
+            <div class="rounded-2xl p-6 text-center border border-[#8FAE5D]/30 bg-white shadow-sm hover:shadow-md hover:border-[#8FAE5D] transition-all duration-300 flex flex-col items-center justify-center">
+                <?php if (!empty($certImg)): ?>
+                    <div class="w-16 h-16 rounded-xl overflow-hidden mb-4 p-1 bg-[#F9F8F6] border border-[#8FAE5D]/20 flex items-center justify-center">
+                        <img src="<?= htmlspecialchars($certImg) ?>" alt="<?= $certTitle ?>" class="max-w-full max-h-full object-contain" />
+                    </div>
+                <?php else: ?>
+                    <div class="w-12 h-12 rounded-full bg-[#8FAE5D]/15 mx-auto mb-4 flex items-center justify-center text-[#173F35]">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#173F35" stroke-width="1.8">
+                            <path d="M12 15l-2 5l-4-2l-4 2l2-5"></path>
+                            <circle cx="12" cy="9" r="6"></circle>
+                        </svg>
+                    </div>
+                <?php endif; ?>
+                <p class="text-[13px] font-medium text-[#173F35] leading-snug"><?= $certTitle ?></p>
+                <span class="inline-block mt-2 text-[9px] uppercase tracking-wider text-[#8FAE5D] font-semibold bg-[#8FAE5D]/10 px-2 py-0.5 rounded-full">Certified</span>
             </div>
-            <div class="rounded-xl p-6 text-center border border-[#8FAE5D]/30 bg-[#8FAE5D]/5">
-                <div class="w-10 h-10 rounded-full bg-[#D8C7A1]/25 mx-auto mb-4 flex items-center justify-center"><svg
-                        width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <rect x="3" y="2" width="12" height="14" rx="2" stroke="#8FAE5D" stroke-width="1.2"></rect>
-                        <line x1="6" y1="6" x2="12" y2="6" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="9" x2="12" y2="9" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="12" x2="10" y2="12" stroke="#8FAE5D" stroke-width="0.9"></line>
-                    </svg></div>
-                <p class="text-[11px] text-[#173F35]/58 leading-snug">Certificate of Origin</p>
-            </div>
-            <div class="rounded-xl p-6 text-center border border-[#8FAE5D]/30 bg-[#8FAE5D]/5">
-                <div class="w-10 h-10 rounded-full bg-[#D8C7A1]/25 mx-auto mb-4 flex items-center justify-center"><svg
-                        width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <rect x="3" y="2" width="12" height="14" rx="2" stroke="#8FAE5D" stroke-width="1.2"></rect>
-                        <line x1="6" y1="6" x2="12" y2="6" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="9" x2="12" y2="9" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="12" x2="10" y2="12" stroke="#8FAE5D" stroke-width="0.9"></line>
-                    </svg></div>
-                <p class="text-[11px] text-[#173F35]/58 leading-snug">Export License</p>
-            </div>
-            <div class="rounded-xl p-6 text-center border border-dashed border-[#D8C7A1]/50 bg-[#D8C7A1]/8">
-                <div class="w-10 h-10 rounded-full bg-[#D8C7A1]/25 mx-auto mb-4 flex items-center justify-center"><svg
-                        width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <rect x="3" y="2" width="12" height="14" rx="2" stroke="#8FAE5D" stroke-width="1.2"></rect>
-                        <line x1="6" y1="6" x2="12" y2="6" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="9" x2="12" y2="9" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="12" x2="10" y2="12" stroke="#8FAE5D" stroke-width="0.9"></line>
-                    </svg></div>
-                <p class="text-[11px] text-[#173F35]/58 leading-snug">Certification Placeholder</p>
-                <p class="text-[9px] text-[#173F35]/28 mt-1 tracking-wide uppercase">Placeholder</p>
-            </div>
-            <div class="rounded-xl p-6 text-center border border-dashed border-[#D8C7A1]/50 bg-[#D8C7A1]/8">
-                <div class="w-10 h-10 rounded-full bg-[#D8C7A1]/25 mx-auto mb-4 flex items-center justify-center"><svg
-                        width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <rect x="3" y="2" width="12" height="14" rx="2" stroke="#8FAE5D" stroke-width="1.2"></rect>
-                        <line x1="6" y1="6" x2="12" y2="6" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="9" x2="12" y2="9" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="12" x2="10" y2="12" stroke="#8FAE5D" stroke-width="0.9"></line>
-                    </svg></div>
-                <p class="text-[11px] text-[#173F35]/58 leading-snug">Certification Placeholder</p>
-                <p class="text-[9px] text-[#173F35]/28 mt-1 tracking-wide uppercase">Placeholder</p>
-            </div>
-            <div class="rounded-xl p-6 text-center border border-dashed border-[#D8C7A1]/50 bg-[#D8C7A1]/8">
-                <div class="w-10 h-10 rounded-full bg-[#D8C7A1]/25 mx-auto mb-4 flex items-center justify-center"><svg
-                        width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <rect x="3" y="2" width="12" height="14" rx="2" stroke="#8FAE5D" stroke-width="1.2"></rect>
-                        <line x1="6" y1="6" x2="12" y2="6" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="9" x2="12" y2="9" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="12" x2="10" y2="12" stroke="#8FAE5D" stroke-width="0.9"></line>
-                    </svg></div>
-                <p class="text-[11px] text-[#173F35]/58 leading-snug">Certification Placeholder</p>
-                <p class="text-[9px] text-[#173F35]/28 mt-1 tracking-wide uppercase">Placeholder</p>
-            </div>
-            <div class="rounded-xl p-6 text-center border border-dashed border-[#D8C7A1]/50 bg-[#D8C7A1]/8">
-                <div class="w-10 h-10 rounded-full bg-[#D8C7A1]/25 mx-auto mb-4 flex items-center justify-center"><svg
-                        width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <rect x="3" y="2" width="12" height="14" rx="2" stroke="#8FAE5D" stroke-width="1.2"></rect>
-                        <line x1="6" y1="6" x2="12" y2="6" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="9" x2="12" y2="9" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="12" x2="10" y2="12" stroke="#8FAE5D" stroke-width="0.9"></line>
-                    </svg></div>
-                <p class="text-[11px] text-[#173F35]/58 leading-snug">Certification Placeholder</p>
-                <p class="text-[9px] text-[#173F35]/28 mt-1 tracking-wide uppercase">Placeholder</p>
-            </div>
-            <div class="rounded-xl p-6 text-center border border-dashed border-[#D8C7A1]/50 bg-[#D8C7A1]/8">
-                <div class="w-10 h-10 rounded-full bg-[#D8C7A1]/25 mx-auto mb-4 flex items-center justify-center"><svg
-                        width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <rect x="3" y="2" width="12" height="14" rx="2" stroke="#8FAE5D" stroke-width="1.2"></rect>
-                        <line x1="6" y1="6" x2="12" y2="6" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="9" x2="12" y2="9" stroke="#8FAE5D" stroke-width="0.9"></line>
-                        <line x1="6" y1="12" x2="10" y2="12" stroke="#8FAE5D" stroke-width="0.9"></line>
-                    </svg></div>
-                <p class="text-[11px] text-[#173F35]/58 leading-snug">Certification Placeholder</p>
-                <p class="text-[9px] text-[#173F35]/28 mt-1 tracking-wide uppercase">Placeholder</p>
-            </div>
+            <?php endforeach; ?>
         </div>
     </section>
     <section class="bg-[#173F35] py-24 text-center">

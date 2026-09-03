@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input 
                     type="email" 
                     name="email" 
-                    placeholder="admin@greenlight.com" 
+                    placeholder="admin@greenpyramids.eg" 
                     value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>"
                     required>
             </div>

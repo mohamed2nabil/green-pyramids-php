@@ -110,6 +110,12 @@ function resolveAdminImage($path) {
         .btn-discard { background: var(--border); color: var(--text-primary); padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
         .sync-indicator { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
     </style>
+<style>
+.image-uploader.dragover {
+    border-color: #8FAE5D;
+    background-color: #f0fdf4;
+}
+</style>
 </head>
 
 <body>
@@ -143,37 +149,74 @@ function resolveAdminImage($path) {
                 <!-- التبويبة الجديدة لصفحة التواصل -->
                 <button class="tab-btn" data-tab="contact">Contact Page</button>
                 <button class="tab-btn" data-tab="quality">Quality Page</button>
+                <button class="tab-btn" data-tab="categories">Categories</button>
             </div>
         </div>
 
         <div class="editor-container">
             <!-- ================= HOME TAB ================= -->
             <div id="home-tab" class="tab-content active">
-                <h2 class="section-title" style="margin-top: 0;">Hero Slides</h2>
-                <?php foreach ($slides as $slide): ?>
-                    <div class="slide-card" data-slide-id="<?= $slide['slide_id'] ?>">
-                        <div class="form-group">
-                            <label>Featured Image</label>
-                            <div class="image-uploader" onclick="this.querySelector('input').click()">
-                                <input type="file" class="slide-image-input" accept="image/*" style="display:none" data-slide-id="<?= $slide['slide_id'] ?>">
-                                <?php $resolvedImage = resolveAdminImage($slide['image_path'] ?? ''); ?>
-                                <?php if (!empty($resolvedImage)): ?>
-                                    <img class="slide-preview" src="<?= htmlspecialchars($resolvedImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
-                                <?php else: ?>
-                                    <p>Click to upload image</p>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Slide Title</label>
-                            <input type="text" class="slide-heading" value="<?= htmlspecialchars($slide['heading'] ?? '') ?>" data-slide-id="<?= $slide['slide_id'] ?>">
-                        </div>
-                        <div class="form-group">
-                            <label>Slide Description</label>
-                            <textarea class="slide-subtext" data-slide-id="<?= $slide['slide_id'] ?>"><?= htmlspecialchars($slide['subtext'] ?? '') ?></textarea>
+                <h2 class="section-title" style="margin-top: 0;">🏠 Home Page Content</h2>
+                
+                <?php 
+                $homeHero = $sections['home']['hero'] ?? ['heading' => '', 'subtext' => '', 'image_path' => ''];
+                ?>
+                <?php 
+                $homeOverline = $sections['home']['hero_overline'] ?? ['heading' => 'Egyptian Agricultural Exports'];
+                ?>
+                <div class="section-card" data-page="home" data-section="hero_overline">
+                    <h3 class="section-title">Overline Text (Small text above title)</h3>
+                    <div class="form-group">
+                        <label>Overline Text (Small text above title)</label>
+                        <input type="text" class="section-heading" placeholder="e.g. Egyptian Agricultural Exports" value="<?= htmlspecialchars($homeOverline['heading'] ?? '') ?>" data-page="home" data-section="hero_overline">
+                    </div>
+                </div>
+                <div class="section-card" data-page="home" data-section="hero">
+                    <h3 class="section-title">Main Hero Section</h3>
+                    <div class="form-group">
+                        <label>Hero Background Image</label>
+                        <div class="image-uploader" onclick="this.querySelector('input').click()">
+                            <input type="file" class="section-image-input" accept="image/*" style="display:none" data-page="home" data-section="hero">
+                            <?php $resolvedImage = resolveAdminImage($homeHero['image_path'] ?? ''); ?>
+                            <?php if (!empty($resolvedImage)): ?>
+                                <img class="section-preview" src="<?= htmlspecialchars($resolvedImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
+                            <?php else: ?>
+                                <p>Drag &amp; Drop or Click to upload</p>
+                            <?php endif; ?>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                    <div class="form-group">
+                        <label>Hero Title</label>
+                        <textarea class="section-heading" data-page="home" data-section="hero"><?= htmlspecialchars($homeHero['heading'] ?? '') ?></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Hero Subtitle</label>
+                        <textarea class="section-subtext" data-page="home" data-section="hero"><?= htmlspecialchars($homeHero['subtext'] ?? '') ?></textarea>
+                    </div>
+                </div>
+
+                <h2 class="section-title" style="margin-top: 30px;">KPIs / Achievements</h2>
+                <?php for($i=1; $i<=4; $i++): 
+                    $kpiData = $sections["home"]["kpi{$i}"] ?? ["heading"=>"", "subtext"=>"", "image_path"=>""];
+                ?>
+                <div class="section-card" data-page="home" data-section="kpi<?= $i ?>">
+                    <h3 class="section-title">KPI <?= $i ?></h3>
+                    <div class="form-group">
+                        <label>Number (e.g. 15+)</label>
+                        <input type="text" class="section-heading" value="<?= htmlspecialchars($kpiData["heading"] ?? "") ?>" data-page="home" data-section="kpi<?= $i ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Title (e.g. Years Exporting)</label>
+                        <input type="text" class="section-subtext" value="<?= htmlspecialchars($kpiData["subtext"] ?? "") ?>" data-page="home" data-section="kpi<?= $i ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Sub-title (e.g. Nile Delta & Upper Egypt)</label>
+                        <input type="text" class="section-image-text" value="<?= htmlspecialchars($kpiData["image_path"] ?? "") ?>" data-page="home" data-section="kpi<?= $i ?>">
+                    </div>
+                </div>
+                <?php endfor; ?>
+
+                
             </div>
 
             <!-- ================= ABOUT TAB ================= -->
@@ -217,17 +260,7 @@ function resolveAdminImage($path) {
                     </div>
                 </div>
 
-                <div class="section-card" data-page="process" data-section="intro">
-                    <h3 class="section-title">Intro Section (Below Image)</h3>
-                    <div class="form-group">
-                        <label>Intro Title</label>
-                        <input type="text" class="section-heading" value="<?= htmlspecialchars($processIntro['heading'] ?? '') ?>" data-page="process" data-section="intro">
-                    </div>
-                    <div class="form-group">
-                        <label>Intro Description</label>
-                        <textarea class="section-subtext" data-page="process" data-section="intro"><?= htmlspecialchars($processIntro['subtext'] ?? '') ?></textarea>
-                    </div>
-                </div>
+                
                 <h2 class="section-title" style="margin-top: 30px;">Journey Steps</h2>
                 <?php for($i=1; $i<=6; $i++): 
                     $stepData = $sections["process"]["step{$i}"] ?? ["heading"=>"", "subtext"=>""];
@@ -317,58 +350,13 @@ function resolveAdminImage($path) {
             </div>
 
             <!-- ================= CONTACT TAB ================= -->
-            <!-- ================= QUALITY TAB ================= -->
-            <div id="quality-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">Quality Page Sections</h2>
-                
-                <div class="section-card" data-page="quality" data-section="hero">
+            <div id="contact-tab" class="tab-content">
+                <h2 class="section-title" style="margin-top: 0;">📞 Contact Page Content</h2>
+                <div class="section-card" data-page="contact" data-section="hero">
                     <h3 class="section-title">Hero Section</h3>
                     <div class="form-group">
-                        <label>Hero Background Image</label>
-                        <?php 
-                        $qualityHero = [];
-                        if(isset($conn)){
-                            $rq = $conn->query("SELECT * FROM page_sections WHERE page='quality' AND section='hero'");
-                            if($rq && $rq->num_rows>0) $qualityHero = $rq->fetch_assoc();
-                        }
-                        ?>
-                        <div class="image-uploader" onclick="this.querySelector('input').click()">
-                            <input type="file" class="section-image-input" accept="image/*" style="display:none" data-page="quality" data-section="hero">
-                            <?php $resolvedImage = resolveAdminImage($qualityHero['image_path'] ?? ''); ?>
-                            <?php if (!empty($resolvedImage)): ?>
-                                <img class="section-preview" src="<?= htmlspecialchars($resolvedImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
-                            <?php else: ?>
-                                <p>Click to upload quality hero image</p>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Main Heading</label>
-                        <input type="text" class="section-heading" value="<?= htmlspecialchars($qualityHero['heading'] ?? 'Uncompromising Quality') ?>" data-page="quality" data-section="hero">
-                    </div>
-                    <div class="form-group">
-                        <label>Subtext</label>
-                        <textarea class="section-subtext" data-page="quality" data-section="hero"><?= htmlspecialchars($qualityHero['subtext'] ?? 'Meeting global standards.') ?></textarea>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="contact-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;"> Contact Page Hero</h2>
-                
-                <div class="section-card" data-page="contact" data-section="hero">
-                    <h3 class="section-title">Contact Hero Image</h3>
-                    <div class="form-group">
-                        <label>Hero Background Image</label>
-                        <div class="image-uploader" onclick="this.querySelector('input').click()">
-                            <input type="file" class="section-image-input" accept="image/*" style="display:none" data-page="contact" data-section="hero">
-                            <?php $resolvedImage = resolveAdminImage($contactHero['image_path'] ?? ''); ?>
-                            <?php if (!empty($resolvedImage)): ?>
-                                <img class="section-preview" src="<?= htmlspecialchars($resolvedImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
-                            <?php else: ?>
-                                <p>Click to upload image</p>
-                            <?php endif; ?>
-                        </div>
+                        <label>Overline Text</label>
+                        <input type="text" class="section-image-text" placeholder="e.g. GET IN TOUCH" value="<?= htmlspecialchars($contactHero['image_path'] ?? '') ?>" data-page="contact" data-section="hero">
                     </div>
                     <div class="form-group">
                         <label>Main Heading</label>
@@ -381,6 +369,51 @@ function resolveAdminImage($path) {
                 </div>
             </div>
 
+            <!-- ================= QUALITY TAB ================= -->
+            <div id="quality-tab" class="tab-content">
+                <h2 class="section-title" style="margin-top: 0;">⭐ Quality Page Sections</h2>
+                <?php $qualityHero = $sections['quality']['hero'] ?? ['heading' => '', 'subtext' => '', 'image_path' => '']; ?>
+                <div class="section-card" data-page="quality" data-section="hero">
+                    <h3 class="section-title">Hero Section</h3>
+                    <div class="form-group">
+                        <label>Main Heading</label>
+                        <input type="text" class="section-heading" value="<?= htmlspecialchars($qualityHero['heading'] ?? '') ?>" data-page="quality" data-section="hero">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtext</label>
+                        <textarea class="section-subtext" data-page="quality" data-section="hero"><?= htmlspecialchars($qualityHero['subtext'] ?? '') ?></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div id="categories-tab" class="tab-content">
+                <h2 class="section-title" style="margin-top: 0;">Category Images</h2>
+                <div class="grid grid-cols-1 gap-6">
+                <?php 
+                $cats = [];
+                if(isset($conn)){
+                    $rc = $conn->query("SELECT * FROM categories ORDER BY category_name ASC");
+                    if($rc) { while($row = $rc->fetch_assoc()) $cats[] = $row; }
+                }
+                foreach ($cats as $cat): 
+                ?>
+                    <div class="section-card" data-cat-id="<?= $cat['category_id'] ?>">
+                        <h3 class="section-title"><?= htmlspecialchars($cat['category_name']) ?></h3>
+                        <div class="form-group">
+                            <div class="image-uploader" onclick="this.querySelector('input').click()">
+                                <input type="file" class="cat-image-input" accept="image/*" style="display:none" data-cat-id="<?= $cat['category_id'] ?>">
+                                <?php $cImage = resolveAdminImage($cat['image_path'] ?? ''); ?>
+                                <?php if (!empty($cImage)): ?>
+                                    <img class="cat-preview" src="<?= htmlspecialchars($cImage) ?>?t=<?= time() ?>" style="max-height: 150px; object-fit: cover;">
+                                <?php else: ?>
+                                    <p>Click to upload image</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -400,6 +433,74 @@ function resolveAdminImage($path) {
             });
         });
     </script>
+
+<script>
+async function addCertification() {
+    const fd = new FormData();
+    fd.append('action', 'add_cert');
+    try {
+        let r = await fetch('api/save_content.php', { method: 'POST', body: fd });
+        let text = await r.text();
+        if(text.includes('success')) { location.reload(); }
+    } catch(e){}
+}
+async function deleteCertification(id, btn) {
+    if(!confirm('Are you sure you want to delete this certification?')) return;
+    const fd = new FormData();
+    fd.append('action', 'delete_cert');
+    fd.append('id', id);
+    try {
+        let r = await fetch('api/save_content.php', { method: 'POST', body: fd });
+        let text = await r.text();
+        if(text.includes('success')) { btn.closest('.cert-card').remove(); }
+    } catch(e){}
+}
+
+document.querySelectorAll('.cert-title, .cert-active').forEach(el => {
+    el.addEventListener('change', async function() {
+        let id = this.dataset.certId;
+        let title = document.querySelector('.cert-title[data-cert-id="'+id+'"]').value;
+        let isActive = document.querySelector('.cert-active[data-cert-id="'+id+'"]').checked ? 1 : 0;
+        
+        const fd = new FormData();
+        fd.append('action', 'update_cert');
+        fd.append('id', id);
+        fd.append('title', title);
+        fd.append('is_active', isActive);
+        
+        await fetch('api/save_content.php', { method: 'POST', body: fd });
+    });
+});
+
+document.querySelectorAll('.cert-image-input').forEach(input => {
+    input.addEventListener('change', async function() {
+        if (!this.files[0]) return;
+        let id = this.dataset.certId;
+        const fd = new FormData();
+        fd.append('action', 'upload_cert_image');
+        fd.append('id', id);
+        fd.append('image', this.files[0]);
+        
+        try {
+            let r = await fetch('api/save_content.php', { method: 'POST', body: fd });
+            let res = await r.json();
+            if(res.status === 'success') {
+                let img = this.closest('.image-uploader').querySelector('img');
+                if (img) img.src = res.path + '?t=' + Date.now();
+                else {
+                    let newImg = document.createElement('img');
+                    newImg.src = res.path;
+                    newImg.style.maxHeight = '100px';
+                    this.closest('.image-uploader').innerHTML = '';
+                    this.closest('.image-uploader').appendChild(this);
+                    this.closest('.image-uploader').appendChild(newImg);
+                }
+            }
+        } catch(e){}
+    });
+});
+</script>
+
 </body>
 </html>
 
