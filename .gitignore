@@ -11,3 +11,7 @@ google-service-account*.json
 /admin/cache/analytics/
 
 error_log
+
+# Ignore image asset folders (do not upload images to the repo)
+images/
+assets/images/
