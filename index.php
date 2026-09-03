@@ -8,8 +8,8 @@
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-65 pointer-events-none" style="background-image:url('assets/images/static/hero_background.png')"></div>
     <!-- Rich dark-to-emerald gradient gradation -->
     <div class="absolute inset-0 bg-gradient-hero pointer-events-none"></div>
-    <!-- 3D Neon Tubes Canvas with mix-blend-screen so black becomes transparent -->
-    <canvas id="hero-canvas" class="absolute inset-0 w-full h-full block z-0 mix-blend-screen" style="touch-action:none;opacity:0"></canvas>
+    <!-- 3D Neon Tubes Canvas — blend mode set in main.css since tailwind.css lacks mix-blend-screen -->
+    <canvas id="hero-canvas" class="absolute inset-0 w-full h-full block z-0" style="touch-action:none;opacity:0"></canvas>
 
     <!-- Hero Content Overlay (pt-32 sm:pt-36 ensures plenty of clearance below the 80px navbar) -->
     <div class="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-32 sm:pt-36 pb-16 flex flex-col items-center justify-center text-center pointer-events-none">
@@ -20,11 +20,11 @@
       </div>
 
       <h1 class="anim-heading font-serif text-4xl sm:text-6xl lg:text-7xl xl:text-[80px] text-[#F6F3EC] leading-[1.08] max-w-4xl mx-auto drop-shadow-2xl mb-4 sm:mb-6 tracking-tight">
-        From Egyptian Soil<br/>To Global Markets.
+        <?= nl2br(htmlspecialchars($siteSettings['hero_title'] ?? "From Egyptian Soil\nTo Global Markets.")) ?>
       </h1>
 
       <p class="text-[#F6F3EC]/85 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 drop-shadow">
-        Connecting world markets to premium Egyptian crops. Sourced with care, verified for quality, and delivered fresh across continents.
+        <?= nl2br(htmlspecialchars($siteSettings['hero_subtitle'] ?? "Connecting world markets to premium Egyptian crops. Sourced with care, verified for quality, and delivered fresh across continents.")) ?>
       </p>
 
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-5 sm:mb-6 w-full sm:w-auto pointer-events-auto">
@@ -74,16 +74,19 @@
   </div>
 
   <!-- 3. WHO WE ARE SECTION -->
-  <section class="py-10 lg:py-12 pb-14 max-w-7xl mx-auto px-6 lg:px-10">
+  <section class="py-10 lg:py-12 max-w-7xl mx-auto px-6 lg:px-10">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-      <div class="relative">
+      <div>
         <img src="assets/images/static/hero_background.png" alt="Egyptian agricultural fields" class="w-full aspect-[4/3] object-cover rounded-2xl shadow-xl" loading="lazy" decoding="async"/>
-        <div class="absolute -bottom-5 -right-3 lg:-right-5 bg-[#F6F3EC] border border-[#D8C7A1]/60 rounded-2xl px-5 py-4 shadow-xl">
-          <div class="flex items-center gap-3">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="12,2 2,21 12,21" fill="#1f5245"></polygon><polygon points="12,2 22,21 12,21" fill="#0d2a24"></polygon><polygon points="12,2 22,21 22,21" fill="none" stroke="#8FAE5D" stroke-width="0.9"></polygon></svg>
-            <div>
-              <p class="text-[10px] tracking-[0.18em] uppercase text-[#173F35]/50 font-medium">Founded</p>
-              <p class="anim-counter font-serif text-2xl lg:text-3xl text-[#173F35] leading-none" data-count="2010">2010</p>
+        <!-- Founded badge — inline below image, not absolute -->
+        <div class="flex justify-end mt-3 pr-2">
+          <div class="bg-[#F6F3EC] border border-[#D8C7A1]/60 rounded-2xl px-5 py-3 shadow-lg">
+            <div class="flex items-center gap-3">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="12,2 2,21 12,21" fill="#1f5245"></polygon><polygon points="12,2 22,21 12,21" fill="#0d2a24"></polygon><polygon points="12,2 22,21 22,21" fill="none" stroke="#8FAE5D" stroke-width="0.9"></polygon></svg>
+              <div>
+                <p class="text-[10px] tracking-[0.18em] uppercase text-[#173F35]/50 font-medium">Founded</p>
+                <p class="anim-counter font-serif text-2xl lg:text-3xl text-[#173F35] leading-none" data-count="2010">2010</p>
+              </div>
             </div>
           </div>
         </div>
@@ -112,28 +115,31 @@
     }
   }
   $idxCats = [];
-  $idxCatRes = $conn->query("SELECT category_id, category_name, image_path FROM categories ORDER BY category_id ASC");
+  $idxCatRes = $conn ? $conn->query("SELECT category_id, category_name, image_path FROM categories ORDER BY category_id ASC") : null;
   if ($idxCatRes) { while ($c = $idxCatRes->fetch_assoc()) $idxCats[] = $c; }
   ?>
   <?php if (!empty($idxCats)): ?>
-  <!-- 4. CATEGORIES — STICKY HORIZONTAL SCROLL GALLERY -->
-  <section id="idx-cat-section" class="relative bg-gradient-category text-[#F6F3EC] overflow-hidden">
-    <!-- This wrapper's height drives the pin duration; set by JS -->
-    <div id="idx-cat-pin-wrapper" class="relative">
-      <div id="idx-cat-pinned" class="w-screen h-screen overflow-hidden flex flex-col justify-center">
-        <!-- Header -->
-        <div class="max-w-7xl mx-auto px-6 lg:px-10 mb-6 w-full flex items-end justify-between">
-          <div>
-            <div class="flex items-center gap-2 mb-2">
-              <div class="w-4 h-px bg-[#8FAE5D]"></div>
-              <p class="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-[#8FAE5D] font-semibold">What We Export</p>
-            </div>
-            <h2 class="anim-heading font-serif text-2xl sm:text-3xl lg:text-4xl text-[#F6F3EC] leading-tight">Our Categories</h2>
+  <!-- 4. CATEGORIES — HORIZONTAL SCROLL GALLERY -->
+  <section id="idx-cat-section" class="relative bg-gradient-category text-[#F6F3EC] border-y border-[#D8C7A1]/20 shadow-2xl">
+    <!-- Pinned container -->
+    <div id="idx-cat-pinned" class="w-full flex flex-col justify-center overflow-hidden py-12 lg:py-16 min-h-screen">
+      <!-- Header -->
+      <div class="max-w-7xl mx-auto px-6 lg:px-10 mb-8 w-full flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-4 h-px bg-[#8FAE5D]"></div>
+            <p class="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-[#8FAE5D] font-semibold">What We Export</p>
           </div>
-          <a href="products.php" class="text-[#8FAE5D] hover:text-[#D8C7A1] text-xs sm:text-sm tracking-wide transition-colors font-medium">View All Products &rarr;</a>
+          <h2 class="anim-heading font-serif text-3xl sm:text-4xl lg:text-5xl text-[#F6F3EC] leading-tight">Our Categories</h2>
         </div>
-        <!-- Horizontal track -->
-        <div id="idx-cat-track" class="flex gap-6 px-6 lg:px-10 will-change-transform">
+        <a href="products.php" class="inline-flex items-center gap-2 text-[#8FAE5D] hover:text-[#D8C7A1] text-sm tracking-wide transition-colors font-medium">
+          View All Products <span class="text-lg">&rarr;</span>
+        </a>
+      </div>
+      
+      <!-- Horizontal track container -->
+      <div class="w-full pl-6 lg:pl-10">
+        <div id="idx-cat-track" class="flex gap-6 lg:gap-8 pr-6 lg:pr-10 will-change-transform w-max">
           <?php foreach ($idxCats as $cat):
             $catImg  = htmlspecialchars($cat['image_path'] ?? '');
             $catLbl  = htmlspecialchars(ucwords($cat['category_name']));
@@ -177,7 +183,7 @@
       <div class="marquee-track px-4">
         <?php
         require_once "includes/db.php";
-        $res = $conn->query("SELECT * FROM testimonials WHERE status = 'approved' ORDER BY created_at DESC LIMIT 6");
+        $res = $conn ? $conn->query("SELECT * FROM testimonials WHERE status = 'approved' ORDER BY created_at DESC LIMIT 6") : null;
         $reviews = [];
         if ($res && $res->num_rows > 0) {
             while ($row = $res->fetch_assoc()) {

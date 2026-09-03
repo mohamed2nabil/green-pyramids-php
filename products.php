@@ -33,7 +33,7 @@ if (!function_exists('get_product_season')) {
 }
 
 // 1. Fetch DB categories
-$categoriesRes = $conn->query("SELECT category_id, category_name FROM categories ORDER BY category_id ASC");
+$categoriesRes = $conn ? $conn->query("SELECT category_id, category_name FROM categories ORDER BY category_id ASC") : null;
 $dbCategories = [];
 if ($categoriesRes) {
     while ($cat = $categoriesRes->fetch_assoc()) {
@@ -189,28 +189,23 @@ $stmt->close();
 $totalCountRes = $conn->query("SELECT COUNT(*) as cnt FROM products WHERE is_active = 1 AND is_visible = 1");
 $totalProductsCount = $totalCountRes ? (int)$totalCountRes->fetch_assoc()['cnt'] : $totalFilteredProducts;
 
-// Representative products query for Hero CardSwap
-$heroQuery = "
-  (SELECT p.*, c.category_name FROM products p JOIN categories c ON p.category_id = c.category_id WHERE p.is_active = 1 AND p.is_visible = 1 AND c.category_name LIKE '%Fruit%' LIMIT 1)
-  UNION ALL
-  (SELECT p.*, c.category_name FROM products p JOIN categories c ON p.category_id = c.category_id WHERE p.is_active = 1 AND p.is_visible = 1 AND c.category_name LIKE '%Veg%' LIMIT 1)
-  UNION ALL
-  (SELECT p.*, c.category_name FROM products p JOIN categories c ON p.category_id = c.category_id WHERE p.is_active = 1 AND p.is_visible = 1 AND c.category_name LIKE '%citrus%' LIMIT 1)
-  UNION ALL
-  (SELECT p.*, c.category_name FROM products p JOIN categories c ON p.category_id = c.category_id WHERE p.is_active = 1 AND p.is_visible = 1 AND (c.category_name LIKE '%Date%' OR c.category_name LIKE '%Crop%') LIMIT 1)
-";
-$heroRes = $conn->query($heroQuery);
+// Fetch custom Hero Cards from product_hero_cards table
 $heroCards = [];
-if ($heroRes) {
-    while ($hp = $heroRes->fetch_assoc()) {
-        $heroCards[] = $hp;
+if (isset($conn)) {
+    $r = $conn->query("SELECT * FROM product_hero_cards ORDER BY sort_order ASC LIMIT 4");
+    if ($r) {
+        while ($row = $r->fetch_assoc()) {
+            $heroCards[] = $row;
+        }
     }
-}
-if (empty($heroCards)) {
-    $heroCards = array_slice($products, 0, 4);
 }
 
 include "includes/header.php";
+$productionHero = [];
+if (isset($conn)) {
+    $r = $conn->query("SELECT * FROM page_sections WHERE page='production' AND section='hero'");
+    if ($r && $r->num_rows > 0) $productionHero = $r->fetch_assoc();
+}
 ?>
 
 <div class="bg-[#F6F3EC] min-h-screen">
@@ -222,12 +217,12 @@ include "includes/header.php";
         <div class="w-5 h-px bg-[#8FAE5D]"></div>
         <p class="text-[11px] tracking-[0.28em] uppercase text-[#8FAE5D]">Our Export Catalog</p>
       </div>
-      <h1 class="font-serif text-4xl sm:text-5xl lg:text-[60px] text-[#F6F3EC] leading-[1.05] mb-4 lg:mb-6">
-        Egyptian<br/>Fresh Produce
-      </h1>
-      <p class="text-[#F6F3EC]/70 text-[14px] lg:text-[15px] max-w-sm leading-relaxed mb-8">
-        Explore our selection of premium agricultural crops prepared for international markets.
-      </p>
+      <h1 class="anim-heading font-serif text-4xl sm:text-5xl lg:text-5xl text-[#F6F3EC] leading-[1.1] mb-4 lg:mb-6 break-words" style="hyphens: none; word-break: break-word;">
+          <?= htmlspecialchars($productionHero["heading"] ?? "Egyptian Fresh Produce") ?>
+        </h1>
+        <p class="anim-heading text-[#F6F3EC]/70 text-[14px] lg:text-[15px] max-w-sm leading-relaxed mb-8">
+          <?= htmlspecialchars($productionHero["subtext"] ?? "Explore our selection of premium agricultural crops prepared for international markets.") ?>
+        </p>
       <div class="flex gap-8">
         <div>
           <p class="font-serif text-2xl lg:text-3xl text-[#F6F3EC]"><?= $totalProductsCount ?>+</p>
@@ -245,59 +240,7 @@ include "includes/header.php";
       <div id="card-swap-wrapper" class="relative w-full max-w-[500px] h-[360px] sm:h-[420px] flex items-center justify-center">
         <div id="hero-card-swap-container" class="relative w-[280px] sm:w-[340px] lg:w-[380px] h-[340px] sm:h-[400px] perspective-[1200px] transform-gpu">
           <div class="absolute inset-0 [transform-style:preserve-3d]">
-            <?php foreach ($heroCards as $idx => $hp): 
-              $hpImg = asset_url($hp['image_path']);
-              $hpCat = htmlspecialchars($hp['category_name'] ?? 'Produce');
-              $hpName = htmlspecialchars($hp['name']);
-              $hpSlug = htmlspecialchars($hp['slug'] ?? $hp['product_id']);
-              $hpGrade = htmlspecialchars($hp['export_grade'] ?? '');
-              $hpSeason = htmlspecialchars(get_product_season($hp));
-              $isFront = ($idx === 0);
-            ?>
-              <a href="productdetail.php?id=<?= urlencode($hpSlug) ?>" 
-                 data-swap-index="<?= $idx ?>"
-                 class="swap-card group absolute top-1/2 left-1/2 w-[280px] sm:w-[340px] lg:w-[380px] h-[320px] sm:h-[380px] rounded-2xl border border-[#D8C7A1]/30 bg-[#0d2a24] shadow-2xl overflow-hidden [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] cursor-pointer transition-shadow duration-300 hover:shadow-emerald-900/40 block">
-                <div class="relative h-full w-full flex flex-col">
-                  <!-- Image with Lazy Loading Support -->
-                  <div class="flex-1 overflow-hidden relative bg-[#173F35]">
-                    <img loading="lazy" decoding="async" src="<?= htmlspecialchars($hpImg) ?>" 
-                         alt="<?= $hpName ?>" 
-                         loading="<?= $isFront ? 'eager' : 'lazy' ?>"
-                         <?php if ($isFront): ?>fetchpriority="high"<?php endif; ?>
-                         class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0d2a24] via-[#0d2a24]/30 to-transparent"></div>
-                    
-                    <!-- Category Badge -->
-                    <div class="absolute top-4 left-4 z-10">
-                      <span class="inline-block text-[9px] tracking-[0.2em] uppercase bg-[#173F35]/90 backdrop-blur-md text-[#8FAE5D] px-3 py-1 rounded-full font-semibold shadow-sm border border-[#8FAE5D]/30">
-                        <?= $hpCat ?>
-                      </span>
-                    </div>
-
-                    <?php if (!empty($hpGrade) && $hpGrade !== 'Standard'): ?>
-                    <div class="absolute top-4 right-4 z-10">
-                      <span class="inline-block text-[9px] tracking-[0.15em] uppercase bg-[#8FAE5D] text-[#173F35] px-2.5 py-0.5 rounded-full font-bold shadow-sm">
-                        <?= $hpGrade ?>
-                      </span>
-                    </div>
-                    <?php endif; ?>
-                  </div>
-
-                  <!-- Bottom Card Details -->
-                  <div class="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-[#F6F3EC] bg-gradient-to-t from-[#0d2a24] via-[#0d2a24]/90 to-transparent">
-                    <h3 class="font-serif text-xl sm:text-2xl text-[#F6F3EC] group-hover:text-[#8FAE5D] transition-colors duration-200 mb-1 leading-snug">
-                      <?= $hpName ?>
-                    </h3>
-                    <div class="flex items-center justify-between text-xs text-[#F6F3EC]/70 mt-2">
-                      <span class="font-medium text-[11px] text-[#8FAE5D]">Season: <?= $hpSeason ?></span>
-                      <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#D8C7A1] group-hover:translate-x-1 transition-transform">
-                        Explore Spec &rarr;
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            <?php endforeach; ?>
+            <?php foreach ($heroCards as $idx => $hp): $hpImg = asset_url($hp["image_path"]); $hpCat = htmlspecialchars($hp["category"] ?? "Produce"); $hpName = htmlspecialchars($hp["title"]); $hpLink = htmlspecialchars($hp["link_url"] ?? "#"); $isFront = ($idx === 0); ?><a href="<?= $hpLink ?>" data-swap-index="<?= $idx ?>" class="swap-card group absolute top-1/2 left-1/2 w-[280px] sm:w-[340px] lg:w-[380px] h-[320px] sm:h-[380px] rounded-2xl border border-[#D8C7A1]/30 bg-[#0d2a24] shadow-2xl overflow-hidden [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] cursor-pointer transition-shadow duration-300 hover:shadow-emerald-900/40 block"><div class="relative h-full w-full flex flex-col"><div class="flex-1 overflow-hidden relative bg-[#173F35]"><img loading="lazy" decoding="async" src="<?= htmlspecialchars($hpImg) ?>" alt="<?= $hpName ?>" loading="<?= $isFront ? "eager" : "lazy" ?>" <?php if ($isFront): ?>fetchpriority="high"<?php endif; ?> class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108" /><div class="absolute inset-0 bg-gradient-to-t from-[#0d2a24] via-[#0d2a24]/30 to-transparent"></div><div class="absolute top-4 left-4 z-10"><span class="inline-block text-[9px] tracking-[0.2em] uppercase bg-[#173F35]/90 backdrop-blur-md text-[#8FAE5D] px-3 py-1 rounded-full font-semibold shadow-sm border border-[#8FAE5D]/30"><?= $hpCat ?></span></div></div><div class="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-[#F6F3EC] bg-gradient-to-t from-[#0d2a24] via-[#0d2a24]/90 to-transparent"><h3 class="font-serif text-xl sm:text-2xl text-[#F6F3EC] group-hover:text-[#8FAE5D] transition-colors duration-200 mb-1 leading-snug"><?= $hpName ?></h3><div class="flex items-center justify-between text-xs text-[#F6F3EC]/70 mt-2"><span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#D8C7A1] group-hover:translate-x-1 transition-transform">Explore &rarr;</span></div></div></div></a><?php endforeach; ?>
           </div>
         </div>
       </div>

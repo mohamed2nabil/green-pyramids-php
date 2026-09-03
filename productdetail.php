@@ -1,17 +1,23 @@
 <?php include 'includes/header.php'; ?>
-$id<?php\n = isset($_GET['id']) ? strtolower($_GET['id']) : '';
+<?php
+$id = isset($_GET['id']) ? strtolower($_GET['id']) : '';
 
 require_once 'includes/db.php';
 
-$query = "SELECT p.*, c.category_name 
-          FROM products p 
-          LEFT JOIN categories c ON p.category_id = c.category_id 
-          WHERE p.slug = ? AND p.is_visible = 1 LIMIT 1";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("s", $id);
-$stmt->execute();
-$db_result = $stmt->get_result();
-$db_product = $db_result->fetch_assoc();
+$db_product = null;
+if ($conn) {
+    $query = "SELECT p.*, c.category_name 
+              FROM products p 
+              LEFT JOIN categories c ON p.category_id = c.category_id 
+              WHERE p.slug = ? AND p.is_visible = 1 LIMIT 1";
+    $stmt = $conn->prepare($query);
+    if ($stmt) {
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $db_result = $stmt->get_result();
+        $db_product = $db_result->fetch_assoc();
+    }
+}
 
 if ($db_product) {
     $product = [

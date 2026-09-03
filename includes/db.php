@@ -6,13 +6,20 @@ $user = "root";
 $password = "";
 $database = "green_pyramids";
 
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+mysqli_report(MYSQLI_REPORT_OFF);
 
+$conn = null;
 try {
-    $conn = new mysqli($host, $user, $password, $database);
-    $conn->set_charset("utf8mb4");
-} catch (Exception $e) {
-    die("Database connection failed: " . $e->getMessage());
+    $conn = @new mysqli($host, $user, $password, $database);
+    if ($conn->connect_error) {
+        error_log("Database connection failed: " . $conn->connect_error);
+        $conn = null;
+    } else {
+        $conn->set_charset("utf8mb4");
+    }
+} catch (Throwable $e) {
+    error_log("Database connection exception: " . $e->getMessage());
+    $conn = null;
 }
 
 // Global functions for resolving media paths if needed

@@ -179,43 +179,40 @@
 
   /* =========================================
      STICKY HORIZONTAL SCROLL CATEGORY GALLERY
-     Vertical scroll locks, cards slide horizontally.
-     Scroll down = left, scroll up = right (bidirectional via scrub).
   ========================================= */
   function initIndexCategoryGallery() {
     const section = document.getElementById('idx-cat-section');
-    const pinWrapper = document.getElementById('idx-cat-pin-wrapper');
     const pinned = document.getElementById('idx-cat-pinned');
     const track = document.getElementById('idx-cat-track');
-    if (!section || !pinWrapper || !pinned || !track) return;
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    if (!section || !pinned || !track) return;
+    
+    // Fallback: If GSAP is missing, use CSS scroll
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      track.classList.remove('w-max');
+      track.classList.add('overflow-x-auto');
+      return;
+    }
 
-    // ponytail: small delay ensures DOM is fully rendered & card widths are accurate
     waitForLayout(track).then(() => {
-      // How far the track needs to slide: total track width minus one viewport width
-      const scrollDistance = track.scrollWidth - window.innerWidth;
-      if (scrollDistance <= 0) return; // all cards fit on screen, no pin needed
-
-      // Set wrapper height = viewport + scroll distance so there's enough room to scrub
-      pinWrapper.style.height = (window.innerHeight + scrollDistance) + 'px';
+      // Calculate max horizontal scroll
+      const getScrollAmount = () => track.scrollWidth - window.innerWidth;
+      
+      // If cards don't overflow, do nothing
+      if (getScrollAmount() <= 0) {
+        track.classList.remove('w-max');
+        return;
+      }
 
       gsap.to(track, {
-        x: -scrollDistance,
+        x: () => -getScrollAmount(),
         ease: 'none',
         scrollTrigger: {
-          trigger: pinWrapper,
+          trigger: pinned,
           start: 'top top',
-          end: 'bottom bottom',
-          pin: pinned,
+          end: () => `+=${getScrollAmount()}`,
+          pin: true,
           scrub: 1,
           invalidateOnRefresh: true,
-          onRefresh: (self) => {
-            // Recalculate on resize
-            const newDist = track.scrollWidth - window.innerWidth;
-            if (newDist > 0) {
-              pinWrapper.style.height = (window.innerHeight + newDist) + 'px';
-            }
-          }
         }
       });
     });

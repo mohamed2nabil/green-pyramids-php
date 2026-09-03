@@ -1,0 +1,1 @@
+<?php require "includes/db.php"; $images = ["assets/images/hero-farm.jpg", "assets/images/product-harvest.jpg", "assets/images/static/hero_background.png", "assets/images/static/quality-bg.jpg"]; for($i=1; $i<=4; $i++) { $img = $images[$i-1]; $conn->query("UPDATE product_hero_cards SET image_path=\"$img\" WHERE sort_order=$i"); } echo "Done"; ?>

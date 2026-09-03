@@ -2,6 +2,23 @@
 $currentPage = basename($_SERVER['PHP_SELF']);
 if (empty($currentPage)) $currentPage = 'index.php';
 
+require_once __DIR__ . '/db.php';
+$siteSettings = [];
+$contactSettings = [];
+if (isset($conn) && $conn) {
+    $res = $conn->query("SELECT * FROM site_settings LIMIT 1");
+    if ($res && $res->num_rows > 0) $siteSettings = $res->fetch_assoc();
+    
+    $res2 = $conn->query("SELECT * FROM contact_settings LIMIT 1");
+    if ($res2 && $res2->num_rows > 0) $contactSettings = $res2->fetch_assoc();
+}
+
+$global_email = $contactSettings['primary_email'] ?? 'info@greenpyramids.eg';
+$global_phone = $contactSettings['general_phone'] ?? '+20 (2) 000-0000';
+$global_wa = $contactSettings['whatsapp_number'] ?? '201000000000';
+$global_location = $contactSettings['physical_address'] ?? 'Cairo, Egypt';
+$global_title = $siteSettings['site_title'] ?? 'Green Pyramids Export';
+
 $seoMeta = [
     'index.php' => [
         'title' => 'Green Pyramids Export | Premium Egyptian Agricultural Produce',
@@ -45,7 +62,7 @@ $assetVersion = static function (string $path): string {
     $modified = @filemtime(__DIR__ . '/../' . $path);
     return $modified ? (string) $modified : '1';
 };
-$usesMotion = in_array($currentPage, ['index.php', 'about.php', 'products.php'], true);
+$usesMotion = true;
 ?>
 <!doctype html>
 <html lang="en">

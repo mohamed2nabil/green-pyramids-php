@@ -8,6 +8,11 @@ $query = "SELECT p.*, c.category_name
           LEFT JOIN categories c ON p.category_id = c.category_id 
           WHERE p.is_active = 1";
           
+if (!$conn) {
+    echo json_encode(["error" => "Database connection unavailable"]);
+    exit;
+}
+
 $result = $conn->query($query);
 
 if (!$result) {

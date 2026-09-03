@@ -22,17 +22,22 @@
   will-change: transform;
 }
 
+/* ===== Hero Canvas blend (not in pre-compiled tailwind.css) ===== */
+#hero-canvas {
+  mix-blend-mode: screen !important;
+}
+
 /* Category Carousel Track styling & Guaranteed Card Dimensions */
 #idx-cat-track {
   display: flex !important;
-  gap: 1.5rem !important;
+  gap: 2rem !important;
 }
 
 .idx-cat-card {
-  width: 250px !important;
-  min-width: 250px !important;
-  max-width: 250px !important;
-  height: 330px !important;
+  width: 340px !important;
+  min-width: 340px !important;
+  max-width: 340px !important;
+  height: 420px !important;
   flex-shrink: 0 !important;
   border-radius: 1rem !important;
   overflow: hidden !important;
@@ -60,21 +65,21 @@
   transform: scale(1.1) !important;
 }
 
-/* ===== BRAND COLOR GRADIENTS ===== */
+/* ===== BRAND COLOR GRADIENTS — high-contrast visible bands ===== */
 .bg-gradient-nav {
-  background: linear-gradient(135deg, rgba(8, 26, 22, 0.98) 0%, rgba(23, 63, 53, 0.94) 50%, rgba(13, 42, 36, 0.98) 100%) !important;
+  background: linear-gradient(135deg, #081a15 0%, #173F35 40%, #245e4e 70%, #0d2a24 100%) !important;
 }
 .bg-gradient-hero {
-  background: linear-gradient(180deg, rgba(5, 12, 10, 0.25) 0%, rgba(13, 42, 36, 0.5) 40%, rgba(23, 63, 53, 0.9) 100%) !important;
+  background: linear-gradient(180deg, rgba(5, 12, 10, 0.15) 0%, rgba(13, 42, 36, 0.45) 35%, rgba(23, 63, 53, 0.85) 100%) !important;
 }
 .bg-gradient-stats {
-  background: linear-gradient(135deg, #091c18 0%, #173F35 30%, #1f5245 70%, #081a15 100%) !important;
+  background: linear-gradient(135deg, #081a15 0%, #173F35 25%, #245e4e 55%, #173F35 75%, #081a15 100%) !important;
 }
 .bg-gradient-category {
-  background: linear-gradient(135deg, #05100d 0%, #11382f 35%, #173F35 65%, #081a15 100%) !important;
+  background: linear-gradient(145deg, #030b09 0%, #0d2a24 25%, #1f5245 50%, #173F35 75%, #050e0b 100%) !important;
 }
 .bg-gradient-footer {
-  background: linear-gradient(180deg, #1f5245 0%, #11382f 40%, #05100d 100%) !important;
+  background: linear-gradient(180deg, #245e4e 0%, #173F35 25%, #0d2a24 60%, #050e0b 100%) !important;
 }
 .text-gradient-gold {
   background: linear-gradient(135deg, #F6F3EC 0%, #D8C7A1 45%, #8FAE5D 100%);
@@ -82,16 +87,16 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* ===== NAVBAR — elegant glass with subtle emerald gradation ===== */
+/* ===== NAVBAR — elegant glass with emerald gradation ===== */
 #site-header {
-  background: linear-gradient(135deg, rgba(13, 42, 36, 0.96) 0%, rgba(23, 63, 53, 0.92) 50%, rgba(31, 82, 69, 0.96) 100%) !important;
+  background: linear-gradient(135deg, #081a15 0%, #173F35 40%, #245e4e 70%, #0d2a24 100%) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(216, 199, 161, 0.25);
   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 #site-header.is-scrolled {
-  background: linear-gradient(135deg, rgba(10, 34, 29, 0.98) 0%, rgba(18, 52, 44, 0.98) 50%, rgba(25, 68, 57, 0.98) 100%) !important;
+  background: linear-gradient(135deg, #050e0b 0%, #0d2a24 40%, #1f5245 70%, #081a15 100%) !important;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
 }
 #site-header nav { display: flex !important; align-items: center; gap: 2rem; }

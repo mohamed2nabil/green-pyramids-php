@@ -142,13 +142,14 @@ function resolveAdminImage($path) {
                 <button class="tab-btn" data-tab="product">Product Page</button>
                 <!-- التبويبة الجديدة لصفحة التواصل -->
                 <button class="tab-btn" data-tab="contact">Contact Page</button>
+                <button class="tab-btn" data-tab="quality">Quality Page</button>
             </div>
         </div>
 
         <div class="editor-container">
             <!-- ================= HOME TAB ================= -->
             <div id="home-tab" class="tab-content active">
-                <h2 class="section-title" style="margin-top: 0;">�� Hero Slides</h2>
+                <h2 class="section-title" style="margin-top: 0;">Hero Slides</h2>
                 <?php foreach ($slides as $slide): ?>
                     <div class="slide-card" data-slide-id="<?= $slide['slide_id'] ?>">
                         <div class="form-group">
@@ -177,7 +178,7 @@ function resolveAdminImage($path) {
 
             <!-- ================= ABOUT TAB ================= -->
             <div id="about-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">�� About Page Content</h2>
+                <h2 class="section-title" style="margin-top: 0;">📝 About Page Content</h2>
                 
                 <div class="section-card" data-page="about" data-section="<?= $aboutSectionKey ?>">
                     <h3 class="section-title">About Hero (Our Legacy)</h3>
@@ -206,22 +207,10 @@ function resolveAdminImage($path) {
 
             <!-- ================= PROCESS TAB ================= -->
             <div id="process-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">⚙�Process Page Sections</h2>
+                <h2 class="section-title" style="margin-top: 0;">Process Page Sections</h2>
                 
                 <div class="section-card" data-page="process" data-section="hero">
                     <h3 class="section-title">Hero Section</h3>
-                    <div class="form-group">
-                        <label>Hero Background Image</label>
-                        <div class="image-uploader" onclick="this.querySelector('input').click()">
-                            <input type="file" class="section-image-input" accept="image/*" style="display:none" data-page="process" data-section="hero">
-                            <?php $resolvedImage = resolveAdminImage($processHero['image_path'] ?? ''); ?>
-                            <?php if (!empty($resolvedImage)): ?>
-                                <img class="section-preview" src="<?= htmlspecialchars($resolvedImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
-                            <?php else: ?>
-                                <p>Click to upload hero image</p>
-                            <?php endif; ?>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label>Hero Title</label>
                         <input type="text" class="section-heading" value="<?= htmlspecialchars($processHero['heading'] ?? '') ?>" data-page="process" data-section="hero">
@@ -239,11 +228,28 @@ function resolveAdminImage($path) {
                         <textarea class="section-subtext" data-page="process" data-section="intro"><?= htmlspecialchars($processIntro['subtext'] ?? '') ?></textarea>
                     </div>
                 </div>
+                <h2 class="section-title" style="margin-top: 30px;">Journey Steps</h2>
+                <?php for($i=1; $i<=6; $i++): 
+                    $stepData = $sections["process"]["step{$i}"] ?? ["heading"=>"", "subtext"=>""];
+                ?>
+                <div class="section-card" data-page="process" data-section="step<?= $i ?>">
+                    <h3 class="section-title">Step <?= $i ?></h3>
+                    <div class="form-group">
+                        <label>Step Title</label>
+                        <input type="text" class="section-heading" value="<?= htmlspecialchars($stepData["heading"] ?? "") ?>" data-page="process" data-section="step<?= $i ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Step Description</label>
+                        <textarea class="section-subtext" data-page="process" data-section="step<?= $i ?>"><?= htmlspecialchars($stepData["subtext"] ?? "") ?></textarea>
+                    </div>
+                </div>
+                <?php endfor; ?>
+
             </div>
 
             <!-- ================= PRODUCT TAB ================= -->
             <div id="product-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">�� Product Page Hero</h2>
+                <h2 class="section-title" style="margin-top: 0;">📦 Product Page Hero</h2>
                 <div class="section-card" data-page="production" data-section="hero">
                     <h3 class="section-title">Main Hero Content</h3>
                     <div class="form-group">
@@ -267,11 +273,88 @@ function resolveAdminImage($path) {
                         <textarea class="section-subtext" data-page="production" data-section="hero"><?= htmlspecialchars($productHero['subtext'] ?? '') ?></textarea>
                     </div>
                 </div>
+                <h2 class="section-title" style="margin-top: 30px;">Animated Hero Cards</h2>
+                <?php 
+                $productHeroCards = [];
+                if (isset($conn)) {
+                    $r = $conn->query("SELECT * FROM product_hero_cards ORDER BY sort_order ASC LIMIT 4");
+                    if ($r) {
+                        while ($row = $r->fetch_assoc()) {
+                            $productHeroCards[] = $row;
+                        }
+                    }
+                }
+                foreach ($productHeroCards as $card): ?>
+                    <div class="slide-card" data-phcard-id="<?= $card['id'] ?>">
+                        <h3 class="section-title">Card <?= $card['sort_order'] ?></h3>
+                        <div class="form-group">
+                            <label>Card Image</label>
+                            <div class="image-uploader" onclick="this.querySelector('input').click()">
+                                <input type="file" class="phcard-image-input" accept="image/*" style="display:none" data-phcard-id="<?= $card['id'] ?>">
+                                <?php $resolvedImage = resolveAdminImage($card['image_path'] ?? ''); ?>
+                                <?php if (!empty($resolvedImage)): ?>
+                                    <img class="phcard-preview" src="<?= htmlspecialchars($resolvedImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
+                                <?php else: ?>
+                                    <p>Click to upload image</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Product Title</label>
+                            <input type="text" class="phcard-title" value="<?= htmlspecialchars($card['title'] ?? '') ?>" data-phcard-id="<?= $card['id'] ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Category Badge</label>
+                            <input type="text" class="phcard-category" value="<?= htmlspecialchars($card['category'] ?? '') ?>" data-phcard-id="<?= $card['id'] ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Link URL</label>
+                            <input type="text" class="phcard-link" value="<?= htmlspecialchars($card['link_url'] ?? '') ?>" data-phcard-id="<?= $card['id'] ?>">
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+
             </div>
 
             <!-- ================= CONTACT TAB ================= -->
+            <!-- ================= QUALITY TAB ================= -->
+            <div id="quality-tab" class="tab-content">
+                <h2 class="section-title" style="margin-top: 0;">Quality Page Sections</h2>
+                
+                <div class="section-card" data-page="quality" data-section="hero">
+                    <h3 class="section-title">Hero Section</h3>
+                    <div class="form-group">
+                        <label>Hero Background Image</label>
+                        <?php 
+                        $qualityHero = [];
+                        if(isset($conn)){
+                            $rq = $conn->query("SELECT * FROM page_sections WHERE page='quality' AND section='hero'");
+                            if($rq && $rq->num_rows>0) $qualityHero = $rq->fetch_assoc();
+                        }
+                        ?>
+                        <div class="image-uploader" onclick="this.querySelector('input').click()">
+                            <input type="file" class="section-image-input" accept="image/*" style="display:none" data-page="quality" data-section="hero">
+                            <?php $resolvedImage = resolveAdminImage($qualityHero['image_path'] ?? ''); ?>
+                            <?php if (!empty($resolvedImage)): ?>
+                                <img class="section-preview" src="<?= htmlspecialchars($resolvedImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
+                            <?php else: ?>
+                                <p>Click to upload quality hero image</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Main Heading</label>
+                        <input type="text" class="section-heading" value="<?= htmlspecialchars($qualityHero['heading'] ?? 'Uncompromising Quality') ?>" data-page="quality" data-section="hero">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtext</label>
+                        <textarea class="section-subtext" data-page="quality" data-section="hero"><?= htmlspecialchars($qualityHero['subtext'] ?? 'Meeting global standards.') ?></textarea>
+                    </div>
+                </div>
+            </div>
+            
             <div id="contact-tab" class="tab-content">
-                <h2 class="section-title" style="margin-top: 0;">�� Contact Page Hero</h2>
+                <h2 class="section-title" style="margin-top: 0;"> Contact Page Hero</h2>
                 
                 <div class="section-card" data-page="contact" data-section="hero">
                     <h3 class="section-title">Contact Hero Image</h3>

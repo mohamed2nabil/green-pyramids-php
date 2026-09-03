@@ -1,0 +1,1 @@
+<?php require "includes/db.php"; $r = $conn->query("SELECT subtext FROM page_sections WHERE page=\"process\" AND section=\"step6\""); $row = $r->fetch_assoc(); echo substr($row["subtext"], 0, 100); ?>
