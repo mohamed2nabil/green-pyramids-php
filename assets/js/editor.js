@@ -198,18 +198,38 @@ async function toggleSlideVisibility(slideId, isVisible) {
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     try {
-        // Tab switching
+        // Tab switching with persistence
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
 
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
+        window.switchEditorTab = function(tabName) {
+            const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+            const targetContent = document.getElementById(tabName + '-tab');
+            if (targetBtn && targetContent) {
                 tabBtns.forEach(b => b.classList.remove('active'));
                 tabContents.forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(btn.getAttribute('data-tab') + '-tab')?.classList.add('active');
+                targetBtn.classList.add('active');
+                targetContent.classList.add('active');
+                try { localStorage.setItem('activeEditorTab', tabName); } catch(e){}
+            }
+        };
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.switchEditorTab(btn.getAttribute('data-tab'));
             });
         });
+
+        try {
+            const savedTab = localStorage.getItem('activeEditorTab');
+            if (savedTab && document.getElementById(savedTab + '-tab')) {
+                window.switchEditorTab(savedTab);
+            }
+        } catch(e){}
+
+        if (typeof initCertifications === 'function') {
+            initCertifications();
+        }
 
         // Slide auto-save
         document.querySelectorAll('.slide-heading').forEach(input => {
@@ -401,37 +421,183 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // ==========================================
-// CERTIFICATIONS API CALLS
+// CERTIFICATIONS CRUD API CALLS & HANDLERS
+// ponytail: clean cert CRUD using Toast and FormData
 // ==========================================
-async function saveCertTitle(certId, title) {
+async function addCertification() {
     try {
         const fd = new FormData();
-        fd.append('action', 'update_cert');
-        fd.append('cert_id', certId);
-        fd.append('title', title);
+        fd.append('action', 'add_cert');
         const r = await fetch('api/save_content.php', { method: 'POST', body: fd });
         const res = await r.json();
-        if (!res.success) throw new Error(res.error || 'Failed to update certificate');
-        Toast.success('Certificate updated');
+        if (!res.success) throw new Error(res.error || 'Failed to add certification');
+        try { localStorage.setItem('activeEditorTab', 'quality'); } catch(e){}
+        location.reload();
     } catch(e) {
-        Toast.error(e.message);
+        Toast.error(e.message || 'Failed to add certification');
     }
 }
 
-async function uploadCertImage(certId, file, previewEl) {
+async function deleteCertification(id, btn) {
+    if (!confirm('Are you sure you want to delete this certification?')) return;
     try {
         const fd = new FormData();
-        fd.append('action', 'upload_cert_image');
-        fd.append('cert_id', certId);
-        fd.append('image', file);
+        fd.append('action', 'delete_cert');
+        fd.append('id', id);
         const r = await fetch('api/save_content.php', { method: 'POST', body: fd });
         const res = await r.json();
-        if (!res.success) throw new Error(res.error || 'Failed to upload certificate image');
-        if (res.image_path) {
-            previewEl.src = '../' + res.image_path + '?t=' + Date.now();
-            Toast.success('Certificate image updated');
+        if (!res.success) throw new Error(res.error || 'Failed to delete certification');
+        
+        const card = btn ? btn.closest('.cert-card') : document.querySelector(`.cert-card[data-cert-id="${id}"]`);
+        if (card) {
+            card.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(-10px)';
+            setTimeout(() => card.remove(), 250);
         }
+        Toast.success('Certification deleted');
     } catch(e) {
-        Toast.error(e.message);
+        Toast.error(e.message || 'Failed to delete certification');
     }
+}
+
+async function removeCertImage(id, btn) {
+    if (!confirm('Remove this certification image?')) return;
+    try {
+        const fd = new FormData();
+        fd.append('action', 'remove_cert_image');
+        fd.append('id', id);
+        const r = await fetch('api/save_content.php', { method: 'POST', body: fd });
+        const res = await r.json();
+        if (!res.success) throw new Error(res.error || 'Failed to remove image');
+        try { localStorage.setItem('activeEditorTab', 'quality'); } catch(e){}
+        location.reload();
+    } catch(e) {
+        Toast.error(e.message || 'Failed to remove image');
+    }
+}
+
+function initCertifications() {
+    // Title & Sort Order live update
+    document.querySelectorAll('.cert-title, .cert-sort').forEach(input => {
+        input.addEventListener('input', (e) => {
+            const certId = e.target.dataset.certId;
+            const card = e.target.closest('.cert-card');
+            if (!card) return;
+            const titleInput = card.querySelector('.cert-title');
+            const sortInput = card.querySelector('.cert-sort');
+            const activeInput = card.querySelector('.cert-active');
+            const titleDisplay = card.querySelector('.cert-title-display');
+
+            if (e.target.classList.contains('cert-title') && titleDisplay) {
+                titleDisplay.textContent = e.target.value.trim() || 'Untitled Certification';
+            }
+
+            debounce(async () => {
+                try {
+                    const fd = new FormData();
+                    fd.append('action', 'update_cert');
+                    fd.append('id', certId);
+                    fd.append('title', titleInput ? titleInput.value.trim() : '');
+                    fd.append('sort_order', sortInput ? sortInput.value : 0);
+                    fd.append('is_active', activeInput && activeInput.checked ? 1 : 0);
+                    const r = await fetch('api/save_content.php', { method: 'POST', body: fd });
+                    const res = await r.json();
+                    if (!res.success) throw new Error(res.error || 'Failed to update');
+                    Toast.success('Certification saved');
+                } catch(err) {
+                    Toast.error(err.message || 'Save failed');
+                }
+            }, 700, 'cert_' + certId);
+        });
+    });
+
+    // Active checkbox toggle
+    document.querySelectorAll('.cert-active').forEach(checkbox => {
+        checkbox.addEventListener('change', async (e) => {
+            const certId = e.target.dataset.certId;
+            const card = e.target.closest('.cert-card');
+            if (!card) return;
+            const titleInput = card.querySelector('.cert-title');
+            const sortInput = card.querySelector('.cert-sort');
+            try {
+                const fd = new FormData();
+                fd.append('action', 'update_cert');
+                fd.append('id', certId);
+                fd.append('title', titleInput ? titleInput.value.trim() : '');
+                fd.append('sort_order', sortInput ? sortInput.value : 0);
+                fd.append('is_active', e.target.checked ? 1 : 0);
+                const r = await fetch('api/save_content.php', { method: 'POST', body: fd });
+                const res = await r.json();
+                if (!res.success) throw new Error(res.error || 'Failed to update status');
+                Toast.success(e.target.checked ? 'Certification visible' : 'Certification hidden');
+            } catch(err) {
+                Toast.error(err.message || 'Update failed');
+            }
+        });
+    });
+
+    // Image upload handler
+    document.querySelectorAll('.cert-image-input').forEach(input => {
+        input.addEventListener('change', async (e) => {
+            const certId = e.target.dataset.certId;
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const uploader = e.target.closest('.image-uploader');
+            if (!uploader) return;
+
+            try {
+                uploader.style.opacity = '0.5';
+                const fd = new FormData();
+                fd.append('action', 'upload_cert_image');
+                fd.append('id', certId);
+                fd.append('image', file);
+                const r = await fetch('api/save_content.php', { method: 'POST', body: fd });
+                const res = await r.json();
+                uploader.style.opacity = '1';
+                if (!res.success) throw new Error(res.error || 'Upload failed');
+                
+                const placeholder = uploader.querySelector('.cert-placeholder-preview');
+                if (placeholder) placeholder.remove();
+
+                let preview = uploader.querySelector('.cert-preview');
+                if (!preview) {
+                    preview = document.createElement('img');
+                    preview.className = 'cert-preview';
+                    preview.style.maxHeight = '100px';
+                    preview.style.maxWidth = '140px';
+                    preview.style.objectFit = 'contain';
+                    preview.style.margin = '0 auto';
+                    preview.style.display = 'block';
+                    uploader.prepend(preview);
+                }
+                const imgPath = res.image_path || res.path;
+                preview.src = '../' + imgPath + '?t=' + Date.now();
+
+                let hint = uploader.querySelector('.uploader-hint');
+                if (!hint) {
+                    hint = document.createElement('p');
+                    hint.className = 'uploader-hint';
+                    hint.style = 'margin: 8px 0 0 0; font-size: 12px; color: var(--text-secondary);';
+                    hint.textContent = 'Click to change logo';
+                    uploader.appendChild(hint);
+                }
+
+                let actionsDiv = uploader.parentElement.querySelector('.cert-img-actions');
+                if (!actionsDiv) {
+                    actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'cert-img-actions';
+                    actionsDiv.style = 'margin-top: 6px; text-align: right;';
+                    actionsDiv.innerHTML = `<button type="button" onclick="removeCertImage(${certId}, this)" style="background: none; border: none; color: #DC2626; font-size: 12px; cursor: pointer; text-decoration: underline;">Remove image</button>`;
+                    uploader.parentElement.appendChild(actionsDiv);
+                }
+
+                Toast.success('Certification logo uploaded');
+            } catch(err) {
+                uploader.style.opacity = '1';
+                Toast.error(err.message || 'Upload error');
+            }
+        });
+    });
 }

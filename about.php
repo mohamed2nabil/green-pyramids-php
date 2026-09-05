@@ -2,10 +2,16 @@
 $currentPage = "about.php";
 require_once "includes/db.php";
 $aboutHero = ['heading' => 'From the Land of Pyramids to Global Markets.', 'subtext' => "Connecting the world to the finest fresh produce from Egypt's most fertile lands, engineered for global export.", 'image_path' => 'assets/images/hero-farm.jpg'];
-if (isset($conn)) {
-    $r = $conn->query("SELECT * FROM page_sections WHERE page='about' AND section='hero'");
+$aboutIntro = ['heading' => 'A Vision Built On Reliability.', 'subtext' => '', 'image_path' => 'assets/images/product-harvest.jpg'];
+
+if (isset($conn) && $conn) {
+    // ponytail: load all about page sections from DB
+    $r = $conn->query("SELECT * FROM page_sections WHERE page='about'");
     if ($r && $r->num_rows > 0) {
-        $aboutHero = $r->fetch_assoc();
+        while ($row = $r->fetch_assoc()) {
+            if ($row['section'] === 'hero') $aboutHero = $row;
+            if ($row['section'] === 'intro') $aboutIntro = $row;
+        }
     }
 }
 include "includes/header.php"; 
@@ -15,7 +21,7 @@ include "includes/header.php";
   <!-- 1. Premium Hero -->
   <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
     <div class="absolute inset-0 z-0">
-      <?php $resolvedImage = !empty($aboutHero['image_path']) ? $aboutHero['image_path'] : 'assets/images/hero-farm.jpg'; ?>
+      <?php $resolvedImage = !empty($aboutHero['image_path']) ? asset_url($aboutHero['image_path']) : 'assets/images/hero-farm.jpg'; ?>
       <img src="<?= htmlspecialchars($resolvedImage) ?>" alt="Egyptian agricultural farm" class="w-full h-full object-cover object-center opacity-80" />
       <div class="absolute inset-0 bg-gradient-to-b from-[#F9F8F6]/90 via-[#F9F8F6]/70 to-[#F9F8F6]"></div>
     </div>
@@ -26,9 +32,9 @@ include "includes/header.php";
         <p class="text-[12px] tracking-[0.25em] uppercase text-[#8FAE5D] font-medium">Our Legacy</p>
         <div class="w-8 h-px bg-[#8FAE5D]"></div>
       </div>
-      <h1 class="hero-typing-anim font-serif text-5xl sm:text-7xl lg:text-[5.5rem] text-[#173F35] leading-[1.05] max-w-4xl mx-auto mb-8 drop-shadow-sm">From the Land of Pyramids to Global Markets.</h1>
+      <h1 class="hero-typing-anim font-serif text-5xl sm:text-7xl lg:text-[5.5rem] text-[#173F35] leading-[1.05] max-w-4xl mx-auto mb-8 drop-shadow-sm"><?= htmlspecialchars($aboutHero['heading'] ?? 'From the Land of Pyramids to Global Markets.') ?></h1>
       <p class="text-[#173F35]/80 text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed reveal-fade">
-        <?= nl2br(htmlspecialchars($aboutHero['subtext'])) ?>
+        <?= nl2br(htmlspecialchars($aboutHero['subtext'] ?? '')) ?>
       </p>
     </div>
   </section>
@@ -37,7 +43,8 @@ include "includes/header.php";
   <section class="py-20 lg:py-32 max-w-7xl mx-auto px-6 lg:px-10">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
       <div class="relative rounded-2xl overflow-hidden aspect-[4/5] lg:aspect-square reveal-up shadow-xl">
-        <img src="assets/images/product-harvest.jpg" alt="Egyptian farm harvest" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"/>
+        <?php $resolvedIntroImage = !empty($aboutIntro['image_path']) ? asset_url($aboutIntro['image_path']) : 'assets/images/product-harvest.jpg'; ?>
+        <img src="<?= htmlspecialchars($resolvedIntroImage) ?>" alt="Egyptian farm harvest" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"/>
         <div class="absolute inset-0 bg-[#173F35]/5 pointer-events-none"></div>
       </div>
       <div>
@@ -45,11 +52,17 @@ include "includes/header.php";
           <div class="w-6 h-px bg-[#8FAE5D]"></div>
           <p class="text-[11px] tracking-[0.25em] uppercase text-[#8FAE5D]">Introduction</p>
         </div>
-        <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] mb-8">A Vision Built On Reliability.</h2>
+        <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] mb-8"><?= htmlspecialchars($aboutIntro['heading'] ?? 'A Vision Built On Reliability.') ?></h2>
         <div class="space-y-6 text-[#173F35]/75 leading-relaxed text-[16px] reveal-up" style="transition-delay: 100ms;">
-          <p>After more than 20 years of hands-on agricultural experience, we saw one clear problem <br> importers struggle to find reliable suppliers they can trust.</p>
-          <p>So we built Green Pyramids to solve that.</p>
-          <p>We combine deep farming expertise with strict quality control and reliable sourcing <br> giving our partners consistent access to premium Egyptian produce without <br> the usual risks of inconsistency, delays, or poor quality.</p>
+          <?php if (!empty($aboutIntro['subtext'])): ?>
+            <?php foreach (explode("\n\n", trim($aboutIntro['subtext'])) as $p): ?>
+              <?php if (!empty(trim($p))): ?><p><?= nl2br(htmlspecialchars(trim($p))) ?></p><?php endif; ?>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <p>After more than 20 years of hands-on agricultural experience, we saw one clear problem <br> importers struggle to find reliable suppliers they can trust.</p>
+            <p>So we built Green Pyramids to solve that.</p>
+            <p>We combine deep farming expertise with strict quality control and reliable sourcing <br> giving our partners consistent access to premium Egyptian produce without <br> the usual risks of inconsistency, delays, or poor quality.</p>
+          <?php endif; ?>
         </div>
       </div>
     </div>

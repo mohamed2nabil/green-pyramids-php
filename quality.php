@@ -18,10 +18,10 @@ if (isset($conn) && $conn) {
         }
     }
 
-    // Certifications
+    // ponytail: Certifications from DB
     $chkTable = $conn->query("SHOW TABLES LIKE 'certifications'");
     if ($chkTable && $chkTable->num_rows > 0) {
-        $rc = $conn->query("SELECT * FROM certifications WHERE is_active = 1 ORDER BY sort_order ASC");
+        $rc = $conn->query("SELECT * FROM certifications WHERE is_active = 1 ORDER BY sort_order ASC, id ASC");
         if ($rc && $rc->num_rows > 0) {
             while ($row = $rc->fetch_assoc()) {
                 $certsList[] = $row;
@@ -40,8 +40,8 @@ $defaultStandards = [
     'standard6' => ['Export Documentation', 'We prepare all required documentation including phytosanitary certificates, origin certificates, and customs clearance paperwork.']
 ];
 
-// Fallback certifications if not in DB
-if (empty($certsList)) {
+// Fallback certifications only if DB table does not exist
+if (!isset($chkTable) || !$chkTable || $chkTable->num_rows === 0) {
     $certsList = [
         ['title' => 'Phytosanitary Certificate', 'image_path' => ''],
         ['title' => 'Certificate of Origin', 'image_path' => ''],
@@ -59,8 +59,8 @@ include "includes/header.php";
 <div class="bg-[#F6F3EC] min-h-screen">
     <div class="bg-[#173F35] pt-[72px] relative overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="<?= htmlspecialchars($qualityHeroImg) ?>" alt="Quality Assurance"
-                loading="eager" fetchpriority="high" decoding="async"
+            <img src="<?= htmlspecialchars($qualityHeroImg) ?>" alt="Quality Assurance" loading="eager"
+                fetchpriority="high" decoding="async"
                 class="w-full h-full object-cover opacity-25 pointer-events-none" />
         </div>
         <div
@@ -131,11 +131,11 @@ include "includes/header.php";
                     stage: farm selection, harvest supervision, arrival inspection, sorting, packing, and cold chain
                     management. Every shipment is traceable back to its source farm.</p>
             </div>
-                <div>
+            <div>
                 <img src="<?= htmlspecialchars(asset_url('assets/images/pages/quailty.jpeg')) ?>"
                     alt="Quality control at packing facility" class="w-full aspect-[4/3] object-cover rounded-2xl"
                     loading="lazy" decoding="async" />
-                </div>
+            </div>
         </div>
     </section>
     <section class="py-24 bg-[#173F35]">
@@ -152,12 +152,15 @@ include "includes/header.php";
                     $stdDesc = $standardsData[$stdKey]['subtext'] ?? $defaultStandards[$stdKey][1];
                     $numFormatted = sprintf("%02d", $i);
                 ?>
-                <div class="p-8 rounded-2xl border border-[#D8C7A1]/20 bg-[#F6F3EC]/[0.06] hover:bg-[#F6F3EC]/[0.10] hover:border-[#8FAE5D]/50 transition-all duration-300 shadow-sm flex flex-col justify-between">
+                <div
+                    class="p-8 rounded-2xl border border-[#D8C7A1]/20 bg-[#F6F3EC]/[0.06] hover:bg-[#F6F3EC]/[0.10] hover:border-[#8FAE5D]/50 transition-all duration-300 shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="font-serif text-4xl text-[#D8C7A1] mb-4"><?= $numFormatted ?></div>
                         <div class="w-8 h-px bg-[#8FAE5D] mb-4"></div>
-                        <h3 class="font-serif text-xl text-[#F6F3EC] mb-3 font-semibold tracking-wide"><?= htmlspecialchars($stdTitle) ?></h3>
-                        <p class="text-[14px] text-[#F6F3EC]/90 leading-relaxed font-light"><?= nl2br(htmlspecialchars($stdDesc)) ?></p>
+                        <h3 class="font-serif text-xl text-[#F6F3EC] mb-3 font-semibold tracking-wide">
+                            <?= htmlspecialchars($stdTitle) ?></h3>
+                        <p class="text-[14px] text-[#F6F3EC]/90 leading-relaxed font-light">
+                            <?= nl2br(htmlspecialchars($stdDesc)) ?></p>
                     </div>
                 </div>
                 <?php endfor; ?>
@@ -174,27 +177,39 @@ include "includes/header.php";
             with international export and food safety standards. Our official certifications are maintained and renewed
             annually.</p>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-            <?php foreach ($certsList as $cert): 
-                $certImg = !empty($cert['image_path']) ? asset_url($cert['image_path']) : '';
-                $certTitle = htmlspecialchars($cert['title']);
-            ?>
-            <div class="rounded-2xl p-6 text-center border border-[#8FAE5D]/30 bg-white shadow-sm hover:shadow-md hover:border-[#8FAE5D] transition-all duration-300 flex flex-col items-center justify-center">
-                <?php if (!empty($certImg)): ?>
-                    <div class="w-16 h-16 rounded-xl overflow-hidden mb-4 p-1 bg-[#F9F8F6] border border-[#8FAE5D]/20 flex items-center justify-center">
-                        <img src="<?= htmlspecialchars($certImg) ?>" alt="<?= $certTitle ?>" class="max-w-full max-h-full object-contain" />
+            <?php if (empty($certsList)): ?>
+                <div class="col-span-full text-center py-10 text-[#173F35]/60">
+                    <p class="text-[14px]">No certifications currently listed.</p>
+                </div>
+            <?php else: ?>
+                <?php foreach ($certsList as $cert): 
+                    $hasImg = !empty($cert['image_path']) && file_exists(__DIR__ . '/' . $cert['image_path']);
+                    $certImg = $hasImg ? asset_url($cert['image_path']) : '';
+                    $certTitle = htmlspecialchars($cert['title']);
+                ?>
+                <div
+                    class="rounded-2xl p-6 text-center border border-[#8FAE5D]/30 bg-white shadow-sm hover:shadow-md hover:border-[#8FAE5D] transition-all duration-300 flex flex-col items-center justify-center">
+                    <?php if (!empty($certImg)): ?>
+                    <div
+                        class="w-16 h-16 rounded-xl overflow-hidden mb-4 p-1 bg-[#F9F8F6] border border-[#8FAE5D]/20 flex items-center justify-center">
+                        <img src="<?= htmlspecialchars($certImg) ?>" alt="<?= $certTitle ?>"
+                            class="max-w-full max-h-full object-contain" />
                     </div>
-                <?php else: ?>
-                    <div class="w-12 h-12 rounded-full bg-[#8FAE5D]/15 mx-auto mb-4 flex items-center justify-center text-[#173F35]">
+                    <?php else: ?>
+                    <div
+                        class="w-12 h-12 rounded-full bg-[#8FAE5D]/15 mx-auto mb-4 flex items-center justify-center text-[#173F35]">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#173F35" stroke-width="1.8">
                             <path d="M12 15l-2 5l-4-2l-4 2l2-5"></path>
                             <circle cx="12" cy="9" r="6"></circle>
                         </svg>
                     </div>
-                <?php endif; ?>
-                <p class="text-[13px] font-medium text-[#173F35] leading-snug"><?= $certTitle ?></p>
-                <span class="inline-block mt-2 text-[9px] uppercase tracking-wider text-[#8FAE5D] font-semibold bg-[#8FAE5D]/10 px-2 py-0.5 rounded-full">Certified</span>
-            </div>
-            <?php endforeach; ?>
+                    <?php endif; ?>
+                    <p class="text-[13px] font-medium text-[#173F35] leading-snug"><?= $certTitle ?></p>
+                    <span
+                        class="inline-block mt-2 text-[9px] uppercase tracking-wider text-[#8FAE5D] font-semibold bg-[#8FAE5D]/10 px-2 py-0.5 rounded-full">Certified</span>
+                </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </section>
     <section class="bg-[#173F35] py-24 text-center">

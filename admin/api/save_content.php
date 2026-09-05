@@ -451,55 +451,140 @@ try {
         exit;
     }
 
+    // ponytail: certifications CRUD endpoints
     if ($action === "add_cert") {
-        $stmt = $conn->prepare("INSERT INTO certifications (title, is_active, sort_order) VALUES ('New Certification', 1, 99)");
+        $nextSort = 1;
+        $sortRes = $conn->query("SELECT COALESCE(MAX(sort_order), 0) + 1 AS next_sort FROM certifications");
+        if ($sortRes && $row = $sortRes->fetch_assoc()) {
+            $nextSort = intval($row['next_sort']);
+        }
+        $defaultTitle = "New Certification";
+        $stmt = $conn->prepare("INSERT INTO certifications (title, is_active, sort_order) VALUES (?, 1, ?)");
+        $stmt->bind_param("si", $defaultTitle, $nextSort);
         $stmt->execute();
-        echo json_encode(["success" => true]);
+        $newId = $conn->insert_id;
+        echo json_encode([
+            "success" => true,
+            "status" => "success",
+            "id" => $newId,
+            "title" => $defaultTitle,
+            "is_active" => 1,
+            "sort_order" => $nextSort
+        ]);
         exit;
     }
 
     if ($action === "delete_cert") {
-        $id = intval($_POST["id"] ?? 0);
+        $id = intval($_POST["id"] ?? $_POST["cert_id"] ?? 0);
+        if ($id <= 0) throw new Exception("Invalid certification ID");
+
+        // Unlink previous uploaded file if present
+        $q = $conn->prepare("SELECT image_path FROM certifications WHERE id = ?");
+        $q->bind_param("i", $id);
+        $q->execute();
+        $res = $q->get_result();
+        if ($row = $res->fetch_assoc()) {
+            $oldPath = $row['image_path'] ?? '';
+            if (!empty($oldPath) && strpos($oldPath, 'assets/images/static/cert_') !== false) {
+                $fullOld = dirname(__FILE__) . "/../../" . $oldPath;
+                if (file_exists($fullOld)) @unlink($fullOld);
+            }
+        }
+
         $stmt = $conn->prepare("DELETE FROM certifications WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
-        echo json_encode(["success" => true]);
+        echo json_encode(["success" => true, "status" => "success"]);
         exit;
     }
 
     if ($action === "update_cert") {
-        $id = intval($_POST["id"] ?? 0);
+        $id = intval($_POST["id"] ?? $_POST["cert_id"] ?? 0);
+        if ($id <= 0) throw new Exception("Invalid certification ID");
+
         $title = trim($_POST["title"] ?? "");
-        $is_active = intval($_POST["is_active"] ?? 0);
-        
-        $stmt = $conn->prepare("UPDATE certifications SET title = ?, is_active = ? WHERE id = ?");
-        $stmt->bind_param("sii", $title, $is_active, $id);
+        $is_active = isset($_POST["is_active"]) ? intval($_POST["is_active"]) : 1;
+        $sort_order = isset($_POST["sort_order"]) ? intval($_POST["sort_order"]) : null;
+
+        if ($sort_order !== null) {
+            $stmt = $conn->prepare("UPDATE certifications SET title = ?, is_active = ?, sort_order = ? WHERE id = ?");
+            $stmt->bind_param("siii", $title, $is_active, $sort_order, $id);
+        } else {
+            $stmt = $conn->prepare("UPDATE certifications SET title = ?, is_active = ? WHERE id = ?");
+            $stmt->bind_param("sii", $title, $is_active, $id);
+        }
         $stmt->execute();
-        echo json_encode(["success" => true]);
+        echo json_encode(["success" => true, "status" => "success"]);
         exit;
     }
 
     if ($action === "upload_cert_image") {
-        $id = intval($_POST["id"] ?? 0);
+        $id = intval($_POST["id"] ?? $_POST["cert_id"] ?? 0);
+        if ($id <= 0) throw new Exception("Invalid certification ID");
         if (!isset($_FILES["image"]) || $_FILES["image"]["error"] !== UPLOAD_ERR_OK) {
             throw new Exception("Invalid image upload");
         }
         
         $ext = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
-        if (!in_array($ext, ["jpg", "jpeg", "png", "webp", "svg"])) throw new Exception("Invalid format");
+        if (!in_array($ext, ["jpg", "jpeg", "png", "webp", "svg"])) throw new Exception("Invalid format. Allowed: JPG, PNG, WEBP, SVG");
         
         $filename = uniqid("cert_") . "." . $ext;
-        $path = dirname(__FILE__) . "/../../assets/images/static/" . $filename;
+        $targetDir = dirname(__FILE__) . "/../../assets/images/static/";
+        if (!is_dir($targetDir)) {
+            @mkdir($targetDir, 0777, true);
+        }
+        $path = $targetDir . $filename;
         
+        // Remove previous custom image
+        $q = $conn->prepare("SELECT image_path FROM certifications WHERE id = ?");
+        $q->bind_param("i", $id);
+        $q->execute();
+        $res = $q->get_result();
+        if ($row = $res->fetch_assoc()) {
+            $oldPath = $row['image_path'] ?? '';
+            if (!empty($oldPath) && strpos($oldPath, 'assets/images/static/cert_') !== false) {
+                $fullOld = dirname(__FILE__) . "/../../" . $oldPath;
+                if (file_exists($fullOld)) @unlink($fullOld);
+            }
+        }
+
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $path)) {
             $db_path = "assets/images/static/" . $filename;
             $stmt = $conn->prepare("UPDATE certifications SET image_path = ? WHERE id = ?");
             $stmt->bind_param("si", $db_path, $id);
             $stmt->execute();
-            echo json_encode(["status" => "success", "path" => $db_path]);
+            echo json_encode([
+                "success" => true,
+                "status" => "success",
+                "path" => $db_path,
+                "image_path" => $db_path
+            ]);
         } else {
             throw new Exception("Move failed");
         }
+        exit;
+    }
+
+    if ($action === "remove_cert_image") {
+        $id = intval($_POST["id"] ?? $_POST["cert_id"] ?? 0);
+        if ($id <= 0) throw new Exception("Invalid certification ID");
+
+        $q = $conn->prepare("SELECT image_path FROM certifications WHERE id = ?");
+        $q->bind_param("i", $id);
+        $q->execute();
+        $res = $q->get_result();
+        if ($row = $res->fetch_assoc()) {
+            $oldPath = $row['image_path'] ?? '';
+            if (!empty($oldPath) && strpos($oldPath, 'assets/images/static/cert_') !== false) {
+                $fullOld = dirname(__FILE__) . "/../../" . $oldPath;
+                if (file_exists($fullOld)) @unlink($fullOld);
+            }
+        }
+
+        $stmt = $conn->prepare("UPDATE certifications SET image_path = NULL WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        echo json_encode(["success" => true, "status" => "success"]);
         exit;
     }
 

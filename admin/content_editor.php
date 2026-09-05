@@ -30,11 +30,9 @@ if (isset($conn) && $conn) {
     }
 }
 
-// ===== تجهيز المتغيرات وتصحيح غلطة مسميات الداتا بيز =====
-// بنجيب البيانات من hero أو process لو متسجلة غلط في الداتا بيز
-$aboutHero     = $sections['about']['hero'] ?? $sections['about']['process'] ?? ['heading' => 'OUR LEGACY', 'subtext' => '', 'image_path' => ''];
-// عشان نحفظ التعديلات في نفس المكان القديم لو موجود
-$aboutSectionKey = isset($sections['about']['process']) ? 'process' : 'hero'; 
+// ===== About Page Sections =====
+$aboutHero  = $sections['about']['hero'] ?? ['heading' => 'From the Land of Pyramids to Global Markets.', 'subtext' => "Connecting the world to the finest fresh produce from Egypt's most fertile lands, engineered for global export.", 'image_path' => 'assets/images/hero-farm.jpg'];
+$aboutIntro = $sections['about']['intro'] ?? ['heading' => 'A Vision Built On Reliability.', 'subtext' => "After more than 20 years of hands-on agricultural experience, we saw one clear problem: importers struggle to find reliable suppliers they can trust.\n\nSo we built Green Pyramids to solve that.\n\nWe combine deep farming expertise with strict quality control and reliable sourcing — giving our partners consistent access to premium Egyptian produce without the usual risks of inconsistency, delays, or poor quality.", 'image_path' => 'assets/images/product-harvest.jpg'];
 
 $processHero   = $sections['process']['hero']  ?? ['heading' => '', 'subtext' => '', 'image_path' => ''];
 $processIntro  = $sections['process']['intro'] ?? ['heading' => '', 'subtext' => '', 'image_path' => ''];
@@ -223,15 +221,15 @@ function resolveAdminImage($path) {
             <div id="about-tab" class="tab-content">
                 <h2 class="section-title" style="margin-top: 0;">📝 About Page Content</h2>
                 
-                <div class="section-card" data-page="about" data-section="<?= $aboutSectionKey ?>">
+                <div class="section-card" data-page="about" data-section="hero">
                     <h3 class="section-title">About Hero (Our Legacy)</h3>
                     <div class="form-group">
                         <label>Background Image</label>
                         <div class="image-uploader" onclick="this.querySelector('input').click()">
-                            <input type="file" class="section-image-input" accept="image/*" style="display:none" data-page="about" data-section="<?= $aboutSectionKey ?>">
-                            <?php $resolvedImage = resolveAdminImage($aboutHero['image_path'] ?? ''); ?>
-                            <?php if (!empty($resolvedImage)): ?>
-                                <img class="section-preview" src="<?= htmlspecialchars($resolvedImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
+                            <input type="file" class="section-image-input" accept="image/*" style="display:none" data-page="about" data-section="hero">
+                            <?php $resolvedHeroImage = resolveAdminImage($aboutHero['image_path'] ?? 'assets/images/hero-farm.jpg'); ?>
+                            <?php if (!empty($resolvedHeroImage)): ?>
+                                <img class="section-preview" src="<?= htmlspecialchars($resolvedHeroImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
                             <?php else: ?>
                                 <p>Click to upload image</p>
                             <?php endif; ?>
@@ -239,11 +237,36 @@ function resolveAdminImage($path) {
                     </div>
                     <div class="form-group">
                         <label>Main Title (e.g. OUR LEGACY)</label>
-                        <input type="text" class="section-heading" value="<?= htmlspecialchars($aboutHero['heading'] ?? '') ?>" data-page="about" data-section="<?= $aboutSectionKey ?>">
+                        <input type="text" class="section-heading" value="<?= htmlspecialchars($aboutHero['heading'] ?? '') ?>" data-page="about" data-section="hero">
                     </div>
                     <div class="form-group">
                         <label>Subtext (Description under the title)</label>
-                        <textarea class="section-subtext" data-page="about" data-section="<?= $aboutSectionKey ?>"><?= htmlspecialchars($aboutHero['subtext'] ?? '') ?></textarea>
+                        <textarea class="section-subtext" data-page="about" data-section="hero"><?= htmlspecialchars($aboutHero['subtext'] ?? '') ?></textarea>
+                    </div>
+                </div>
+
+                <!-- ponytail: about introduction / harvest image section -->
+                <div class="section-card" data-page="about" data-section="intro">
+                    <h3 class="section-title">Introduction Section (A Vision Built On Reliability)</h3>
+                    <div class="form-group">
+                        <label>Section Image (Harvest Image / Tomato Basket)</label>
+                        <div class="image-uploader" onclick="this.querySelector('input').click()">
+                            <input type="file" class="section-image-input" accept="image/*" style="display:none" data-page="about" data-section="intro">
+                            <?php $resolvedIntroImage = resolveAdminImage($aboutIntro['image_path'] ?? 'assets/images/product-harvest.jpg'); ?>
+                            <?php if (!empty($resolvedIntroImage)): ?>
+                                <img class="section-preview" src="<?= htmlspecialchars($resolvedIntroImage) ?>?t=<?= time() ?>" style="max-height: 200px; object-fit: cover;">
+                            <?php else: ?>
+                                <p>Click to upload image</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Main Title</label>
+                        <input type="text" class="section-heading" value="<?= htmlspecialchars($aboutIntro['heading'] ?? '') ?>" data-page="about" data-section="intro">
+                    </div>
+                    <div class="form-group">
+                        <label>Content Description</label>
+                        <textarea class="section-subtext" style="min-height: 120px;" data-page="about" data-section="intro"><?= htmlspecialchars($aboutIntro['subtext'] ?? '') ?></textarea>
                     </div>
                 </div>
             </div>
@@ -384,6 +407,88 @@ function resolveAdminImage($path) {
                         <textarea class="section-subtext" data-page="quality" data-section="hero"><?= htmlspecialchars($qualityHero['subtext'] ?? '') ?></textarea>
                     </div>
                 </div>
+
+                <!-- ponytail: certifications CRUD section -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 35px 0 15px 0; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 class="section-title" style="margin: 0;">🏅 Certifications Management</h2>
+                        <p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 13px;">Manage all certificates displayed in the grid on the Quality page.</p>
+                    </div>
+                    <button type="button" class="btn-publish" onclick="addCertification()" style="padding: 9px 18px; font-size: 13px; display: inline-flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-plus"></i> Add Certification
+                    </button>
+                </div>
+
+                <div id="certifications-list">
+                <?php 
+                $certRows = [];
+                if (isset($conn) && $conn) {
+                    $chk = $conn->query("SHOW TABLES LIKE 'certifications'");
+                    if ($chk && $chk->num_rows > 0) {
+                        $rc = $conn->query("SELECT * FROM certifications ORDER BY sort_order ASC, id ASC");
+                        if ($rc) {
+                            while ($row = $rc->fetch_assoc()) {
+                                $certRows[] = $row;
+                            }
+                        }
+                    }
+                }
+                foreach ($certRows as $cert): 
+                    $hasImg = !empty($cert['image_path']) && file_exists(dirname(__FILE__) . '/../' . $cert['image_path']);
+                    $certImg = $hasImg ? resolveAdminImage($cert['image_path']) : '';
+                ?>
+                    <div class="section-card cert-card" data-cert-id="<?= $cert['id'] ?>" style="border-left: 4px solid var(--primary);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                            <h3 class="section-title" style="margin: 0; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-certificate" style="color: #8FAE5D;"></i>
+                                <span class="cert-title-display"><?= htmlspecialchars($cert['title'] ?: 'Untitled Certification') ?></span>
+                            </h3>
+                            <button type="button" class="btn-delete-cert" onclick="deleteCertification(<?= $cert['id'] ?>, this)" style="background: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 120px; gap: 16px;">
+                            <div class="form-group">
+                                <label>Certification Title</label>
+                                <input type="text" class="cert-title" data-cert-id="<?= $cert['id'] ?>" value="<?= htmlspecialchars($cert['title']) ?>" placeholder="e.g. ISO 22000 Food Safety">
+                            </div>
+                            <div class="form-group">
+                                <label>Sort Order</label>
+                                <input type="number" class="cert-sort" data-cert-id="<?= $cert['id'] ?>" value="<?= intval($cert['sort_order']) ?>" min="0">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 500; font-size: 14px;">
+                                <input type="checkbox" class="cert-active" data-cert-id="<?= $cert['id'] ?>" <?= !empty($cert['is_active']) ? 'checked' : '' ?> style="width: 18px; height: 18px; accent-color: var(--primary);">
+                                <span>Active (visible on website)</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Certification Logo / Image <span style="font-weight: 400; color: var(--text-secondary); font-size: 12px;">(optional: PNG, JPG, SVG, WEBP)</span></label>
+                            <div class="image-uploader" onclick="this.querySelector('input').click()" style="position: relative;">
+                                <input type="file" class="cert-image-input" accept="image/*" style="display:none" data-cert-id="<?= $cert['id'] ?>">
+                                <?php if (!empty($certImg)): ?>
+                                    <img class="cert-preview" src="<?= htmlspecialchars($certImg) ?>?t=<?= time() ?>" style="max-height: 100px; max-width: 140px; object-fit: contain; margin: 0 auto; display: block;">
+                                    <p class="uploader-hint" style="margin: 8px 0 0 0; font-size: 12px; color: var(--text-secondary);">Click to change logo</p>
+                                <?php else: ?>
+                                    <div class="cert-placeholder-preview" style="padding: 10px 0;">
+                                        <i class="fas fa-award" style="font-size: 32px; color: #8FAE5D; margin-bottom: 8px; display: block;"></i>
+                                        <p style="margin: 0; font-size: 13px; color: var(--text-secondary);">Click to upload logo/image (defaults to badge icon)</p>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <?php if (!empty($certImg)): ?>
+                                <div class="cert-img-actions" style="margin-top: 6px; text-align: right;">
+                                    <button type="button" onclick="removeCertImage(<?= $cert['id'] ?>, this)" style="background: none; border: none; color: #DC2626; font-size: 12px; cursor: pointer; text-decoration: underline;">Remove image</button>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+                </div>
             </div>
 
             <div id="categories-tab" class="tab-content">
@@ -421,86 +526,7 @@ function resolveAdminImage($path) {
     <script src="../assets/js/sidebar.js"></script>
     <script src="../assets/js/profile.js"></script>
     <script src="../assets/js/editor.js?v=1.1"></script>
-
-    <!-- كود إضافي لتشغيل التبويبات الجديدة بسلاسة -->
-    <script>
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(btn.dataset.tab + '-tab').classList.add('active');
-            });
-        });
-    </script>
-
-<script>
-async function addCertification() {
-    const fd = new FormData();
-    fd.append('action', 'add_cert');
-    try {
-        let r = await fetch('api/save_content.php', { method: 'POST', body: fd });
-        let text = await r.text();
-        if(text.includes('success')) { location.reload(); }
-    } catch(e){}
-}
-async function deleteCertification(id, btn) {
-    if(!confirm('Are you sure you want to delete this certification?')) return;
-    const fd = new FormData();
-    fd.append('action', 'delete_cert');
-    fd.append('id', id);
-    try {
-        let r = await fetch('api/save_content.php', { method: 'POST', body: fd });
-        let text = await r.text();
-        if(text.includes('success')) { btn.closest('.cert-card').remove(); }
-    } catch(e){}
-}
-
-document.querySelectorAll('.cert-title, .cert-active').forEach(el => {
-    el.addEventListener('change', async function() {
-        let id = this.dataset.certId;
-        let title = document.querySelector('.cert-title[data-cert-id="'+id+'"]').value;
-        let isActive = document.querySelector('.cert-active[data-cert-id="'+id+'"]').checked ? 1 : 0;
-        
-        const fd = new FormData();
-        fd.append('action', 'update_cert');
-        fd.append('id', id);
-        fd.append('title', title);
-        fd.append('is_active', isActive);
-        
-        await fetch('api/save_content.php', { method: 'POST', body: fd });
-    });
-});
-
-document.querySelectorAll('.cert-image-input').forEach(input => {
-    input.addEventListener('change', async function() {
-        if (!this.files[0]) return;
-        let id = this.dataset.certId;
-        const fd = new FormData();
-        fd.append('action', 'upload_cert_image');
-        fd.append('id', id);
-        fd.append('image', this.files[0]);
-        
-        try {
-            let r = await fetch('api/save_content.php', { method: 'POST', body: fd });
-            let res = await r.json();
-            if(res.status === 'success') {
-                let img = this.closest('.image-uploader').querySelector('img');
-                if (img) img.src = res.path + '?t=' + Date.now();
-                else {
-                    let newImg = document.createElement('img');
-                    newImg.src = res.path;
-                    newImg.style.maxHeight = '100px';
-                    this.closest('.image-uploader').innerHTML = '';
-                    this.closest('.image-uploader').appendChild(this);
-                    this.closest('.image-uploader').appendChild(newImg);
-                }
-            }
-        } catch(e){}
-    });
-});
-</script>
-
+    <!-- ponytail: editor.js handles tabs, toasts, and certifications CRUD cleanly -->
 </body>
 </html>
 
