@@ -31,7 +31,7 @@ $kpis = [
 ?>
 <div class="bg-[#F6F3EC]">
   <!-- 1. HERO SECTION WITH 3D TUBES CANVAS -->
-  <section id="hero-section" class="relative min-h-[100vh] lg:min-h-[100vh] w-full overflow-hidden bg-[#050c0a] flex items-center justify-center cursor-pointer select-none">
+  <section id="hero-section" class="relative w-full overflow-hidden bg-[#050c0a] flex items-center justify-center cursor-pointer select-none" style="min-height: 92vh; min-height: 92dvh;">
     <!-- Agricultural farm and pyramids background photo (clearly visible with opacity-65) -->
     <?php $resolvedBg = !empty($homeHero['image_path']) ? asset_url($homeHero['image_path']) : 'assets/images/static/hero_background.png'; ?>
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-65 pointer-events-none" style="background-image:url('<?= htmlspecialchars($resolvedBg) ?>')"></div>
@@ -41,7 +41,7 @@ $kpis = [
     <canvas id="hero-canvas" class="absolute inset-0 w-full h-full block z-0" style="touch-action:none;opacity:0"></canvas>
 
     <!-- Hero Content Overlay (pt-32 sm:pt-36 ensures plenty of clearance below the 80px navbar) -->
-    <div class="relative z-20 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-32 sm:pt-36 pb-16 flex flex-col items-center justify-center text-center">
+    <div class="relative z-20 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-32 sm:pt-40 pb-20 sm:pb-28 flex flex-col items-center justify-center text-center">
       <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-5">
         <div class="w-4 sm:w-6 h-px bg-[#8FAE5D]"></div>
         <p class="text-[9px] sm:text-[12px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-[#8FAE5D] font-semibold drop-shadow"><?= htmlspecialchars($homeOverline['heading'] ?? 'Egyptian Agricultural Exports') ?></p>
