@@ -23,3 +23,17 @@ RewriteRule ^insights/([^/]+)/?$ guide.php?topic=$1 [L,QSA]
 
 # 404
 ErrorDocument 404 /404.php
+
+# Image caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+</IfModule>
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|jpeg|png|webp|svg)$">
+        Header set Cache-Control "public, max-age=31536000"
+    </FilesMatch>
+</IfModule>

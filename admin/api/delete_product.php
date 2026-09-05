@@ -10,8 +10,11 @@ try {
         throw new Exception('Invalid request method');
     }
 
-    $input = json_decode(file_get_contents('php://input'), true);
-    $product_id = intval($input['product_id'] ?? 0);
+    $product_id = intval($_POST['product_id'] ?? 0);
+    if ($product_id <= 0) {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $product_id = intval($input['product_id'] ?? 0);
+    }
 
     if ($product_id <= 0) {
         throw new Exception('Invalid product ID');
@@ -34,9 +37,12 @@ try {
             throw new Exception('Failed to delete product: ' . $stmt->error);
         }
         
-        // Delete the image file if it exists
-        if (!empty($product['image_path']) && file_exists('../' . $product['image_path'])) {
-            unlink('../' . $product['image_path']);
+        // Delete the image file if it exists and is local
+        if (!empty($product['image_path'])) {
+            $imgDisk = __DIR__ . '/../../' . ltrim(str_replace('../', '', $product['image_path']), '/');
+            if (file_exists($imgDisk) && is_file($imgDisk) && strpos($imgDisk, 'default-product.png') === false) {
+                @unlink($imgDisk);
+            }
         }
         
         $response['success'] = true;
@@ -45,9 +51,14 @@ try {
         throw new Exception('Product not found');
     }
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
+    $response['error'] = $e->getMessage();
     $response['message'] = $e->getMessage();
 }
 
+if (ob_get_length()) {
+    @ob_clean();
+}
 echo json_encode($response);
+exit();
 ?>

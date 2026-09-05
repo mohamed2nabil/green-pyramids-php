@@ -31,7 +31,7 @@ $kpis = [
 ?>
 <div class="bg-[#F6F3EC]">
   <!-- 1. HERO SECTION WITH 3D TUBES CANVAS -->
-  <section id="hero-section" class="relative min-h-[90vh] lg:min-h-[86vh] w-full overflow-hidden bg-[#050c0a] flex items-center justify-center cursor-pointer select-none">
+  <section id="hero-section" class="relative min-h-[100vh] lg:min-h-[100vh] w-full overflow-hidden bg-[#050c0a] flex items-center justify-center cursor-pointer select-none">
     <!-- Agricultural farm and pyramids background photo (clearly visible with opacity-65) -->
     <?php $resolvedBg = !empty($homeHero['image_path']) ? asset_url($homeHero['image_path']) : 'assets/images/static/hero_background.png'; ?>
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-65 pointer-events-none" style="background-image:url('<?= htmlspecialchars($resolvedBg) ?>')"></div>
@@ -41,7 +41,7 @@ $kpis = [
     <canvas id="hero-canvas" class="absolute inset-0 w-full h-full block z-0" style="touch-action:none;opacity:0"></canvas>
 
     <!-- Hero Content Overlay (pt-32 sm:pt-36 ensures plenty of clearance below the 80px navbar) -->
-    <div class="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-32 sm:pt-36 pb-16 flex flex-col items-center justify-center text-center pointer-events-none">
+    <div class="relative z-20 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-32 sm:pt-36 pb-16 flex flex-col items-center justify-center text-center">
       <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-5">
         <div class="w-4 sm:w-6 h-px bg-[#8FAE5D]"></div>
         <p class="text-[9px] sm:text-[12px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-[#8FAE5D] font-semibold drop-shadow"><?= htmlspecialchars($homeOverline['heading'] ?? 'Egyptian Agricultural Exports') ?></p>
@@ -52,13 +52,13 @@ $kpis = [
         <?= nl2br(htmlspecialchars($homeHero['heading'] ?? "Egyptian Agricultural Exporter\nFrom Egyptian Soil to Global Markets.")) ?>
       </h1>
 
-      <p class="text-[#F6F3EC]/85 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 drop-shadow">
+      <p class="text-[#F6F3EC] font-medium text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 drop-shadow-lg">
         <?= nl2br(htmlspecialchars($homeHero['subtext'])) ?>
       </p>
 
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-5 sm:mb-6 w-full sm:w-auto pointer-events-auto">
-        <a class="w-full sm:w-auto px-8 py-3.5 bg-[#8FAE5D] text-[#173F35] text-[13px] font-semibold tracking-wide rounded-full hover:bg-[#F6F3EC] transition-all duration-300 shadow-xl" href="products.php">Explore Catalog</a>
-        <a class="w-full sm:w-auto px-8 py-3.5 bg-white/15 backdrop-blur-md text-[#F6F3EC] border border-white/25 text-[13px] font-semibold tracking-wide rounded-full hover:bg-white/30 transition-all duration-300 shadow-xl" href="contact.php">Request a Quote</a>
+      <div class="relative z-30 flex flex-col sm:flex-row items-center justify-center gap-4 mb-5 sm:mb-6 w-full sm:w-auto">
+        <a class="relative z-30 w-full sm:w-auto px-8 py-3.5 bg-[#8FAE5D] text-[#173F35] text-[13px] font-semibold tracking-wide rounded-full hover:bg-[#F6F3EC] transition-all duration-300 shadow-xl cursor-pointer" href="products.php" onclick="window.location.href='products.php'">Explore Catalog</a>
+        <a class="relative z-30 w-full sm:w-auto px-8 py-3.5 bg-white/15 backdrop-blur-md text-[#F6F3EC] border border-white/25 text-[13px] font-semibold tracking-wide rounded-full hover:bg-white/30 transition-all duration-300 shadow-xl cursor-pointer" href="contact.php" onclick="window.location.href='contact.php'">Request a Quote</a>
       </div>
 
       <div class="text-[#8FAE5D] text-[11px] tracking-[0.2em] uppercase select-none flex items-center gap-2 pointer-events-none font-medium drop-shadow">
@@ -148,8 +148,8 @@ $kpis = [
       </div>
       
       <!-- Horizontal track container -->
-      <div class="w-full pl-6 lg:pl-10">
-        <div id="idx-cat-track" class="flex gap-6 lg:gap-8 pr-6 lg:pr-10 will-change-transform w-max">
+      <div class="w-full px-6 lg:px-10">
+        <div id="idx-cat-track" class="w-full">
           <?php foreach ($idxCats as $cat):
             $catImg  = htmlspecialchars($cat['image_path'] ?? '');
             $catLbl  = htmlspecialchars(ucwords($cat['category_name']));

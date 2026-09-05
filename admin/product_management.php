@@ -82,7 +82,7 @@ $products = pm_fetchProducts($conn, $catId, $search, $vis);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/sidebar.css">
     <link rel="stylesheet" href="../assets/css/main.css?v=1.1">
-    <link rel="stylesheet" href="../assets/css/products.css?v=1.1">
+    <link rel="stylesheet" href="../assets/css/products.css?v=1.3">
     <link rel="icon" href="../assets/images/favicon.svg">
     <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
     <style>
@@ -452,7 +452,7 @@ $products = pm_fetchProducts($conn, $catId, $search, $vis);
     <script src="../assets/js/auth.js"></script>
     <script src="../assets/js/sidebar.js"></script>
     <script src="../assets/js/profile.js"></script>
-    <script src="../assets/js/product-management.js?v=1.1"></script>
+    <script src="../assets/js/product-management.js?v=1.4"></script>
 </body>
 </html>
 

@@ -90,20 +90,30 @@
                 headers: { "X-Requested-With": "XMLHttpRequest" }
             });
             
-            const data = await r.json();
+            const text = await r.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (jsonErr) {
+                console.error("JSON parse error, raw response:", text);
+                showFeedback("Server response error: " + text.slice(0, 150), true);
+                alert("Server response error:\n" + text.slice(0, 300));
+                return { success: false };
+            }
 
             if (data.success) {
                 showFeedback("Saved Successfully!", false);
                 loadProducts(); 
                 return data;
             } else {
-                showFeedback(data.error || "Save Failed in Database", true);
-                alert("Database Error: " + (data.error || "Unknown Error"));
+                const errMsg = data.error || data.message || "Save Failed in Database";
+                showFeedback(errMsg, true);
+                alert("Database Error: " + errMsg);
                 return { success: false };
             }
         } catch (e) {
             console.error("Fetch Error:", e);
-            showFeedback("Server connection failed", true);
+            showFeedback("Connection failed: " + (e.message || "Unknown error"), true);
             loadProducts();
             return { success: false };
         }
@@ -328,15 +338,35 @@
 
     if (confirmDelBtn) {
         confirmDelBtn.addEventListener("click", async () => {
-            const fd = new FormData();
-            fd.append("product_id", String(pendingDeleteId));
-            const r = await fetch(endpointDelete, { method: "POST", body: fd, headers: { "X-Requested-With": "XMLHttpRequest" } });
-            const data = await r.json();
-            if (data.success) {
-                loadProducts();
-                showFeedback("Product deleted", false);
+            confirmDelBtn.disabled = true;
+            confirmDelBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+            try {
+                const fd = new FormData();
+                fd.append("product_id", String(pendingDeleteId));
+                const r = await fetch(endpointDelete, { method: "POST", body: fd, headers: { "X-Requested-With": "XMLHttpRequest" } });
+                const text = await r.text();
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    showFeedback("Delete failed: server error", true);
+                    return;
+                }
+                if (data.success) {
+                    loadProducts();
+                    showFeedback("Product deleted successfully!", false);
+                } else {
+                    showFeedback(data.error || data.message || "Failed to delete product", true);
+                    alert("Delete Error: " + (data.error || data.message));
+                }
+            } catch (err) {
+                console.error("Delete error:", err);
+                showFeedback("Connection failed while deleting", true);
+            } finally {
+                confirmDelBtn.disabled = false;
+                confirmDelBtn.innerHTML = 'Delete';
+                closeModal(deleteModal);
             }
-            closeModal(deleteModal);
         });
     }
 

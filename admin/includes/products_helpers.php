@@ -58,6 +58,12 @@ function pm_renderRows(array $products): string
             $eyeIco = $visible ? "fa-eye" : "fa-eye-slash";
             $visCls = $visible ? "status-visible" : "status-hidden";
             $sku = htmlspecialchars($p["sku"] ?? "");
+            $hs = htmlspecialchars($p["hs_code"] ?? "", ENT_QUOTES);
+            $variety = htmlspecialchars($p["variety"] ?? "", ENT_QUOTES);
+            $sizes = htmlspecialchars($p["sizes"] ?? "", ENT_QUOTES);
+            $packaging = htmlspecialchars($p["packaging_types"] ?? "", ENT_QUOTES);
+            $shipping = htmlspecialchars($p["shipping_method"] ?? "", ENT_QUOTES);
+            $capacity = htmlspecialchars($p["container_capacity"] ?? "", ENT_QUOTES);
 
             echo <<<HTML
 <tr>
@@ -76,6 +82,8 @@ function pm_renderRows(array $products): string
       <button type="button" class="action-btn edit edit-product-btn"
               data-product-id="$pid" data-name="$name" data-category-id="$cid"
               data-grade="$grade" data-description="$desc" data-image="$img" 
+              data-hs-code="$hs" data-variety="$variety" data-sizes="$sizes"
+              data-packaging-types="$packaging" data-shipping-method="$shipping" data-container-capacity="$capacity"
               data-avail-jan="{$p['avail_jan']}" data-avail-feb="{$p['avail_feb']}" data-avail-mar="{$p['avail_mar']}"
               data-avail-apr="{$p['avail_apr']}" data-avail-may="{$p['avail_may']}" data-avail-jun="{$p['avail_jun']}"
               data-avail-jul="{$p['avail_jul']}" data-avail-aug="{$p['avail_aug']}" data-avail-sep="{$p['avail_sep']}"

@@ -48,19 +48,19 @@ if (isset($conn)) {
     <div class="absolute inset-0 z-0 pointer-events-none w-full h-full">
       <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1000 3000" class="overflow-visible">
         <path id="journey-path-bg" 
-              d="M 500,0 C 500,150 200,150 200,300 C 200,525 800,525 800,750 C 800,975 200,975 200,1200 C 200,1425 800,1425 800,1650 C 800,1875 200,1875 200,2100 C 200,2325 500,2325 500,2550 C 500,2775 500,3000 500,3000" 
+              d="M 500,0 C 500,150 160,150 160,300 C 160,525 840,525 840,750 C 840,975 160,975 160,1200 C 160,1425 840,1425 840,1650 C 840,1875 160,1875 160,2100 C 160,2325 500,2325 500,2550" 
               fill="none" stroke="#FFFFFF" stroke-width="3" vector-effect="nonScalingStroke"></path>
         
         <path id="journey-path" 
-              d="M 500,0 C 500,150 200,150 200,300 C 200,525 800,525 800,750 C 800,975 200,975 200,1200 C 200,1425 800,1425 800,1650 C 800,1875 200,1875 200,2100 C 200,2325 500,2325 500,2550 C 500,2775 500,3000 500,3000" 
+              d="M 500,0 C 500,150 160,150 160,300 C 160,525 840,525 840,750 C 840,975 160,975 160,1200 C 160,1425 840,1425 840,1650 C 840,1875 160,1875 160,2100 C 160,2325 500,2325 500,2550" 
               fill="none" stroke="#8FAE5D" stroke-width="3" stroke-linecap="round" vector-effect="nonScalingStroke"></path>
       </svg>
     </div>
 
     <!-- Step 1 -->
-    <div class="journey-dot" style="top: 10%; left: 20%;"></div>
-    <div class="journey-box left-side" style="top: 10%; left: 24%;">
-      <div class="journey-content pl-2 sm:pl-6 text-left">
+    <div class="journey-dot" style="top: 10%; left: 16%;"></div>
+    <div class="journey-box left-side" style="top: 10%; left: 28%;">
+      <div class="journey-content pl-6 text-left">
         <p class="font-bold text-[10px] sm:text-xs tracking-widest uppercase mb-1 text-[#D8C7A1]">STEP 01</p>
         <h2 class="font-serif text-2xl sm:text-3xl mb-2 text-[#173F35]"><?= htmlspecialchars($sections['step1']['heading'] ?? 'Farm Sourcing') ?></h2>
         <p class="text-[#173F35]/70 text-xs sm:text-sm leading-relaxed"><?= htmlspecialchars($sections['step1']['subtext'] ?? 'Rigorous farm selection across Egypt\'s key regions to ensure premium export quality.') ?></p>
@@ -68,9 +68,9 @@ if (isset($conn)) {
     </div>
 
     <!-- Step 2 -->
-    <div class="journey-dot" style="top: 25%; left: 80%;"></div>
-    <div class="journey-box right-side" style="top: 25%; right: 24%;">
-      <div class="journey-content pr-2 sm:pr-6 text-right text-responsive">
+    <div class="journey-dot" style="top: 25%; left: 84%;"></div>
+    <div class="journey-box right-side" style="top: 25%; right: 28%;">
+      <div class="journey-content pr-6 text-right text-responsive">
         <p class="font-bold text-[10px] sm:text-xs tracking-widest uppercase mb-1 text-[#D8C7A1]">STEP 02</p>
         <h2 class="font-serif text-2xl sm:text-3xl mb-2 text-[#173F35]"><?= htmlspecialchars($sections['step2']['heading'] ?? 'Harvesting') ?></h2>
         <p class="text-[#173F35]/70 text-xs sm:text-sm leading-relaxed"><?= htmlspecialchars($sections['step2']['subtext'] ?? 'Carefully harvested precisely for optimal export windows, maintaining structural integrity.') ?></p>
@@ -78,9 +78,9 @@ if (isset($conn)) {
     </div>
 
     <!-- Step 3 -->
-    <div class="journey-dot" style="top: 40%; left: 20%;"></div>
-    <div class="journey-box left-side" style="top: 40%; left: 24%;">
-      <div class="journey-content pl-2 sm:pl-6 text-left">
+    <div class="journey-dot" style="top: 40%; left: 16%;"></div>
+    <div class="journey-box left-side" style="top: 40%; left: 28%;">
+      <div class="journey-content pl-6 text-left">
         <p class="font-bold text-[10px] sm:text-xs tracking-widest uppercase mb-1 text-[#D8C7A1]">STEP 03</p>
         <h2 class="font-serif text-2xl sm:text-3xl mb-2 text-[#173F35]"><?= htmlspecialchars($sections['step3']['heading'] ?? 'Quality Control') ?></h2>
         <p class="text-[#173F35]/70 text-xs sm:text-sm leading-relaxed"><?= htmlspecialchars($sections['step3']['subtext'] ?? 'Stringent export-grade assessment for size, color, firmness, and natural perfection.') ?></p>
@@ -88,9 +88,9 @@ if (isset($conn)) {
     </div>
 
     <!-- Step 4 -->
-    <div class="journey-dot" style="top: 55%; left: 80%;"></div>
-    <div class="journey-box right-side" style="top: 55%; right: 24%;">
-      <div class="journey-content pr-2 sm:pr-6 text-right text-responsive">
+    <div class="journey-dot" style="top: 55%; left: 84%;"></div>
+    <div class="journey-box right-side" style="top: 55%; right: 28%;">
+      <div class="journey-content pr-6 text-right text-responsive">
         <p class="font-bold text-[10px] sm:text-xs tracking-widest uppercase mb-1 text-[#D8C7A1]">STEP 04</p>
         <h2 class="font-serif text-2xl sm:text-3xl mb-2 text-[#173F35]"><?= htmlspecialchars($sections['step4']['heading'] ?? 'Packing') ?></h2>
         <p class="text-[#173F35]/70 text-xs sm:text-sm leading-relaxed"><?= htmlspecialchars($sections['step4']['subtext'] ?? 'Packed in breathable, export-standard cartons designed to withstand long transit.') ?></p>
@@ -98,9 +98,9 @@ if (isset($conn)) {
     </div>
 
     <!-- Step 5 -->
-    <div class="journey-dot" style="top: 70%; left: 20%;"></div>
-    <div class="journey-box left-side" style="top: 70%; left: 24%;">
-      <div class="journey-content pl-2 sm:pl-6 text-left">
+    <div class="journey-dot" style="top: 70%; left: 16%;"></div>
+    <div class="journey-box left-side" style="top: 70%; left: 28%;">
+      <div class="journey-content pl-6 text-left">
         <p class="font-bold text-[10px] sm:text-xs tracking-widest uppercase mb-1 text-[#D8C7A1]">STEP 05</p>
         <h2 class="font-serif text-2xl sm:text-3xl mb-2 text-[#173F35]"><?= htmlspecialchars($sections['step5']['heading'] ?? 'Cold Chain') ?></h2>
         <p class="text-[#173F35]/70 text-xs sm:text-sm leading-relaxed"><?= htmlspecialchars($sections['step5']['subtext'] ?? 'Continuous refrigerated transport that strictly maintains optimal holding temperatures.') ?></p>
@@ -129,7 +129,6 @@ if (isset($conn)) {
 document.addEventListener("DOMContentLoaded", () => {
     gsap.registerPlugin(ScrollTrigger);
     
-    // Slight delay to ensure SVG is fully rendered
     setTimeout(() => {
         const path = document.getElementById("journey-path");
         if (!path) return;
@@ -141,15 +140,15 @@ document.addEventListener("DOMContentLoaded", () => {
             strokeDashoffset: length
         });
         
-        // Draw the line as you scroll
+        // Draw the line as you scroll in real-time
         gsap.to(path, {
             strokeDashoffset: 0,
             ease: "none",
             scrollTrigger: {
                 trigger: "#journey-container",
-                start: "top 60%",
-                end: "bottom 80%",
-                scrub: 1,
+                start: "top 40%",
+                end: "85% center",
+                scrub: true,
             }
         });
 

@@ -27,42 +27,47 @@
   mix-blend-mode: screen !important;
 }
 
-/* Category Carousel Track styling & Guaranteed Card Dimensions */
+/* Category Grid styling */
 #idx-cat-track {
-  display: flex !important;
-  gap: 2rem !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px !important;
+  width: 100% !important;
+  justify-items: center !important;
+}
+@media (max-width: 1024px) {
+  #idx-cat-track {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 640px) {
+  #idx-cat-track {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 .idx-cat-card {
-  width: 340px !important;
-  min-width: 340px !important;
-  max-width: 340px !important;
-  height: 420px !important;
-  flex-shrink: 0 !important;
+  width: 100% !important;
+  max-width: 280px !important;
+  aspect-ratio: 3/4 !important;
+  height: auto !important;
   border-radius: 1rem !important;
   overflow: hidden !important;
   position: relative !important;
   display: block !important;
-  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
   border: 1px solid rgba(216, 199, 161, 0.25) !important;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease !important;
   background-color: #173F35 !important;
+  transition: none !important;
 }
-.idx-cat-card:hover {
-  transform: translateY(-8px) scale(1.02) !important;
-  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(143, 174, 93, 0.3) !important;
-  border-color: rgba(143, 174, 93, 0.7) !important;
-}
+
 .idx-cat-card img {
   position: absolute !important;
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1) !important;
-}
-.idx-cat-card:hover img {
-  transform: scale(1.1) !important;
+  transition: none !important;
 }
 
 /* ===== BRAND COLOR GRADIENTS — high-contrast visible bands ===== */

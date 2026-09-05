@@ -6,7 +6,7 @@ $user = "root";
 $password = "";
 $database = "green_pyramids";
 
-mysqli_report(MYSQLI_REPORT_OFF);
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $conn = null;
 try {
