@@ -52,7 +52,7 @@ include "includes/header.php";
           <div class="w-6 h-px bg-[#8FAE5D]"></div>
           <p class="text-[11px] tracking-[0.25em] uppercase text-[#8FAE5D]">Introduction</p>
         </div>
-        <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] mb-8"><?= htmlspecialchars($aboutIntro['heading'] ?? 'A Vision Built On Reliability.') ?></h2>
+        <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] mb-8"><?= htmlspecialchars($aboutIntro['heading'] ?? 'Our Story.') ?></h2>
         <div class="space-y-6 text-[#173F35]/75 leading-relaxed text-[16px] reveal-up" style="transition-delay: 100ms;">
           <?php if (!empty($aboutIntro['subtext'])): ?>
             <?php foreach (explode("\n\n", trim($aboutIntro['subtext'])) as $p): ?>
@@ -101,7 +101,7 @@ include "includes/header.php";
           <p class="text-[11px] tracking-[0.25em] uppercase text-[#8FAE5D]">Our Foundation</p>
           <div class="w-6 h-px bg-[#8FAE5D]"></div>
         </div>
-        <h2 class="anim-heading font-serif text-4xl lg:text-5xl leading-[1.1] max-w-2xl mx-auto">Our Core Values</h2>
+        <h2 class="anim-heading font-serif text-4xl lg:text-5xl leading-[1.1] max-w-2xl mx-auto">Mission</h2>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
