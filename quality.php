@@ -52,15 +52,15 @@ if (empty($certsList)) {
     ];
 }
 
+$qualityHeroImg = !empty($qualityHero['image_path']) ? asset_url($qualityHero['image_path']) : 'assets/images/pages/Sunlit Green Fields and Pyramids.png';
 include "includes/header.php"; 
 ?>
-<link rel="preload" as="image"
-    href="https://images.unsplash.com/photo-1652211955967-99c892925469?w=900&amp;h=700&amp;fit=crop&amp;auto=format" />
+<link rel="preload" as="image" href="<?= htmlspecialchars($qualityHeroImg) ?>" />
 <div class="bg-[#F6F3EC] min-h-screen">
     <div class="bg-[#173F35] pt-[72px] relative overflow-hidden">
-        <?php $qualityHeroImg = !empty($qualityHero['image_path']) ? asset_url($qualityHero['image_path']) : 'assets/images/static/hero_background.png'; ?>
         <div class="absolute inset-0 z-0">
             <img src="<?= htmlspecialchars($qualityHeroImg) ?>" alt="Quality Assurance"
+                loading="eager" fetchpriority="high" decoding="async"
                 class="w-full h-full object-cover opacity-25 pointer-events-none" />
         </div>
         <div

@@ -47,7 +47,7 @@ if (!isset($assetVersion))    $assetVersion    = fn($p) => (string)(@filemtime(_
           <li><a class="text-[13px] text-[#F6F3EC]/70 hover:text-[#D8C7A1] transition-colors" href="products.php">Fresh Fruits</a></li>
           <li><a class="text-[13px] text-[#F6F3EC]/70 hover:text-[#D8C7A1] transition-colors" href="products.php">Fresh Vegetables</a></li>
           <li><a class="text-[13px] text-[#F6F3EC]/70 hover:text-[#D8C7A1] transition-colors" href="products.php">Citrus</a></li>
-          <li><a class="text-[13px] text-[#F6F3EC]/70 hover:text-[#D8C7A1] transition-colors" href="products.php">Seasonal Crops</a></li>
+          <li><a class="text-[13px] text-[#F6F3EC]/70 hover:text-[#D8C7A1] transition-colors" href="products.php?category=dates">Dates</a></li>
           <li><a class="text-[13px] text-[#F6F3EC]/70 hover:text-[#D8C7A1] transition-colors" href="products.php">Egyptian Mango</a></li>
           <li><a class="text-[13px] text-[#F6F3EC]/70 hover:text-[#D8C7A1] transition-colors" href="products.php">Pomegranate</a></li>
         </ul>

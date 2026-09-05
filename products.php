@@ -47,7 +47,7 @@ $filterTabs = [
     ['slug' => 'fruits', 'label' => 'Fruits', 'cat_ids' => []],
     ['slug' => 'vegetables', 'label' => 'Vegetables', 'cat_ids' => []],
     ['slug' => 'citrus', 'label' => 'Citrus', 'cat_ids' => []],
-    ['slug' => 'seasonal-crops', 'label' => 'Seasonal Crops', 'cat_ids' => []],
+    ['slug' => 'dates', 'label' => 'Dates', 'cat_ids' => []],
 ];
 
 // Map DB categories into standard filter tabs
@@ -92,7 +92,7 @@ foreach ($filterTabs as $index => &$tab) {
     $tabLabelSlug = slugify_category($tab['label']);
     
     $isMatch = false;
-    if ($rawCategory === $tabSlug || $rawCategory === $tabLabelSlug) {
+    if ($rawCategory === $tabSlug || $rawCategory === $tabLabelSlug || ($rawCategory === 'seasonal-crops' && $tabSlug === 'dates')) {
         $isMatch = true;
     } elseif ($tabSlug === 'fruits' && (strpos($rawCategory, 'fruit') !== false)) {
         $isMatch = true;
@@ -100,7 +100,7 @@ foreach ($filterTabs as $index => &$tab) {
         $isMatch = true;
     } elseif ($tabSlug === 'citrus' && (strpos($rawCategory, 'citrus') !== false)) {
         $isMatch = true;
-    } elseif ($tabSlug === 'seasonal-crops' && (strpos($rawCategory, 'date') !== false || strpos($rawCategory, 'season') !== false || strpos($rawCategory, 'crop') !== false)) {
+    } elseif ($tabSlug === 'dates' && (strpos($rawCategory, 'date') !== false || strpos($rawCategory, 'season') !== false || strpos($rawCategory, 'crop') !== false)) {
         $isMatch = true;
     } elseif (is_numeric($rawCategory) && in_array((int)$rawCategory, $tab['cat_ids'])) {
         $isMatch = true;
@@ -199,6 +199,14 @@ if (isset($conn)) {
         }
     }
 }
+if (empty($heroCards) && isset($conn)) {
+    $fallbackRes = $conn->query("SELECT product_id as id, name as title, 'Produce' as category, image_path, CONCAT('productdetail.php?id=', slug) as link_url, 1 as sort_order FROM products WHERE is_active = 1 AND is_visible = 1 LIMIT 4");
+    if ($fallbackRes) {
+        while ($row = $fallbackRes->fetch_assoc()) {
+            $heroCards[] = $row;
+        }
+    }
+}
 
 include "includes/header.php";
 $productionHero = [];
@@ -240,7 +248,38 @@ if (isset($conn)) {
       <div id="card-swap-wrapper" class="relative w-full max-w-[500px] h-[360px] sm:h-[420px] flex items-center justify-center">
         <div id="hero-card-swap-container" class="relative w-[280px] sm:w-[340px] lg:w-[380px] h-[340px] sm:h-[400px] perspective-[1200px] transform-gpu">
           <div class="absolute inset-0 [transform-style:preserve-3d]">
-            <?php foreach ($heroCards as $idx => $hp): $hpImg = asset_url($hp["image_path"]); $hpCat = htmlspecialchars($hp["category"] ?? "Produce"); $hpName = htmlspecialchars($hp["title"]); $hpLink = htmlspecialchars($hp["link_url"] ?? "#"); $isFront = ($idx === 0); ?><a href="<?= $hpLink ?>" data-swap-index="<?= $idx ?>" class="swap-card group absolute top-1/2 left-1/2 w-[280px] sm:w-[340px] lg:w-[380px] h-[320px] sm:h-[380px] rounded-2xl border border-[#D8C7A1]/30 bg-[#0d2a24] shadow-2xl overflow-hidden [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] cursor-pointer transition-shadow duration-300 hover:shadow-emerald-900/40 block"><div class="relative h-full w-full flex flex-col"><div class="flex-1 overflow-hidden relative bg-[#173F35]"><img loading="lazy" decoding="async" src="<?= htmlspecialchars($hpImg) ?>" alt="<?= $hpName ?>" loading="<?= $isFront ? "eager" : "lazy" ?>" <?php if ($isFront): ?>fetchpriority="high"<?php endif; ?> class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108" /><div class="absolute inset-0 bg-gradient-to-t from-[#0d2a24] via-[#0d2a24]/30 to-transparent"></div><div class="absolute top-4 left-4 z-10"><span class="inline-block text-[9px] tracking-[0.2em] uppercase bg-[#173F35]/90 backdrop-blur-md text-[#8FAE5D] px-3 py-1 rounded-full font-semibold shadow-sm border border-[#8FAE5D]/30"><?= $hpCat ?></span></div></div><div class="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-[#F6F3EC] bg-gradient-to-t from-[#0d2a24] via-[#0d2a24]/90 to-transparent"><h3 class="font-serif text-xl sm:text-2xl text-[#F6F3EC] group-hover:text-[#8FAE5D] transition-colors duration-200 mb-1 leading-snug"><?= $hpName ?></h3><div class="flex items-center justify-between text-xs text-[#F6F3EC]/70 mt-2"><span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#D8C7A1] group-hover:translate-x-1 transition-transform">Explore &rarr;</span></div></div></div></a><?php endforeach; ?>
+            <?php foreach ($heroCards as $idx => $hp): 
+              $hpImg = asset_url($hp["image_path"]); 
+              $hpCat = htmlspecialchars($hp["category"] ?? "Produce"); 
+              $hpName = htmlspecialchars($hp["title"]); 
+              $hpLink = htmlspecialchars($hp["link_url"] ?? "#"); 
+              $isFront = ($idx === 0); 
+            ?>
+              <a href="<?= $hpLink ?>" data-swap-index="<?= $idx ?>" class="swap-card group absolute top-1/2 left-1/2 w-[280px] sm:w-[340px] lg:w-[380px] h-[320px] sm:h-[380px] rounded-2xl border border-[#D8C7A1]/30 bg-[#0d2a24] shadow-2xl overflow-hidden [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] cursor-pointer transition-shadow duration-300 hover:shadow-emerald-900/40 block">
+                <div class="relative h-full w-full flex flex-col">
+                  <div class="flex-1 overflow-hidden relative bg-[#173F35]">
+                    <img src="<?= htmlspecialchars($hpImg) ?>" 
+                         alt="<?= $hpName ?>" 
+                         loading="<?= $isFront ? "eager" : "lazy" ?>" 
+                         decoding="async"
+                         <?= $isFront ? 'fetchpriority="high"' : '' ?> 
+                         width="380" 
+                         height="380"
+                         class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0d2a24] via-[#0d2a24]/30 to-transparent"></div>
+                    <div class="absolute top-4 left-4 z-10">
+                      <span class="inline-block text-[9px] tracking-[0.2em] uppercase bg-[#173F35]/90 backdrop-blur-md text-[#8FAE5D] px-3 py-1 rounded-full font-semibold shadow-sm border border-[#8FAE5D]/30"><?= $hpCat ?></span>
+                    </div>
+                  </div>
+                  <div class="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-[#F6F3EC] bg-gradient-to-t from-[#0d2a24] via-[#0d2a24]/90 to-transparent">
+                    <h3 class="font-serif text-xl sm:text-2xl text-[#F6F3EC] group-hover:text-[#8FAE5D] transition-colors duration-200 mb-1 leading-snug"><?= $hpName ?></h3>
+                    <div class="flex items-center justify-between text-xs text-[#F6F3EC]/70 mt-2">
+                      <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#D8C7A1] group-hover:translate-x-1 transition-transform">Explore &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            <?php endforeach; ?>
           </div>
         </div>
       </div>
@@ -296,7 +335,7 @@ if (isset($conn)) {
         </div>
       <?php else: ?>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
-          <?php foreach ($products as $p): 
+          <?php foreach ($products as $index => $p): 
             $pId = (int)$p['product_id'];
             $pName = htmlspecialchars($p['name']);
             $pSlug = htmlspecialchars($p['slug'] ?? $pId);
@@ -306,14 +345,19 @@ if (isset($conn)) {
             $pImg = asset_url($p['image_path']);
             $pSeason = htmlspecialchars(get_product_season($p));
             $detailUrl = "productdetail.php?id=" . urlencode($pSlug);
+            $pImgLoading = ($index < 4) ? 'eager' : 'lazy';
+            $pFetchAttr = ($index < 2) ? ' fetchpriority="high"' : '';
           ?>
             <!-- MasonryGallery Inspired Card Structure -->
             <a href="<?= $detailUrl ?>" class="masonry-card group relative bg-[#0d2a24] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 cursor-pointer text-left block">
               <div class="relative overflow-hidden bg-[#173F35] aspect-[4/5] w-full">
-                <!-- Lazy Loaded Image -->
-                <img loading="lazy" decoding="async" src="<?= htmlspecialchars($pImg) ?>" 
+                <!-- Optimized Image -->
+                <img src="<?= htmlspecialchars($pImg) ?>" 
                      alt="<?= $pName ?>" 
-                     loading="lazy"
+                     loading="<?= $pImgLoading ?>" 
+                     decoding="async"<?= $pFetchAttr ?>
+                     width="400" 
+                     height="500"
                      class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108" />
                 
                 <!-- Color Overlay Shift on Hover -->

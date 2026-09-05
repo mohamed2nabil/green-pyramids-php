@@ -42,16 +42,11 @@ if ($db_product) {
         "name" => $db_product['name'],
         "cat" => $db_product['category_name'] ?? 'Fresh Produce',
         "origin" => "Egypt",
-        "season" => "Check Availability", // Could map avail_jan, avail_feb etc to a string if needed
+        "season" => "Check Availability",
         "packaging" => explode("\n", $db_product['packaging_types']),
         "sizes" => explode(",", $db_product['sizes']),
         "desc" => $db_product['description'],
         "img" => asset_url($db_product['image_path']),
-        "galleryImgs" => [
-            "https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=500&h=400&fit=crop&auto=format",
-            "https://images.unsplash.com/photo-1652211955967-99c892925469?w=500&h=400&fit=crop&auto=format",
-            "https://images.unsplash.com/photo-1759272840538-ae4b07214c71?w=500&h=400&fit=crop&auto=format",
-        ],
     ];
 } else {
     $product = [
@@ -62,12 +57,7 @@ if ($db_product) {
         "packaging" => ["4 kg Carton", "5 kg Carton"],
         "sizes" => ["Large", "Medium"],
         "desc" => "Premium quality Egyptian agricultural produce, carefully selected and packed for international export markets.",
-        "img" => "https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=900&h=1100&fit=crop&auto=format",
-        "galleryImgs" => [
-            "https://images.unsplash.com/photo-1708417134108-f4d009383f44?w=500&h=400&fit=crop&auto=format",
-            "https://images.unsplash.com/photo-1652211955967-99c892925469?w=500&h=400&fit=crop&auto=format",
-            "https://images.unsplash.com/photo-1759272840538-ae4b07214c71?w=500&h=400&fit=crop&auto=format",
-        ],
+        "img" => asset_url('assets/images/default-product.png'),
     ];
 }
 
@@ -80,6 +70,7 @@ $domain = ($_SERVER['HTTP_HOST'] ?? 'localhost');
 
 include 'includes/header.php';
 ?>
+    <link rel="preload" as="image" href="<?= htmlspecialchars($product['img']) ?>" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org/",
@@ -133,7 +124,14 @@ include 'includes/header.php';
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           <div class="relative">
             <div class="aspect-[3/4] rounded-2xl overflow-hidden bg-[#D8C7A1]/20">
-              <img src="<?php echo htmlspecialchars($product['img']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="w-full h-full object-cover" />
+              <img src="<?php echo htmlspecialchars($product['img']); ?>" 
+                   alt="<?php echo htmlspecialchars($product['name']); ?>" 
+                   loading="eager" 
+                   fetchpriority="high" 
+                   decoding="async" 
+                   width="600" 
+                   height="800" 
+                   class="w-full h-full object-cover" />
             </div>
           </div>
           <div class="flex flex-col justify-center">
@@ -189,7 +187,13 @@ include 'includes/header.php';
           <?php foreach ($related_products as $rel_prod): ?>
             <a href="productdetail.php?id=<?= urlencode($rel_prod['slug']) ?>" class="group block">
               <div class="relative aspect-[4/5] rounded-2xl overflow-hidden bg-[#D8C7A1]/20 mb-6">
-                <img src="<?= asset_url($rel_prod['image_path']) ?>" alt="<?= htmlspecialchars($rel_prod['name']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img src="<?= asset_url($rel_prod['image_path']) ?>" 
+                     alt="<?= htmlspecialchars($rel_prod['name']) ?>" 
+                     loading="lazy" 
+                     decoding="async" 
+                     width="400" 
+                     height="500" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
               </div>
               <h3 class="font-serif text-2xl text-[#173F35] mb-2 group-hover:text-[#8FAE5D] transition-colors"><?= htmlspecialchars($rel_prod['name']) ?></h3>
               <p class="text-sm text-[#173F35]/50 flex items-center gap-2">

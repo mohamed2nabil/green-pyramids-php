@@ -57,7 +57,7 @@ if (isset($pageTitle)) $pageSeo['title'] = $pageTitle;
 if (isset($pageDesc)) $pageSeo['description'] = $pageDesc;
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $domain = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$currentUrl = isset($pageCanonical) ? $pageCanonical : $protocol . '://' . $domain . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$currentUrl = isset($pageCanonical) ? $pageCanonical : $protocol . '://' . $domain . parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 $assetVersion = static function (string $path): string {
     $modified = @filemtime(__DIR__ . '/../' . $path);
     return $modified ? (string) $modified : '1';

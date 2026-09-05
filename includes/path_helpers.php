@@ -88,11 +88,16 @@ if (!function_exists('asset_url')) {
      */
     function asset_url(?string $path, string $default = 'assets/images/default-product.png'): string
     {
+        static $urlCache = [];
         $cleanPath = trim((string)$path);
+        
+        if (isset($urlCache[$cleanPath])) {
+            return $urlCache[$cleanPath];
+        }
         
         // If it's already a full URL
         if (strpos($cleanPath, 'http://') === 0 || strpos($cleanPath, 'https://') === 0 || strpos($cleanPath, '//') === 0) {
-            return $cleanPath;
+            return $urlCache[$cleanPath] = $cleanPath;
         }
         
         // Normalize paths: strip leading slash, change backslashes to slashes
@@ -111,6 +116,16 @@ if (!function_exists('asset_url')) {
             $diskPath = $projectRoot . '/' . $cleanPath;
             if (file_exists($diskPath) && is_file($diskPath)) {
                 $exists = true;
+            } elseif (preg_match('/\.(webp|png|jpe?g)$/i', $cleanPath, $extMatch)) {
+                $altExts = strtolower($extMatch[1]) === 'webp' ? ['png', 'jpg', 'jpeg'] : ['webp', 'jpg', 'png'];
+                foreach ($altExts as $ext) {
+                    $altPath = preg_replace('/\.[^.]+$/', '.' . $ext, $cleanPath);
+                    if (file_exists($projectRoot . '/' . $altPath) && is_file($projectRoot . '/' . $altPath)) {
+                        $cleanPath = $altPath;
+                        $exists = true;
+                        break;
+                    }
+                }
             }
         }
         
@@ -137,6 +152,6 @@ if (!function_exists('asset_url')) {
         }
         
         $base = app_base_url();
-        return $base . '/' . $cleanPath;
+        return $urlCache[$cleanPath] = $base . '/' . $cleanPath;
     }
 }

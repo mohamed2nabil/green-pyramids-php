@@ -92,7 +92,7 @@ try {
                     }
                 }
             }
-            $image_path = '../assets/images/products/' . $filename;
+            $image_path = 'assets/images/products/' . $filename;
         } else {
             throw new Exception('Failed to upload image');
         }
