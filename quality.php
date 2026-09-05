@@ -131,10 +131,11 @@ include "includes/header.php";
                     stage: farm selection, harvest supervision, arrival inspection, sorting, packing, and cold chain
                     management. Every shipment is traceable back to its source farm.</p>
             </div>
-            <div><img
-                    src="https://images.unsplash.com/photo-1652211955967-99c892925469?w=900&amp;h=700&amp;fit=crop&amp;auto=format"
-                    alt="Quality control at packing facility" class="w-full aspect-[4/3] object-cover rounded-2xl" />
-            </div>
+                <div>
+                <img src="<?= htmlspecialchars(asset_url('assets/images/pages/quailty.jpeg')) ?>"
+                    alt="Quality control at packing facility" class="w-full aspect-[4/3] object-cover rounded-2xl"
+                    loading="lazy" decoding="async" />
+                </div>
         </div>
     </section>
     <section class="py-24 bg-[#173F35]">
