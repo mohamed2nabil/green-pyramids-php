@@ -1,7 +1,7 @@
 <?php 
 $currentPage = "about.php";
 require_once "includes/db.php";
-$aboutHero = ['heading' => 'Rooted in Deep Soil.', 'subtext' => "Connecting the world to the finest fresh produce from Egypt's most fertile lands, engineered for global export.", 'image_path' => 'assets/images/hero-farm.jpg'];
+$aboutHero = ['heading' => 'From the Land of Pyramids to Global Markets.', 'subtext' => "Connecting the world to the finest fresh produce from Egypt's most fertile lands, engineered for global export.", 'image_path' => 'assets/images/hero-farm.jpg'];
 if (isset($conn)) {
     $r = $conn->query("SELECT * FROM page_sections WHERE page='about' AND section='hero'");
     if ($r && $r->num_rows > 0) {
@@ -26,7 +26,7 @@ include "includes/header.php";
         <p class="text-[12px] tracking-[0.25em] uppercase text-[#8FAE5D] font-medium">Our Legacy</p>
         <div class="w-8 h-px bg-[#8FAE5D]"></div>
       </div>
-      <h1 class="hero-typing-anim font-serif text-5xl sm:text-7xl lg:text-[5.5rem] text-[#173F35] leading-[1.05] max-w-4xl mx-auto mb-8 drop-shadow-sm"><?= nl2br(htmlspecialchars($aboutHero['heading'])) ?></h1>
+      <h1 class="hero-typing-anim font-serif text-5xl sm:text-7xl lg:text-[5.5rem] text-[#173F35] leading-[1.05] max-w-4xl mx-auto mb-8 drop-shadow-sm">From the Land of Pyramids to Global Markets.</h1>
       <p class="text-[#173F35]/80 text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed reveal-fade">
         <?= nl2br(htmlspecialchars($aboutHero['subtext'])) ?>
       </p>
@@ -47,9 +47,9 @@ include "includes/header.php";
         </div>
         <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] mb-8">A Vision Built On Reliability.</h2>
         <div class="space-y-6 text-[#173F35]/75 leading-relaxed text-[16px] reveal-up" style="transition-delay: 100ms;">
-          <p>Green Pyramids was founded with a clear vision: to bring the best of Egyptian agriculture to global markets with the professionalism and reliability that international buyers deserve.</p>
-          <p>We specialize in sourcing, sorting, packing, and exporting premium fresh fruits and vegetables.</p>
-          <p>We work closely with a network of trusted Egyptian farms - carefully selected based on soil quality, farming practices, and yield consistency.</p>
+          <p>After more than 20 years of hands-on agricultural experience, we saw one clear problem <br> importers struggle to find reliable suppliers they can trust.</p>
+          <p>So we built Green Pyramids to solve that.</p>
+          <p>We combine deep farming expertise with strict quality control and reliable sourcing <br> giving our partners consistent access to premium Egyptian produce without <br> the usual risks of inconsistency, delays, or poor quality.</p>
         </div>
       </div>
     </div>
@@ -58,20 +58,20 @@ include "includes/header.php";
   <!-- 3. Egyptian Agricultural Advantage -->
   <section class="py-24 lg:py-36 bg-[#EBE7DF]">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 text-center mb-16">
-      <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] max-w-3xl mx-auto">The Egyptian Advantage</h2>
+      <h2 class="anim-heading font-serif text-4xl lg:text-5xl text-[#173F35] leading-[1.1] max-w-3xl mx-auto">OUR VISION</h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6 lg:px-10">
       <div class="bg-[#F9F8F6] p-10 rounded-2xl reveal-up border border-[#173F35]/5 shadow-sm hover:shadow-md transition-shadow">
-        <h3 class="anim-heading font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-500 hover:text-[#8FAE5D] text-[#173F35] mb-4">Fertile Lands</h3>
-        <p class="text-[#173F35]/70 text-[15px] leading-relaxed">The Nile Delta provides incredibly rich alluvial soil, producing crops with exceptional taste, size, and nutritional value.</p>
+        <h3 class="anim-heading font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-500 hover:text-[#8FAE5D] text-[#173F35] mb-4">01 — GROW</h3>
+        <p class="text-[#173F35]/70 text-[15px] leading-relaxed">Growing Egypt’s finest produce for the world.</p>
       </div>
       <div class="bg-[#F9F8F6] p-10 rounded-2xl reveal-up border border-[#173F35]/5 shadow-sm hover:shadow-md transition-shadow" style="transition-delay: 100ms;">
-        <h3 class="anim-heading font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-500 hover:text-[#8FAE5D] text-[#173F35] mb-4">Ideal Climate</h3>
-        <p class="text-[#173F35]/70 text-[15px] leading-relaxed">Abundant sunshine and favorable weather allow for extended growing seasons and early harvests compared to Europe.</p>
+        <h3 class="anim-heading font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-500 hover:text-[#8FAE5D] text-[#173F35] mb-4">02 — CONNECT</h3>
+        <p class="text-[#173F35]/70 text-[15px] leading-relaxed">Connecting trusted farms with global markets.</p>
       </div>
       <div class="bg-[#F9F8F6] p-10 rounded-2xl reveal-up border border-[#173F35]/5 shadow-sm hover:shadow-md transition-shadow" style="transition-delay: 200ms;">
-        <h3 class="anim-heading font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-500 hover:text-[#8FAE5D] text-[#173F35] mb-4">Strategic Location</h3>
-        <p class="text-[#173F35]/70 text-[15px] leading-relaxed">Situated at the crossroads of three continents, enabling fast transit times and fresh delivery to global markets.</p>
+        <h3 class="anim-heading font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-500 hover:text-[#8FAE5D] text-[#173F35] mb-4">03 — INSPIRE</h3>
+        <p class="text-[#173F35]/70 text-[15px] leading-relaxed">Setting a new standard for Egyptian fresh produce.</p>
       </div>
     </div>
   </section>
@@ -94,23 +94,23 @@ include "includes/header.php";
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
         <div class="reveal-up">
           <span class="block text-4xl font-serif text-[#D8C7A1] mb-6" data-count="1" data-prefix="0">01</span>
-          <h3 class="text-xl font-medium mb-3 tracking-wide">Quality First</h3>
-          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">Every product we export meets strict international quality standards before it leaves Egyptian soil.</p>
+          <h3 class="text-xl font-medium mb-3 tracking-wide">QUALITY</h3>
+          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">Every product meets our highest standards before it leaves Egypt.</p>
         </div>
         <div class="reveal-up" style="transition-delay: 100ms;">
           <span class="block text-4xl font-serif text-[#D8C7A1] mb-6">02</span>
-          <h3 class="text-xl font-medium mb-3 tracking-wide">Transparency</h3>
-          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">We operate with full visibility across our supply chain - from farm to destination.</p>
+          <h3 class="text-xl font-medium mb-3 tracking-wide">TRUST</h3>
+          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">We build every relationship on transparency, reliability, and integrity.</p>
         </div>
         <div class="reveal-up" style="transition-delay: 200ms;">
           <span class="block text-4xl font-serif text-[#D8C7A1] mb-6">03</span>
-          <h3 class="text-xl font-medium mb-3 tracking-wide">Partnership</h3>
-          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">We build long-term relationships based on trust, reliability, and mutual growth.</p>
+          <h3 class="text-xl font-medium mb-3 tracking-wide">CONNECTION</h3>
+          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">We connect Egyptian growers with buyers across global markets.</p>
         </div>
         <div class="reveal-up" style="transition-delay: 300ms;">
           <span class="block text-4xl font-serif text-[#D8C7A1] mb-6">04</span>
-          <h3 class="text-xl font-medium mb-3 tracking-wide">Sustainability</h3>
-          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">We work with farms that adopt responsible practices for the long-term health of Egyptian land.</p>
+          <h3 class="text-xl font-medium mb-3 tracking-wide">IMPACT</h3>
+          <p class="text-[14px] text-[#F6F3EC]/70 leading-relaxed">We create lasting value for farms, partners, and Egyptian agriculture.</p>
         </div>
       </div>
     </div>
