@@ -18,7 +18,7 @@ if (!isset($assetVersion))    $assetVersion    = fn($p) => (string)(@filemtime(_
         </div>
         <p class="text-[13px] text-[#F6F3EC]/70 leading-relaxed max-w-sm font-light">Premium Egyptian agricultural crops sourced, packed, and delivered to global markets with uncompromising quality.</p>
         <div class="flex gap-5 mt-5">
-          <a href="#" class="text-[11px] uppercase tracking-widest text-[#D8C7A1] hover:text-white transition-colors font-medium border-b border-[#D8C7A1]/30 hover:border-white pb-0.5">LinkedIn</a>
+          <!-- <a href="#" class="text-[11px] uppercase tracking-widest text-[#D8C7A1] hover:text-white transition-colors font-medium border-b border-[#D8C7A1]/30 hover:border-white pb-0.5">LinkedIn</a> -->
           <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $global_wa) ?>" class="text-[11px] uppercase tracking-widest text-[#D8C7A1] hover:text-white transition-colors font-medium border-b border-[#D8C7A1]/30 hover:border-white pb-0.5">WhatsApp</a>
         </div>
       </div>
